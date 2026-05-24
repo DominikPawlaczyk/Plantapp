@@ -126,6 +126,30 @@
       </div>
     </div>
 
+    <!-- SETTINGS -->
+    <div class="view" id="view-settings">
+      <div class="section-header">
+        <h2>Ustawienia</h2>
+      </div>
+      <!-- AI Forecast -->
+      <div class="ai-forecast-card">
+        <div class="ai-forecast-header">
+          <span class="ai-badge"><i data-lucide="sparkles"></i> AI</span>
+          <h3>Forecast od AI</h3>
+        </div>
+        <p class="ai-forecast-desc">Wklej lub wgraj plan podlewania wygenerowany przez AI (JSON)</p>
+        <textarea id="ai-forecast-text" placeholder='{"Monstera": {"next": "2024-06-01", "freq": 7}}'></textarea>
+        <div class="ai-forecast-actions">
+          <label class="btn-secondary" for="ai-forecast-file">
+            <i data-lucide="upload"></i> Wgraj plik
+          </label>
+          <input type="file" id="ai-forecast-file" accept=".json,.txt" class="hidden" />
+          <button class="btn-primary" id="btn-apply-ai-forecast">Zastosuj</button>
+        </div>
+        <div class="ai-forecast-result hidden" id="ai-forecast-result"></div>
+      </div>
+    </div>
+
   </main>
 
   <!-- BOTTOM NAV -->
@@ -145,6 +169,10 @@
     <button class="nav-btn" data-view="stats">
       <i data-lucide="bar-chart-2"></i>
       <span>Statsy</span>
+    </button>
+    <button class="nav-btn" data-view="settings">
+      <i data-lucide="settings"></i>
+      <span>Ustawienia</span>
     </button>
   </nav>
 
