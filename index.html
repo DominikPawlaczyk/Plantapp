@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0f0a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="description" content="Śledź podlewanie roślin, plony i pogodę w Łodzi" />
+  <title>Plant Tracker</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">
+        <i data-lucide="leaf"></i>
+      </div>
+      <span class="topbar-title">Plant Tracker</span>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="btn-notif" title="Powiadomienia">
+        <i data-lucide="bell"></i>
+        <span class="notif-dot hidden" id="notif-dot"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- WEATHER STRIP -->
+  <div class="weather-strip" id="weather-strip">
+    <div class="weather-loading">
+      <div class="spinner"></div>
+      <span>Ładowanie pogody…</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HOME -->
+    <div class="view active" id="view-home">
+      <div class="section-header">
+        <h2>Moje Rośliny</h2>
+        <button class="btn-add" id="btn-add-plant">
+          <i data-lucide="plus"></i>
+          Dodaj
+        </button>
+      </div>
+      <div class="filter-tabs" id="location-filter">
+        <button class="filter-tab active" data-filter="all">Wszystkie</button>
+        <button class="filter-tab" data-filter="balkon">Balkon</button>
+        <button class="filter-tab" data-filter="parapet">Parapet</button>
+      </div>
+      <div class="plants-grid" id="plants-grid"></div>
+      <div class="empty-state hidden" id="empty-plants">
+        <div class="empty-icon"><i data-lucide="flower-2"></i></div>
+        <p>Brak roślin</p>
+        <span>Dodaj pierwszą roślinę aby zacząć</span>
+        <button class="btn-primary mt-16" id="btn-empty-add">
+          <i data-lucide="plus"></i> Dodaj roślinę
+        </button>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="view" id="view-timeline">
+      <div class="section-header">
+        <h2>Oś Czasu</h2>
+        <div class="filter-chips" id="timeline-filters">
+          <button class="filter-chip active" data-type="all">Wszystko</button>
+          <button class="filter-chip" data-type="water">Podlewanie</button>
+          <button class="filter-chip" data-type="fertilize">Nawóz</button>
+          <button class="filter-chip" data-type="plant">Sadzenie</button>
+          <button class="filter-chip" data-type="harvest">Zbiory</button>
+        </div>
+      </div>
+      <div class="timeline-container" id="timeline-container"></div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="view" id="view-calendar">
+      <div class="section-header">
+        <h2>Kalendarz</h2>
+        <button class="btn-add" id="btn-add-event">
+          <i data-lucide="plus"></i>
+          Zaplanuj
+        </button>
+      </div>
+      <div class="calendar-widget" id="calendar-widget"></div>
+      <div class="calendar-events" id="calendar-events"></div>
+    </div>
+
+    <!-- WEATHER -->
+    <div class="view" id="view-weather">
+      <div class="section-header">
+        <h2>Pogoda — Łódź</h2>
+        <button class="icon-btn" id="btn-refresh-weather" title="Odśwież">
+          <i data-lucide="refresh-cw"></i>
+        </button>
+      </div>
+      <div id="weather-full"></div>
+      <!-- AI Forecast -->
+      <div class="ai-forecast-card">
+        <div class="ai-forecast-header">
+          <span class="ai-badge"><i data-lucide="sparkles"></i> AI</span>
+          <h3>Forecast od AI</h3>
+        </div>
+        <p class="ai-forecast-desc">Wklej lub wgraj plan podlewania wygenerowany przez AI (JSON)</p>
+        <textarea id="ai-forecast-text" placeholder='{"Monstera": {"next": "2024-06-01", "freq": 7}}'></textarea>
+        <div class="ai-forecast-actions">
+          <label class="btn-secondary" for="ai-forecast-file">
+            <i data-lucide="upload"></i> Wgraj plik
+          </label>
+          <input type="file" id="ai-forecast-file" accept=".json,.txt" class="hidden" />
+          <button class="btn-primary" id="btn-apply-ai-forecast">Zastosuj</button>
+        </div>
+        <div class="ai-forecast-result hidden" id="ai-forecast-result"></div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="view" id="view-stats">
+      <div class="section-header"><h2>Statystyki</h2></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon water-color"><i data-lucide="droplets"></i></div>
+          <div class="stat-value" id="stat-waterings-val">0</div>
+          <div class="stat-label">Podlewań</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon fert-color"><i data-lucide="flask-conical"></i></div>
+          <div class="stat-value" id="stat-fertilize-val">0</div>
+          <div class="stat-label">Nawożeń</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon harvest-color"><i data-lucide="apple"></i></div>
+          <div class="stat-value" id="stat-harvest-val">0 kg</div>
+          <div class="stat-label">Plonów</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon plant-color"><i data-lucide="sprout"></i></div>
+          <div class="stat-value" id="stat-plants-val">0</div>
+          <div class="stat-label">Roślin</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Podlewanie — ostatnie 30 dni</h3>
+        <canvas id="chart-waterings" height="200"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Plony per roślina (kg)</h3>
+        <canvas id="chart-harvests" height="200"></canvas>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="nav-btn active" data-view="home">
+      <i data-lucide="home"></i>
+      <span>Rośliny</span>
+    </button>
+    <button class="nav-btn" data-view="timeline">
+      <i data-lucide="clock"></i>
+      <span>Oś czasu</span>
+    </button>
+    <button class="nav-btn" data-view="calendar">
+      <i data-lucide="calendar"></i>
+      <span>Kalendarz</span>
+    </button>
+    <button class="nav-btn" data-view="weather">
+      <i data-lucide="cloud-sun"></i>
+      <span>Pogoda</span>
+    </button>
+    <button class="nav-btn" data-view="stats">
+      <i data-lucide="bar-chart-2"></i>
+      <span>Statsy</span>
+    </button>
+  </nav>
+
+</div><!-- /#app -->
+
+<!-- ======== MODALS ======== -->
+
+<!-- MODAL: Plant -->
+<div class="modal-overlay hidden" id="modal-plant">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-plant-title">Nowa roślina</h3>
+      <button class="modal-close" data-modal="modal-plant"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="photo-upload-area" id="plant-photo-area">
+        <div class="photo-preview" id="plant-photo-preview">
+          <i data-lucide="image"></i>
+          <span>Dodaj zdjęcie</span>
+        </div>
+        <input type="file" id="plant-photo-input" accept="image/*" class="hidden" />
+      </div>
+      <div class="form-group">
+        <label for="plant-name">Nazwa *</label>
+        <input type="text" id="plant-name" placeholder="np. Monstera, Pomidory…" autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label>Lokalizacja *</label>
+        <div class="btn-group" id="location-group">
+          <button class="btn-toggle active" data-value="balkon">
+            <i data-lucide="sun"></i> Balkon
+          </button>
+          <button class="btn-toggle" data-value="parapet">
+            <i data-lucide="layout-panel-left"></i> Parapet
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="plant-species">Gatunek</label>
+        <input type="text" id="plant-species" placeholder="np. Monstera deliciosa" autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label for="plant-planted">Data posadzenia</label>
+        <input type="date" id="plant-planted" />
+      </div>
+      <div class="form-group">
+        <label for="plant-water-freq">Podlewaj co (dni)</label>
+        <input type="number" id="plant-water-freq" min="1" max="90" value="7" />
+      </div>
+      <div class="form-group">
+        <label for="plant-notes">Notatki</label>
+        <textarea id="plant-notes" placeholder="Dodatkowe informacje…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-plant">Anuluj</button>
+      <button class="btn-primary" id="btn-save-plant">Zapisz roślinę</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Water -->
+<div class="modal-overlay hidden" id="modal-water">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-water-title">Podlej roślinę</h3>
+      <button class="modal-close" data-modal="modal-water"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="plant-badge-display" id="water-plant-badge"></div>
+      <div class="form-group">
+        <label>Typ</label>
+        <div class="btn-group" id="water-type-group">
+          <button class="btn-toggle active" data-value="water">
+            <i data-lucide="droplets"></i> Zwykłe
+          </button>
+          <button class="btn-toggle" data-value="fertilize">
+            <i data-lucide="flask-conical"></i> Z nawozem
+          </button>
+        </div>
+      </div>
+      <div class="form-group hidden" id="fertilizer-group">
+        <label for="fertilizer-name">Rodzaj nawozu</label>
+        <input type="text" id="fertilizer-name" placeholder="np. NPK 10-10-10" autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label for="water-amount">Ilość wody (ml)</label>
+        <input type="number" id="water-amount" min="0" max="10000" placeholder="np. 250" />
+      </div>
+      <div class="form-group">
+        <label for="water-date">Data i godzina</label>
+        <input type="datetime-local" id="water-date" />
+      </div>
+      <div class="form-group">
+        <label for="water-notes">Notatki</label>
+        <input type="text" id="water-notes" placeholder="Opcjonalne uwagi…" autocomplete="off" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-water">Anuluj</button>
+      <button class="btn-primary" id="btn-save-water">Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Harvest -->
+<div class="modal-overlay hidden" id="modal-harvest">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Dodaj zbiory</h3>
+      <button class="modal-close" data-modal="modal-harvest"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="plant-badge-display" id="harvest-plant-badge"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="harvest-quantity">Ilość (szt.)</label>
+          <input type="number" id="harvest-quantity" min="0" placeholder="5" />
+        </div>
+        <div class="form-group">
+          <label for="harvest-weight">Waga (kg)</label>
+          <input type="number" id="harvest-weight" min="0" step="0.01" placeholder="0.35" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="harvest-date">Data zbioru</label>
+        <input type="date" id="harvest-date" />
+      </div>
+      <div class="photo-upload-area" id="harvest-photo-area">
+        <div class="photo-preview" id="harvest-photo-preview">
+          <i data-lucide="camera"></i>
+          <span>Dodaj zdjęcie zbiorów</span>
+        </div>
+        <input type="file" id="harvest-photo-input" accept="image/*" class="hidden" />
+      </div>
+      <div class="form-group">
+        <label for="harvest-notes">Notatki</label>
+        <input type="text" id="harvest-notes" placeholder="Jakość, smak, obserwacje…" autocomplete="off" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-harvest">Anuluj</button>
+      <button class="btn-primary" id="btn-save-harvest">Zapisz zbiory</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Schedule -->
+<div class="modal-overlay hidden" id="modal-schedule">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Zaplanuj zdarzenie</h3>
+      <button class="modal-close" data-modal="modal-schedule"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="sched-plant">Roślina</label>
+        <select id="sched-plant"></select>
+      </div>
+      <div class="form-group">
+        <label>Typ zdarzenia</label>
+        <div class="btn-group flex-wrap" id="sched-type-group">
+          <button class="btn-toggle active" data-value="water">
+            <i data-lucide="droplets"></i> Podlewanie
+          </button>
+          <button class="btn-toggle" data-value="fertilize">
+            <i data-lucide="flask-conical"></i> Nawożenie
+          </button>
+          <button class="btn-toggle" data-value="harvest">
+            <i data-lucide="apple"></i> Zbiory
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="sched-date">Data</label>
+        <input type="date" id="sched-date" />
+      </div>
+      <div class="form-group">
+        <label for="sched-time">Godzina przypomnienia</label>
+        <input type="time" id="sched-time" value="08:00" />
+      </div>
+      <div class="form-group">
+        <label for="sched-repeat">Powtarzaj co (dni, 0 = jednorazowo)</label>
+        <input type="number" id="sched-repeat" min="0" max="365" value="0" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-schedule">Anuluj</button>
+      <button class="btn-primary" id="btn-save-sched">Zaplanuj</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Plant Detail -->
+<div class="modal-overlay hidden" id="modal-detail">
+  <div class="modal modal-large">
+    <div class="modal-header">
+      <h3 id="detail-title">Roślina</h3>
+      <button class="modal-close" data-modal="modal-detail"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" id="modal-detail-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast hidden" id="toast"></div>
+
+<script src="lucide.min.js"></script>
+<script src="chart.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
