@@ -17,21 +17,7 @@
 
 <div id="app">
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-logo">
-        <i data-lucide="leaf"></i>
-      </div>
-      <span class="topbar-title">Plant Tracker</span>
-    </div>
-    <div class="topbar-right">
-      <button class="icon-btn" id="btn-notif" title="Powiadomienia">
-        <i data-lucide="bell"></i>
-        <span class="notif-dot hidden" id="notif-dot"></span>
-      </button>
-    </div>
-  </header>
+  <!-- TOP BAR REMOVED -->
 
 
   <!-- MAIN CONTENT -->
@@ -57,14 +43,12 @@
           <button class="filter-tab active" data-filter="all">Wszystkie</button>
           <button class="filter-tab" data-filter="balkon">Balkon</button>
           <button class="filter-tab" data-filter="parapet">Parapet</button>
-          <button class="filter-tab" data-filter="mieszkanie">Mieszkanie</button>
-          <button class="filter-tab" data-filter="ogrod">Ogród</button>
+          <button class="filter-tab" data-filter="polka">Półka</button>
+          <button class="filter-tab" data-filter="okno">Okno</button>
         </div>
         <select class="form-select" id="sort-plants">
-          <select class="form-select" id="sort-plants">
-            <option value="urgency">Sortuj: Najpilniejsze</option>
-            <option value="name">Sortuj: Od A do Z</option>
-          </select>
+          <option value="urgency">Sortuj: Najpilniejsze</option>
+          <option value="name">Sortuj: Od A do Z</option>
         </select>
       </div>
       <div class="plants-grid" id="plants-grid"></div>
@@ -177,6 +161,18 @@
         <h2>Ustawienia</h2>
       </div>
 
+      <!-- Notifications -->
+      <div class="ai-forecast-card">
+        <div class="ai-forecast-header">
+          <span class="ai-badge" style="background: var(--accent-bg); color: var(--accent); box-shadow: none;"><i data-lucide="bell"></i> Powiadomienia</span>
+          <h3>Powiadomienia systemowe</h3>
+        </div>
+        <p class="ai-forecast-desc">Włącz, aby otrzymywać przypomnienia o podlewaniu i nawożeniu. (Oczekujące: <span id="notif-dot" style="display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;" class="hidden"></span>)</p>
+        <div class="ai-forecast-actions">
+          <button type="button" class="btn-primary" id="btn-notif"><i data-lucide="bell"></i> Włącz</button>
+        </div>
+      </div>
+
       <!-- Backup -->
       <div class="ai-forecast-card">
         <div class="ai-forecast-header">
@@ -267,14 +263,14 @@
           <button class="btn-toggle active" data-value="balkon">
             <i data-lucide="sun"></i> Balkon
           </button>
-          <button class="btn-toggle" data-value="parapet">
+          <button type="button" class="btn-toggle" data-value="parapet">
             <i data-lucide="layout-panel-left"></i> Parapet
           </button>
-          <button class="btn-toggle" data-value="mieszkanie">
-            <i data-lucide="home"></i> Mieszkanie
+          <button type="button" class="btn-toggle" data-value="polka">
+            <i data-lucide="layers"></i> Półka
           </button>
-          <button class="btn-toggle" data-value="ogrod">
-            <i data-lucide="tree-pine"></i> Ogród
+          <button type="button" class="btn-toggle" data-value="okno">
+            <i data-lucide="app-window"></i> Okno
           </button>
         </div>
       </div>

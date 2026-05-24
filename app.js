@@ -236,8 +236,8 @@ function renderPlants() {
     const imgHtml = p.photo
       ? `<img class="plant-img" src="${p.photo}" alt="${p.name}" loading="lazy" />`
       : `<div class="plant-placeholder">${icon(plantEmoji(p.name), 44)}</div>`;
-    const locLabels = { balkon:'Balkon', parapet:'Parapet', mieszkanie:'Mieszkanie', ogrod:'Ogród' };
-    const locIcos   = { balkon:'sun', parapet:'layout-panel-left', mieszkanie:'home', ogrod:'tree-pine' };
+    const locLabels = { balkon:'Balkon', parapet:'Parapet', polka:'Półka', okno:'Okno' };
+    const locIcos   = { balkon:'sun', parapet:'layout-panel-left', polka:'layers', okno:'app-window' };
     const locLabel = locLabels[p.location] || p.location;
     const locIco = locIcos[p.location] || 'layout-panel-left';
 
@@ -531,8 +531,8 @@ function openPlantDetail(plantId) {
   const typeLabel= { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
   const typeCls  = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom' };
 
-  const locLabels = { balkon:'Balkon', parapet:'Parapet', mieszkanie:'Mieszkanie', ogrod:'Ogród' };
-  const locIcos   = { balkon:'sun', parapet:'layout-panel-left', mieszkanie:'home', ogrod:'tree-pine' };
+  const locLabels = { balkon:'Balkon', parapet:'Parapet', polka:'Półka', okno:'Okno' };
+  const locIcos   = { balkon:'sun', parapet:'layout-panel-left', polka:'layers', okno:'app-window' };
   const locLabel = locLabels[p.location] || p.location;
   const locIco = locIcos[p.location] || 'layout-panel-left';
 
@@ -1187,11 +1187,19 @@ function init() {
     if (card?.dataset.plantId) openPlantDetail(card.dataset.plantId);
   });
 
+  // Timeline clicks -> open plant detail
+  document.getElementById('timeline-container').addEventListener('click', e => {
+    const tlItem = e.target.closest('.tl-item');
+    if (tlItem && tlItem.dataset.plantId) {
+      openPlantDetail(tlItem.dataset.plantId);
+    }
+  });
+
   // Empty state button (outside grid)
-  document.getElementById('btn-empty-add')?.addEventListener('click', () => openPlantModal());
+  document.getElementById('btn-empty-add')?.addEventListener('click', (e) => { e.preventDefault(); openPlantModal(); });
 
   // Add plant button
-  document.getElementById('btn-add-plant').addEventListener('click', () => openPlantModal());
+  document.getElementById('btn-add-plant').addEventListener('click', (e) => { e.preventDefault(); openPlantModal(); });
 
   // Location filter tabs
   document.getElementById('location-filter').addEventListener('click', e => {
@@ -1228,8 +1236,13 @@ function init() {
   });
   document.getElementById('events-chart-filters')?.addEventListener('change', renderEventChart);
 
+  document.getElementById('events-chart-filters')?.addEventListener('change', renderEventChart);
+
+  // Notifications (now in settings)
+  document.getElementById('btn-notif')?.addEventListener('click', (e) => { e.preventDefault(); requestNotifPermission(); });
+
   // Plant modal: save
-  document.getElementById('btn-save-plant').addEventListener('click', savePlant);
+  document.getElementById('btn-save-plant').addEventListener('click', (e) => { e.preventDefault(); savePlant(); });
 
   // Plant modal: location toggle
   document.getElementById('location-group').addEventListener('click', e => {
@@ -1245,7 +1258,7 @@ function init() {
   bindPhotoInput('plant-photo-input', 'plant-photo-preview');
 
   // Water modal: save
-  document.getElementById('btn-save-water').addEventListener('click', saveWatering);
+  document.getElementById('btn-save-water').addEventListener('click', (e) => { e.preventDefault(); saveWatering(); });
 
   // Water modal: type toggle
   document.getElementById('water-type-group').addEventListener('click', e => {
@@ -1255,8 +1268,8 @@ function init() {
     document.getElementById('fertilizer-group').classList.toggle('hidden', btn.dataset.value !== 'fertilize');
   });
 
-  // Harvest modal: save + photo
-  document.getElementById('btn-save-harvest').addEventListener('click', saveHarvest);
+  // Harvest modal: save
+  document.getElementById('btn-save-harvest').addEventListener('click', (e) => { e.preventDefault(); saveHarvest(); });
   document.getElementById('harvest-photo-area').addEventListener('click', () => {
     document.getElementById('harvest-photo-input').click();
   });
@@ -1292,6 +1305,14 @@ function init() {
     if (btn) closeModal(btn.dataset.modal);
   });
 
+  // Click outside  // Modals close button
+  document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      closeModal(e.target.closest('.modal-close').dataset.modal);
+    });
+  });
+
   // Click outside modal to close
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', e => {
@@ -1320,8 +1341,8 @@ function init() {
     document.getElementById('bulk-custom-group').classList.toggle('hidden', btn.dataset.value !== 'custom');
   });
 
-  // Custom Modal
-  document.getElementById('btn-save-custom').addEventListener('click', saveCustom);
+  // Custom event modal: save
+  document.getElementById('btn-save-custom').addEventListener('click', (e) => { e.preventDefault(); saveCustom(); });
 
   // Backup
   document.getElementById('btn-export-data').addEventListener('click', exportData);
