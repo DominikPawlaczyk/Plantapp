@@ -18,9 +18,113 @@ function renderIcons() {
   if (window.lucide) window.lucide.createIcons();
 }
 
+const DEFAULT_SPECIES = [
+  {
+    id: 'sp_truskawka',
+    name: 'Truskawka wieloletnia',
+    description: 'Opis: Bylina owocująca dająca słodkie, czerwone jagody.\nHistoria: Współczesna truskawka powstała w XVIII wieku we Francji.\nPochodzenie: Krzyżówka odmian z Ameryki Północnej i Południowej.\nNasłonecznienie: Pełne słońce.\nNawodnienie: Umiarkowane, ale regularne (nie znosi suszy).\nCechy szczególne: Wypuszcza rozłogi, owocuje przez kilka sezonów.\nFunkcje: Jadalna, dekoracyjna do donic i skrzynek.'
+  },
+  {
+    id: 'sp_tom_red',
+    name: 'Pomidor wiszący Tumbling Tom Red',
+    description: 'Opis: Karłowa odmiana o kaskadowym pokroju i czerwonych owocach.\nHistoria: Stworzona specjalnie z myślą o uprawach miejskich i balkonowych.\nPochodzenie: Europa (współczesna odmiana hodowlana).\nNasłonecznienie: Pełne słońce.\nNawodnienie: Częste (ziemia powinna być stale lekko wilgotna).\nCechy szczególne: Zwisające pędy, nie wymaga palikowania ani cięcia.\nFunkcje: Kulinarna (przekąska), ozdobna.'
+  },
+  {
+    id: 'sp_black_cherry',
+    name: 'Pomidor Black Cherry',
+    description: 'Opis: Wysoka roślina rodząca ciemne, brunatno-bordowe pomidorki koktajlowe.\nHistoria: Szybko zdobyła popularność dzięki unikalnemu, dymno-słodkiemu smakowi.\nPochodzenie: USA (Floryda).\nNasłonecznienie: Pełne słońce, osłonięte od wiatru.\nNawodnienie: Regularne, obfite.\nCechy szczególne: Szybki i silny wzrost, wymaga wysokich podpór.\nFunkcje: Kulinarna, idealna do letnich sałatek.'
+  },
+  {
+    id: 'sp_yellow_pear',
+    name: 'Pomidor Żółta gruszka (Yellow Pear)',
+    description: 'Opis: Wysoka odmiana rodząca małe, żółte owoce w kształcie gruszek.\nHistoria: Odmiana historyczna, znana w Europie już w XVIII wieku.\nPochodzenie: Europa.\nNasłonecznienie: Dużo słońca.\nNawodnienie: Umiarkowane do częstego.\nCechy szczególne: Bardzo słodki, łagodny smak i unikalny kształt owoców.\nFunkcje: Kulinarna, dekoracyjna na talerzu.'
+  },
+  {
+    id: 'sp_tom_yellow',
+    name: 'Pomidor wiszący Tumbling Tom Yellow',
+    description: 'Opis: Żółty odpowiednik wersji Red, o kaskadowym, krzaczastym pokroju.\nHistoria: Wyhodowana do upraw pojemnikowych na małych przestrzeniach.\nPochodzenie: Europa.\nNasłonecznienie: Pełne słońce.\nNawodnienie: Częste, latem wymaga codziennego podlewania.\nCechy szczególne: Owoce o złocistym kolorze, pędy naturalnie opadające.\nFunkcje: Jadalna, idealna do wiszących donic na balkon.'
+  },
+  {
+    id: 'sp_maliniak',
+    name: 'Pomidor Maliniak',
+    description: 'Opis: Niska, sztywno-łodygowa odmiana o dużych, malinowych owocach.\nHistoria: Bardzo popularna, polska odmiana amatorska.\nPochodzenie: Polska.\nNasłonecznienie: Słoneczne i ciepłe stanowisko.\nNawodnienie: Regularne, unikać moczenia liści.\nCechy szczególne: Krzaczasty pokrój, nie wymaga palikowania ani usuwania pędów.\nFunkcje: Kulinarna (kanapki, przetwory, sosy).'
+  },
+  {
+    id: 'sp_jalapeno',
+    name: 'Papryka Jalapeño',
+    description: 'Opis: Pikantna papryka o mięsistych, zielonych (dojrzewających na czerwono) strąkach.\nHistoria: Uprawiana od tysiącleci przez rdzennych mieszkańców Ameryki.\nPochodzenie: Meksyk (stan Veracruz).\nNasłonecznienie: Pełne, intensywne słońce.\nNawodnienie: Umiarkowane, lubi przeschnąć między podlewaniami.\nCechy szczególne: Średnia ostrość (2,5-8 tys. w skali Scoville\'a).\nFunkcje: Kulinarna, przyprawowa (salsy, marynaty).'
+  },
+  {
+    id: 'sp_chilli',
+    name: 'Papryka Chilli',
+    description: 'Opis: Bardzo ostra papryka o smukłych, intensywnie czerwonych owocach.\nHistoria: Rozprzestrzeniona na całym świecie przez hiszpańskich odkrywców.\nPochodzenie: Ameryka Środkowa i Południowa.\nNasłonecznienie: Bardzo słoneczne i ciepłe.\nNawodnienie: Umiarkowane.\nCechy szczególne: Wysoka zawartość kapsaicyny (silna ostrość).\nFunkcje: Przyprawowa, lecznicza (działanie rozgrzewające).'
+  },
+  {
+    id: 'sp_bazylia_ziel',
+    name: 'Bazylia Zielona',
+    description: 'Opis: Jednoroczne zioło o niezwykle aromatycznych, jasnozielonych liściach.\nHistoria: Uznawana za świętą roślinę w starożytnych Indiach.\nPochodzenie: Tropikalne regiony Azji / Indie.\nNasłonecznienie: Jasne, ale osłonięte przed palącym, popołudniowym słońcem.\nNawodnienie: Częste, podłoże musi być stale lekko wilgotne.\nCechy szczególne: Bardzo wrażliwa na chłód, odstrasza owady.\nFunkcje: Kulinarna (pesto, dania włoskie).'
+  },
+  {
+    id: 'sp_mieta_czek',
+    name: 'Mięta Czekoladowa',
+    description: 'Opis: Odmiana mięty o ciemniejszych pędach i unikalnym, kakaowym zapachu.\nHistoria: Powstała z selekcji odmian mięty pieprzowej.\nPochodzenie: Europa (odmiana hodowlana).\nNasłonecznienie: Półcień do pełnego słońca.\nNawodnienie: Regularne, preferuje wilgotną glebę.\nCechy szczególne: Zapach i smak przypominający miętową czekoladę.\nFunkcje: Kulinarna (desery, zimne napoje), aromaterapeutyczna.'
+  },
+  {
+    id: 'sp_mieta_pom',
+    name: 'Mięta Pomarańczowa',
+    description: 'Opis: Aromatyczne zioło o silnym, cytrusowo-orzeźwiającym zapachu.\nHistoria: Ceniona w medycynie ludowej od setek lat.\nPochodzenie: Europa / Azja Zachodnia.\nNasłonecznienie: Półcień do słońca.\nNawodnienie: Regularne i obfite.\nCechy szczególne: Mocny aromat bergamotki i pomarańczy; roślina ekspansywna.\nFunkcje: Kulinarna (herbaty, sałatki, drinki), relaksująca.'
+  },
+  {
+    id: 'sp_melisa',
+    name: 'Melisa',
+    description: 'Opis: Wieloletnie zioło o karbowanych liściach i cytrynowym aromacie.\nHistoria: Stosowana już w starożytnej Grecji jako środek uspokajający.\nPochodzenie: Basen Morza Śródziemnego.\nNasłonecznienie: Półcień do pełnego słońca.\nNawodnienie: Umiarkowane (podlewać po lekkim przeschnięciu).\nCechy szczególne: Silnie przyciąga pszczoły (roślina miododajna).\nFunkcje: Lecznicza (łagodzi stres), kulinarna (napary).'
+  },
+  {
+    id: 'sp_rozmaryn',
+    name: 'Rozmaryn',
+    description: 'Opis: Zimozielony krzewinka o igiełkowatych liściach i leśnym, żywicznym zapachu.\nHistoria: Symbol pamięci i wierności w starożytnym Rzymie.\nPochodzenie: Region Morza Śródziemnego.\nNasłonecznienie: Pełne, mocne słońce.\nNawodnienie: Rzadkie, roślina bardzo dobrze znosi suszę.\nCechy szczególne: Łodygi z czasem drewnieją, bogaty w olejki eteryczne.\nFunkcje: Przyprawowa (do mięs, pieczeni), ozdobna.'
+  },
+  {
+    id: 'sp_oregano',
+    name: 'Oregano (Lebiodka pospolita)',
+    description: 'Opis: Drobne, krzewiaste zioło o intensywnym, lekko pikantnym smaku.\nHistoria: Niezbędny element kuchni i medycyny antycznej Grecji.\nPochodzenie: Europa, Azja Zachodnia.\nNasłonecznienie: Pełne słońce.\nNawodnienie: Umiarkowane (ziemia powinna przesychać między podlewaniami).\nCechy szczególne: Wysoce odporne na suszę i łatwe w uprawie.\nFunkcje: Kulinarna (pizza, sosy pomidorowe), antybakteryjna.'
+  },
+  {
+    id: 'sp_szczypiorek',
+    name: 'Szczypiorek wieloletni',
+    description: 'Opis: Roślina cebulowa o rurkowatych, zielonych liściach i fioletowych kwiatach.\nHistoria: Uprawiany i ceniony w Chinach już 3000 lat p.n.e.\nPochodzenie: Europa, Azja, Ameryka Północna.\nNasłonecznienie: Słońce do lekkiego półcienia.\nNawodnienie: Umiarkowane, regularne.\nCechy szczególne: Szybko odrasta po ścięciu, jadalne, miododajne kwiaty.\nFunkcje: Kulinarna (dodatek do twarogów, jaj, sałatek).'
+  },
+  {
+    id: 'sp_tuja',
+    name: 'Tuja Szmaragdowa (Żywotnik zachodni)',
+    description: 'Opis: Elegancki iglak o stożkowym pokroju i soczyście zielonych łuskach.\nHistoria: Odmiana wyselekcjonowana w 1950 roku w Danii.\nPochodzenie: Ameryka Północna.\nNasłonecznienie: Słońce do półcienia.\nNawodnienie: Regularne (ma płytki system korzeniowy, wrażliwa na suszę).\nCechy szczególne: Zachowuje szmaragdową zieleń zimą, nie brązowieje.\nFunkcje: Ozdobna, idealna na gęste żywopłoty na balkonach/tarasach.'
+  },
+  {
+    id: 'sp_philo_brasil',
+    name: 'Philodendron Brasil',
+    description: 'Opis: Efektowne pnącze o sercowatych liściach z neonowo-żółtymi paskami.\nHistoria: Odkryty jako naturalna mutacja Philodendrona pnącego (hederaceum).\nPochodzenie: Ameryka Południowa (Brazylia).\nNasłonecznienie: Jasne, rozproszone światło.\nNawodnienie: Umiarkowane (podlewać, gdy wierzchnia warstwa ziemi przeschnie).\nCechy szczególne: Bardzo szybki wzrost, wybacza błędy początkujących.\nFunkcje: Ozdobna (do makram i kwietników), oczyszczająca powietrze.'
+  },
+  {
+    id: 'sp_philo_scandens',
+    name: 'Philodendron scandens (pnący)',
+    description: 'Opis: Klasyczne pnącze o jednolitych, ciemnozielonych, sercowatych liściach.\nHistoria: Jedna z najstarszych i najchętniej uprawianych roślin domowych.\nPochodzenie: Ameryka Środkowa i Karaiby.\nNasłonecznienie: Toleruje słabe oświetlenie i głęboki półcień.\nNawodnienie: Umiarkowane.\nCechy szczególne: Wyjątkowo odporny na zaniedbania i brak światła.\nFunkcje: Ozdobna, silnie filtruje toksyny z powietrza.'
+  },
+  {
+    id: 'sp_sansewiera',
+    name: 'Sansewiera Laurentii (Wężownica)',
+    description: 'Opis: Sukulent o mieczowatych, sztywnych liściach z żółtym marginesem.\nHistoria: Popularna w europejskich domach i biurach od początku XX wieku.\nPochodzenie: Afryka Zachodnia.\nNasłonecznienie: Rośnie wszędzie: od pełnego słońca po głęboki cień.\nNawodnienie: Bardzo rzadkie (dopiero gdy ziemia w donicy całkowicie wyschnie).\nCechy szczególne: Produkuje tlen w nocy (idealna do sypialni).\nFunkcje: Ozdobna, uznana przez NASA za oczyszczającą powietrze.'
+  },
+  {
+    id: 'sp_zamioculcas',
+    name: 'Zamioculcas Zamikulkas',
+    description: 'Opis: Sukulent o grubych, błyszczących liściach ułożonych na mięsistych łodygach.\nHistoria: Wprowadzony na szeroki rynek florystyczny stosunkowo niedawno (w 1996 roku).\nPochodzenie: Afryka Wschodnia (Tanzania, Zanzibar).\nNasłonecznienie: Cień do lekko rozproszonego światła.\nNawodnienie: Bardzo rzadkie (magazynuje wodę w podziemnych bulwach).\nCechy szczególne: Nazywany "żelazną rośliną" – niemal niezniszczalny.\nFunkcje: Ozdobna, idealna dla zapracowanych i początkujących.'
+  }
+];
+
 // ───── STATE ─────
 const S = {
   plants: [], events: [], scheduled: [], aiForecasts: {}, species: [],
+  defaultSpeciesAdded: false,
   view: 'home', locationFilter: 'all', timelineFilter: 'all',
   calMonth: new Date(), selectedDate: new Date(),
   editingPlantId: null, waterPlantId: null, harvestPlantId: null, customPlantId: null,
@@ -34,7 +138,8 @@ function save() {
   try {
     localStorage.setItem(CFG.STORE, JSON.stringify({
       plants: S.plants, events: S.events,
-      scheduled: S.scheduled, aiForecasts: S.aiForecasts, species: S.species
+      scheduled: S.scheduled, aiForecasts: S.aiForecasts, species: S.species,
+      defaultSpeciesAdded: S.defaultSpeciesAdded
     }));
   } catch(e) { console.error(e); }
 }
@@ -47,6 +152,15 @@ function load() {
     S.scheduled  = d.scheduled  || [];
     S.aiForecasts = d.aiForecasts || {};
     S.species    = d.species    || [];
+    S.defaultSpeciesAdded = d.defaultSpeciesAdded || false;
+
+    if (!S.defaultSpeciesAdded) {
+      DEFAULT_SPECIES.forEach(ds => {
+        if (!S.species.find(s => s.name === ds.name)) S.species.push(ds);
+      });
+      S.defaultSpeciesAdded = true;
+      save(); // Save immediately to persist defaults
+    }
   } catch(e) { console.error(e); }
 }
 
