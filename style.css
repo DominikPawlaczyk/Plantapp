@@ -767,6 +767,74 @@ input[type="date"], input[type="datetime-local"], input[type="time"] { color-sch
 .chart-filter-lbl:hover { background: rgba(255,255,255,0.1); }
 .chart-filter-lbl input { accent-color: var(--accent); }
 
+/* ===== MODERN CHARTS & TABLES ===== */
+.modern-chart-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--r-lg);
+    padding: 16px;
+    position: relative;
+    width: 100%;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--r-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: var(--text2);
+}
+
+.modern-table thead {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.modern-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+}
+
+.modern-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.modern-table tbody tr {
+    transition: background 0.2s;
+}
+
+.modern-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.modern-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.05);
+}
+.table-status.ok { color: #a3e635; background: rgba(163, 230, 53, 0.1); }
+.table-status.warn { color: #facc15; background: rgba(250, 204, 21, 0.1); }
+.table-status.danger { color: #fb7185; background: rgba(251, 113, 133, 0.1); }
  / *    % % % % %  M O D E R N   C H A R T S   &   T A B L E S    % % % % %  * / 
  . m o d e r n - c h a r t - c o n t a i n e r   { 
      b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 0 2 ) ; 
