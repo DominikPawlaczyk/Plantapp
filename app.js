@@ -620,9 +620,9 @@ function openBulkModal() {
 
   const list = document.getElementById('bulk-plant-list');
   list.innerHTML = S.plants.map(p => `
-    <label class="bulk-plant-item">
-      <input type="checkbox" value="${p.id}" class="bulk-cb" />
-      <div style="flex:1">
+    <label class="bulk-plant-item" for="bulk-cb-${p.id}">
+      <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" />
+      <div style="flex:1; pointer-events: none;">
         <div class="bulk-plant-name">${p.name}</div>
         <div class="bulk-plant-meta">${p.location}</div>
       </div>
@@ -1643,7 +1643,8 @@ function init() {
   document.getElementById('btn-bulk-action')?.addEventListener('click', openBulkModal);
   document.getElementById('btn-save-bulk').addEventListener('click', saveBulkAction);
   
-  document.getElementById('btn-bulk-select-all')?.addEventListener('click', () => {
+  document.getElementById('btn-bulk-select-all')?.addEventListener('click', (e) => {
+    e.preventDefault();
     const cbs = document.querySelectorAll('.bulk-cb');
     const allChecked = Array.from(cbs).every(cb => cb.checked);
     cbs.forEach(cb => cb.checked = !allChecked);
