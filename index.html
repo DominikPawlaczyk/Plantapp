@@ -33,13 +33,6 @@
     </div>
   </header>
 
-  <!-- WEATHER STRIP -->
-  <div class="weather-strip" id="weather-strip">
-    <div class="weather-loading">
-      <div class="spinner"></div>
-      <span>Ładowanie pogody…</span>
-    </div>
-  </div>
 
   <!-- MAIN CONTENT -->
   <main class="main-content">
@@ -97,33 +90,6 @@
       <div class="calendar-events" id="calendar-events"></div>
     </div>
 
-    <!-- WEATHER -->
-    <div class="view" id="view-weather">
-      <div class="section-header">
-        <h2>Pogoda — Łódź</h2>
-        <button class="icon-btn" id="btn-refresh-weather" title="Odśwież">
-          <i data-lucide="refresh-cw"></i>
-        </button>
-      </div>
-      <div id="weather-full"></div>
-      <!-- AI Forecast -->
-      <div class="ai-forecast-card">
-        <div class="ai-forecast-header">
-          <span class="ai-badge"><i data-lucide="sparkles"></i> AI</span>
-          <h3>Forecast od AI</h3>
-        </div>
-        <p class="ai-forecast-desc">Wklej lub wgraj plan podlewania wygenerowany przez AI (JSON)</p>
-        <textarea id="ai-forecast-text" placeholder='{"Monstera": {"next": "2024-06-01", "freq": 7}}'></textarea>
-        <div class="ai-forecast-actions">
-          <label class="btn-secondary" for="ai-forecast-file">
-            <i data-lucide="upload"></i> Wgraj plik
-          </label>
-          <input type="file" id="ai-forecast-file" accept=".json,.txt" class="hidden" />
-          <button class="btn-primary" id="btn-apply-ai-forecast">Zastosuj</button>
-        </div>
-        <div class="ai-forecast-result hidden" id="ai-forecast-result"></div>
-      </div>
-    </div>
 
     <!-- STATS -->
     <div class="view" id="view-stats">
@@ -175,10 +141,6 @@
     <button class="nav-btn" data-view="calendar">
       <i data-lucide="calendar"></i>
       <span>Kalendarz</span>
-    </button>
-    <button class="nav-btn" data-view="weather">
-      <i data-lucide="cloud-sun"></i>
-      <span>Pogoda</span>
     </button>
     <button class="nav-btn" data-view="stats">
       <i data-lucide="bar-chart-2"></i>

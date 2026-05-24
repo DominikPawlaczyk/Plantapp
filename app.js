@@ -21,7 +21,6 @@ function renderIcons() {
 // ───── STATE ─────
 const S = {
   plants: [], events: [], scheduled: [], aiForecasts: {},
-  weather: null, weatherAt: 0,
   view: 'home', locationFilter: 'all', timelineFilter: 'all',
   calMonth: new Date(), selectedDate: new Date(),
   editingPlantId: null, waterPlantId: null, harvestPlantId: null,
@@ -142,228 +141,7 @@ function checkScheduled() {
   });
 }
 
-// ───── WEATHER ─────
-const WMO_ICO = {
-  0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',
-  51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',
-  71:'❄️',73:'❄️',75:'❄️',80:'🌦',81:'🌧',82:'⛈',
-  95:'⛈',96:'⛈',99:'⛈'
-};
-const WMO_TXT = {
-  0:'Bezchmurnie',1:'Prawie pogodnie',2:'Częściowe zachmurzenie',3:'Zachmurzenie',
-  45:'Mgła',48:'Szron',51:'Mżawka',53:'Mżawka',55:'Gęsta mżawka',
-  61:'Lekki deszcz',63:'Deszcz',65:'Silny deszcz',71:'Lekki śnieg',
-  73:'Śnieg',75:'Intensywny śnieg',80:'Przelotny deszcz',81:'Deszcz',82:'Gwałtowne opady',
-  95:'Burza',96:'Burza z gradem',99:'Ciężka burza'
-};
 
-async function fetchWeather() {
-  if (S.weather && Date.now() - S.weatherAt < 900000) {
-    renderWeatherStrip(S.weather);
-    renderWeatherFull(S.weather);
-    return;
-  }
-
-  const url = `https://api.open-meteo.com/v1/forecast?` +
-    `latitude=${CFG.lat}&longitude=${CFG.lon}` +
-    `&hourly=temperature_2m,precipitation_probability,weathercode,windspeed_10m,relativehumidity_2m,uv_index` +
-    `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max` +
-    `&timezone=Europe%2FWarsaw&forecast_days=9&current_weather=true`;
-
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-
-    const now = new Date();
-    const hours = data.hourly.time;
-    let curIdx = hours.findIndex(t => {
-      const d = new Date(t);
-      return d.getHours() === now.getHours() && d.toDateString() === now.toDateString();
-    });
-    if (curIdx < 0) curIdx = 0;
-
-    const weather = {
-      current: {
-        temp: Math.round(data.current_weather.temperature),
-        wind: Math.round(data.current_weather.windspeed),
-        wmo:  data.current_weather.weathercode,
-        icon: WMO_ICO[data.current_weather.weathercode] || '🌤',
-        desc: WMO_TXT[data.current_weather.weathercode] || 'Pogoda',
-        humidity: data.hourly.relativehumidity_2m[curIdx] ?? '—',
-        uv: data.hourly.uv_index[curIdx] ?? '—'
-      },
-      hourly: hours.slice(curIdx, curIdx + 48).map((t, i) => {
-        const idx = curIdx + i;
-        return {
-          time: t, temp: Math.round(data.hourly.temperature_2m[idx]),
-          wmo: data.hourly.weathercode[idx],
-          icon: WMO_ICO[data.hourly.weathercode[idx]] || '🌤',
-          rain: data.hourly.precipitation_probability[idx] || 0,
-          wind: Math.round(data.hourly.windspeed_10m[idx] || 0)
-        };
-      }),
-      daily: data.daily.time.map((t, i) => ({
-        date: t,
-        icon: WMO_ICO[data.daily.weathercode[i]] || '🌤',
-        desc: WMO_TXT[data.daily.weathercode[i]] || '—',
-        max: Math.round(data.daily.temperature_2m_max[i]),
-        min: Math.round(data.daily.temperature_2m_min[i]),
-        rainProb: data.daily.precipitation_probability_max[i] || 0,
-        rainSum: (data.daily.precipitation_sum[i] || 0).toFixed(1)
-      }))
-    };
-
-    // Try wttr.in for extra data
-    try {
-      const wr = await fetch(`https://wttr.in/${CFG.lat},${CFG.lon}?format=j1`);
-      const wd = await wr.json();
-      const cc = wd.current_condition?.[0];
-      if (cc) weather.feels = cc.FeelsLikeC;
-    } catch(_) {}
-
-    S.weather = weather;
-    S.weatherAt = Date.now();
-    renderWeatherStrip(weather);
-    renderWeatherFull(weather);
-
-  } catch(e) {
-    console.error('Weather error:', e);
-    document.getElementById('weather-strip').innerHTML =
-      '<div style="color:var(--text3);font-size:13px;padding:0 16px">Brak danych pogodowych (sprawdź połączenie)</div>';
-  }
-}
-
-function weatherSuggestion(w) {
-  const tmr = w.daily?.[1];
-  if (!tmr) return null;
-  if (tmr.rainProb >= 60) return `Jutro deszcz (${tmr.rainProb}%) — możesz pominąć podlewanie`;
-  if (w.current.temp > 28) return `Upał ${w.current.temp}°C — podlej wieczorem`;
-  if ([0,1].includes(w.current.wmo)) return 'Piękna pogoda — czas na ogród!';
-  return null;
-}
-
-function renderWeatherStrip(w) {
-  const next8 = w.hourly.slice(0, 8);
-  const sugg = weatherSuggestion(w);
-  document.getElementById('weather-strip').innerHTML = `
-    <div class="w-current">
-      <span class="w-icon">${w.current.icon}</span>
-      <div>
-        <div class="w-temp">${w.current.temp}°C</div>
-        <div class="w-desc">${w.current.desc}</div>
-        <div class="w-meta">💧 ${w.current.humidity}% &nbsp;💨 ${w.current.wind} km/h</div>
-      </div>
-    </div>
-    <div class="w-hourly">
-      ${next8.map((h,i) => {
-        const d = new Date(h.time);
-        return `<div class="w-hour">
-          <span class="w-hour-time">${i===0?'Teraz':d.getHours()+':00'}</span>
-          <span class="w-hour-icon">${h.icon}</span>
-          <span class="w-hour-temp">${h.temp}°</span>
-          ${h.rain>20?`<span class="w-hour-rain">☔${h.rain}%</span>`:''}
-        </div>`;
-      }).join('')}
-    </div>
-    ${sugg ? `<div class="w-suggest">💡 ${sugg}</div>` : ''}
-  `;
-}
-
-function renderWeatherFull(w) {
-  const el = document.getElementById('weather-full');
-  if (!el) return;
-  const dayNames = ['Niedz','Pon','Wt','Śr','Czw','Pt','Sob'];
-  const todayH = w.hourly.slice(0, 12);
-  const tomorrowH = w.hourly.slice(12, 24);
-
-  el.innerHTML = `
-    <div class="source-badges">
-      <span class="src-badge primary">${icon('check-circle',10)} Open-Meteo ✓</span>
-      ${w.feels ? `<span class="src-badge secondary">${icon('thermometer',10)} wttr.in ✓</span>` : ''}
-      <span class="src-badge primary">${icon('map-pin',10)} ${CFG.city}</span>
-    </div>
-
-    <div class="w-card">
-      <h3>Teraz</h3>
-      <div class="w-now-big">
-        <span class="w-icon-big">${w.current.icon}</span>
-        <div>
-          <div class="w-temp-big">${w.current.temp}°C</div>
-          <div class="w-desc-main">${w.current.desc}</div>
-          ${w.feels ? `<div class="w-feels">Odczuwalnie ${w.feels}°C</div>` : ''}
-        </div>
-      </div>
-      <div class="w-details-grid">
-        <div class="w-detail-item">
-          <div class="w-detail-icon">${icon('droplets',16)}</div>
-          <div class="w-detail-val">${w.current.humidity}%</div>
-          <div class="w-detail-lbl">Wilgotność</div>
-        </div>
-        <div class="w-detail-item">
-          <div class="w-detail-icon">${icon('wind',16)}</div>
-          <div class="w-detail-val">${w.current.wind}</div>
-          <div class="w-detail-lbl">km/h</div>
-        </div>
-        <div class="w-detail-item">
-          <div class="w-detail-icon">${icon('sun',16)}</div>
-          <div class="w-detail-val">${w.current.uv}</div>
-          <div class="w-detail-lbl">Indeks UV</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-card">
-      <h3>Dziś — co godzinę</h3>
-      <div class="w-hourly-scroll">
-        ${todayH.map((h,i) => {
-          const d = new Date(h.time);
-          return `<div class="w-hour-item${i===0?' now':''}">
-            <span class="whi-time">${i===0?'Teraz':d.getHours()+':00'}</span>
-            <span class="whi-icon">${h.icon}</span>
-            <span class="whi-temp">${h.temp}°</span>
-            ${h.rain>0?`<span class="whi-rain">☔${h.rain}%</span>`:'<span class="whi-rain" style="opacity:0">-</span>'}
-            <span class="whi-wind">💨${h.wind}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>
-
-    ${tomorrowH.length > 0 ? `
-    <div class="w-card">
-      <h3>Jutro — co godzinę</h3>
-      <div class="w-hourly-scroll">
-        ${tomorrowH.map(h => {
-          const d = new Date(h.time);
-          return `<div class="w-hour-item">
-            <span class="whi-time">${d.getHours()}:00</span>
-            <span class="whi-icon">${h.icon}</span>
-            <span class="whi-temp">${h.temp}°</span>
-            ${h.rain>0?`<span class="whi-rain">☔${h.rain}%</span>`:'<span class="whi-rain" style="opacity:0">-</span>'}
-            <span class="whi-wind">💨${h.wind}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>` : ''}
-
-    <div class="w-card">
-      <h3>7 dni — dzień i noc</h3>
-      ${w.daily.slice(0,8).map((d,i) => {
-        const date = new Date(d.date);
-        return `<div class="w-daily-row">
-          <span class="wdr-day" ${i===0?'style="color:var(--accent);font-weight:700"':''}>${i===0?'Dziś':dayNames[date.getDay()]}</span>
-          <span class="wdr-icon">${d.icon}</span>
-          <div>
-            <div class="wdr-desc">${d.desc}</div>
-            ${d.rainProb>10?`<div class="wdr-rain">☔ ${d.rainProb}% · ${d.rainSum}mm</div>`:''}
-          </div>
-          <div class="wdr-temps">${d.max}° <span class="wdr-min">/ ${d.min}°</span></div>
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-  renderIcons();
-}
 
 // ───── PREDICTION ─────
 function predict(plant) {
@@ -1088,7 +866,6 @@ function switchView(name) {
 
   if (name==='timeline')  renderTimeline();
   if (name==='calendar')  renderCalendar();
-  if (name==='weather')   fetchWeather();
   if (name==='stats')     renderCharts();
 
   renderIcons();
@@ -1170,8 +947,6 @@ function init() {
 
   renderPlants();
   updateStats();
-  fetchWeather();
-
   if (Notification.permission === 'default') {
     document.getElementById('notif-dot').classList.remove('hidden');
   }
@@ -1302,12 +1077,7 @@ function init() {
   // Notifications
   document.getElementById('btn-notif').addEventListener('click', requestNotifPermission);
 
-  // Weather refresh
-  document.getElementById('btn-refresh-weather').addEventListener('click', () => {
-    S.weatherAt = 0;
-    fetchWeather();
-    toast('Odświeżam pogodę…');
-  });
+
 
   // AI forecast
   document.getElementById('btn-apply-ai-forecast').addEventListener('click', applyAiForecast);
