@@ -620,7 +620,7 @@ function openBulkModal() {
 
   const list = document.getElementById('bulk-plant-list');
   list.innerHTML = S.plants.map(p => `
-    <label class="bulk-plant-item" for="bulk-cb-${p.id}" data-pid="${p.id}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.07);margin-bottom:6px;background:rgba(255,255,255,0.03);user-select:none;">
+    <label class="bulk-plant-item" data-pid="${p.id}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.07);margin-bottom:6px;background:rgba(255,255,255,0.03);user-select:none;">
       <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" style="width:16px;height:16px;flex-shrink:0;cursor:pointer;" />
       <div style="flex:1;">
         <div class="bulk-plant-name" style="font-weight:500;font-size:14px;color:var(--text1)">${p.name}</div>
