@@ -620,13 +620,13 @@ function openBulkModal() {
 
   const list = document.getElementById('bulk-plant-list');
   list.innerHTML = S.plants.map(p => `
-    <label class="bulk-plant-item" for="bulk-cb-${p.id}">
-      <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" />
+    <div class="bulk-plant-item" data-pid="${p.id}">
+      <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" style="pointer-events: none;" />
       <div style="flex:1; pointer-events: none;">
         <div class="bulk-plant-name">${p.name}</div>
         <div class="bulk-plant-meta">${p.location}</div>
       </div>
-    </label>
+    </div>
   `).join('');
 
   openModal('modal-bulk');
@@ -1656,6 +1656,13 @@ function init() {
     setGroupActive('bulk-type-group', btn.dataset.value);
     document.getElementById('bulk-fertilizer-group').classList.toggle('hidden', btn.dataset.value !== 'fertilize');
     document.getElementById('bulk-custom-group').classList.toggle('hidden', btn.dataset.value !== 'custom');
+  });
+
+  document.getElementById('bulk-plant-list')?.addEventListener('click', e => {
+    const item = e.target.closest('.bulk-plant-item');
+    if (!item) return;
+    const cb = item.querySelector('.bulk-cb');
+    if (cb) cb.checked = !cb.checked;
   });
 
   // Custom event modal: save

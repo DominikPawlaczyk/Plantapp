@@ -1,4 +1,4 @@
-const CACHE = 'plant-tracker-v15';
+const CACHE = 'plant-tracker-v16';
 const ASSETS = [
   './',
   './index.html',
