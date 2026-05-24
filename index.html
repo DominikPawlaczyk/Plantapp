@@ -41,10 +41,16 @@
     <div class="view active" id="view-home">
       <div class="section-header">
         <h2>Moje Rośliny</h2>
-        <button class="btn-add" id="btn-add-plant">
-          <i data-lucide="plus"></i>
-          Dodaj
-        </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-secondary" id="btn-bulk-action" style="padding: 9px 14px; font-size: 13px; font-weight: 600;">
+            <i data-lucide="layers"></i>
+            Masowo
+          </button>
+          <button class="btn-add" id="btn-add-plant">
+            <i data-lucide="plus"></i>
+            Dodaj
+          </button>
+        </div>
       </div>
       <div class="filter-tabs" id="location-filter">
         <button class="filter-tab active" data-filter="all">Wszystkie</button>
@@ -72,6 +78,7 @@
           <button class="filter-chip" data-type="fertilize">Nawóz</button>
           <button class="filter-chip" data-type="plant">Sadzenie</button>
           <button class="filter-chip" data-type="harvest">Zbiory</button>
+          <button class="filter-chip" data-type="custom">Inne</button>
         </div>
       </div>
       <div class="timeline-container" id="timeline-container"></div>
@@ -361,6 +368,9 @@
           <button class="btn-toggle" data-value="harvest">
             <i data-lucide="apple"></i> Zbiory
           </button>
+          <button class="btn-toggle" data-value="custom">
+            <i data-lucide="file-text"></i> Inne
+          </button>
         </div>
       </div>
       <div class="form-group">
@@ -391,6 +401,92 @@
       <button class="modal-close" data-modal="modal-detail"><i data-lucide="x"></i></button>
     </div>
     <div class="modal-body" id="modal-detail-body"></div>
+  </div>
+</div>
+
+<!-- MODAL: Custom Event -->
+<div class="modal-overlay hidden" id="modal-custom">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Inne zdarzenie</h3>
+      <button class="modal-close" data-modal="modal-custom"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="plant-badge-display" id="custom-plant-badge"></div>
+      <div class="form-group">
+        <label for="custom-date">Data</label>
+        <input type="date" id="custom-date" />
+      </div>
+      <div class="form-group">
+        <label for="custom-title">Tytuł akcji</label>
+        <input type="text" id="custom-title" placeholder="np. Dosypanie ziemi, Przesadzenie..." autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label for="custom-notes">Opis / Notatki</label>
+        <textarea id="custom-notes" placeholder="Dodatkowe informacje..." autocomplete="off"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-custom">Anuluj</button>
+      <button class="btn-primary" id="btn-save-custom">Zapisz zdarzenie</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Bulk Action -->
+<div class="modal-overlay hidden" id="modal-bulk">
+  <div class="modal modal-large">
+    <div class="modal-header">
+      <h3>Akcja Masowa</h3>
+      <button class="modal-close" data-modal="modal-bulk"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Typ akcji</label>
+        <div class="btn-group flex-wrap" id="bulk-type-group">
+          <button class="btn-toggle active" data-value="water">
+            <i data-lucide="droplets"></i> Podlewanie
+          </button>
+          <button class="btn-toggle" data-value="fertilize">
+            <i data-lucide="flask-conical"></i> Nawożenie
+          </button>
+          <button class="btn-toggle" data-value="custom">
+            <i data-lucide="file-text"></i> Inne
+          </button>
+        </div>
+      </div>
+      <div class="form-group hidden" id="bulk-fertilizer-group">
+        <label for="bulk-fertilizer-name">Rodzaj nawozu</label>
+        <input type="text" id="bulk-fertilizer-name" placeholder="np. NPK 10-10-10" autocomplete="off" />
+      </div>
+      <div class="form-group hidden" id="bulk-custom-group">
+        <label for="bulk-custom-title">Tytuł akcji</label>
+        <input type="text" id="bulk-custom-title" placeholder="np. Dosypanie ziemi" autocomplete="off" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="bulk-date">Data</label>
+          <input type="date" id="bulk-date" />
+        </div>
+        <div class="form-group">
+          <label for="bulk-notes">Notatki (dla wszystkich)</label>
+          <input type="text" id="bulk-notes" placeholder="Opcjonalnie..." autocomplete="off" />
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label>Wybierz rośliny</label>
+          <button class="btn-secondary" id="btn-bulk-select-all" style="padding: 4px 10px; font-size: 11px;">Zaznacz wszystkie</button>
+        </div>
+        <div class="bulk-plant-list" id="bulk-plant-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-bulk">Anuluj</button>
+      <button class="btn-primary" id="btn-save-bulk">Wykonaj masowo</button>
+    </div>
   </div>
 </div>
 

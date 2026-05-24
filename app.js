@@ -242,6 +242,7 @@ function renderPlants() {
         <button class="plant-btn water"    data-action="water"     title="Podlej">${icon('droplets',16)}</button>
         <button class="plant-btn fertilize" data-action="fertilize" title="Nawóź">${icon('flask-conical',16)}</button>
         <button class="plant-btn harvest"  data-action="harvest"   title="Zbiory">${icon('apple',16)}</button>
+        <button class="plant-btn custom"   data-action="custom"    title="Inne">${icon('file-text',16)}</button>
       </div>
     </div>`;
   }).join('');
@@ -404,6 +405,98 @@ function saveHarvest() {
   toast('🍅 Zbiory zapisane!');
 }
 
+// ───── CUSTOM MODAL ─────
+function openCustomModal(plantId) {
+  S.customPlantId = plantId;
+  const p = S.plants.find(x => x.id === plantId);
+  if (!p) return;
+
+  document.getElementById('custom-plant-badge').textContent = p.name;
+  document.getElementById('custom-date').value = nowLocal().split('T')[0];
+  document.getElementById('custom-title').value = '';
+  document.getElementById('custom-notes').value = '';
+
+  openModal('modal-custom');
+}
+
+function saveCustom() {
+  const dateVal = document.getElementById('custom-date').value;
+  const title = document.getElementById('custom-title').value.trim();
+  if (!dateVal || !title) { toast('Podaj datę i tytuł', true); return; }
+
+  S.events.push({
+    id: uid(), plantId: S.customPlantId, type: 'custom',
+    timestamp: new Date(dateVal).toISOString(),
+    customTitle: title,
+    notes: document.getElementById('custom-notes').value.trim()
+  });
+
+  save();
+  closeModal('modal-custom');
+  renderTimeline();
+  renderCalendar();
+  toast('Zdarzenie zapisane!');
+}
+
+// ───── BULK MODAL ─────
+function openBulkModal() {
+  if (S.plants.length === 0) { toast('Najpierw dodaj rośliny', true); return; }
+  document.getElementById('bulk-date').value = nowLocal().split('T')[0];
+  document.getElementById('bulk-notes').value = '';
+  document.getElementById('bulk-fertilizer-name').value = '';
+  document.getElementById('bulk-custom-title').value = '';
+  
+  setGroupActive('bulk-type-group', 'water');
+  document.getElementById('bulk-fertilizer-group').classList.add('hidden');
+  document.getElementById('bulk-custom-group').classList.add('hidden');
+
+  const list = document.getElementById('bulk-plant-list');
+  list.innerHTML = S.plants.map(p => `
+    <label class="bulk-plant-item">
+      <input type="checkbox" value="${p.id}" class="bulk-cb" />
+      <div style="flex:1">
+        <div class="bulk-plant-name">${p.name}</div>
+        <div class="bulk-plant-meta">${p.location}</div>
+      </div>
+    </label>
+  `).join('');
+
+  openModal('modal-bulk');
+}
+
+function saveBulkAction() {
+  const cbs = document.querySelectorAll('.bulk-cb:checked');
+  if (cbs.length === 0) { toast('Wybierz przynajmniej jedną roślinę', true); return; }
+
+  const typeBtn = document.querySelector('#bulk-type-group .btn-toggle.active');
+  const type = typeBtn ? typeBtn.dataset.value : 'water';
+  const dateVal = document.getElementById('bulk-date').value;
+  if (!dateVal) { toast('Podaj datę', true); return; }
+
+  const notes = document.getElementById('bulk-notes').value.trim();
+  const fert = document.getElementById('bulk-fertilizer-name').value.trim();
+  const title = document.getElementById('bulk-custom-title').value.trim();
+
+  if (type === 'custom' && !title) { toast('Podaj tytuł dla zdarzenia Inne', true); return; }
+
+  const timestamp = new Date(dateVal).toISOString();
+
+  cbs.forEach(cb => {
+    const pid = cb.value;
+    const ev = { id: uid(), plantId: pid, type, timestamp, notes };
+    if (type === 'fertilize') ev.fertilizer = fert || null;
+    if (type === 'custom') ev.customTitle = title;
+    S.events.push(ev);
+  });
+
+  save();
+  closeModal('modal-bulk');
+  renderPlants();
+  renderTimeline();
+  updateStats();
+  toast(`✓ Wykonano dla ${cbs.length} roślin!`);
+}
+
 // ───── PLANT DETAIL ─────
 function openPlantDetail(plantId) {
   const p = S.plants.find(x => x.id === plantId);
@@ -420,9 +513,9 @@ function openPlantDetail(plantId) {
     ? `<img class="detail-img" src="${p.photo}" alt="${p.name}" />`
     : `<div class="detail-placeholder">${icon(plantEmoji(p.name), 40)}</div>`;
 
-  const typeIco  = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout' };
-  const typeLabel= { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie' };
-  const typeCls  = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant' };
+  const typeIco  = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text' };
+  const typeLabel= { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
+  const typeCls  = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom' };
 
   document.getElementById('detail-title').textContent = p.name;
   document.getElementById('modal-detail-body').innerHTML = `
@@ -443,6 +536,7 @@ function openPlantDetail(plantId) {
       <button class="detail-action-btn water"     data-detail-action="water"     data-pid="${p.id}">${icon('droplets',14)} Podlej</button>
       <button class="detail-action-btn fertilize" data-detail-action="fertilize" data-pid="${p.id}">${icon('flask-conical',14)} Nawóź</button>
       <button class="detail-action-btn harvest"   data-detail-action="harvest"   data-pid="${p.id}">${icon('apple',14)} Zbiory</button>
+      <button class="detail-action-btn custom"    data-detail-action="custom"    data-pid="${p.id}">${icon('file-text',14)} Inne</button>
       <button class="detail-action-btn danger"    data-detail-action="delete"    data-pid="${p.id}">${icon('trash-2',14)}</button>
     </div>
 
@@ -475,7 +569,7 @@ function openPlantDetail(plantId) {
         return `<div class="history-item">
           <div class="history-icon ${tCls}">${icon(typeIco[ev.type]||'circle',14)}</div>
           <div class="history-text">
-            <div class="history-title">${typeLabel[ev.type]||ev.type}</div>
+            <div class="history-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</div>
             ${detail?`<div class="history-detail">${detail}</div>`:''}
           </div>
           <span class="history-time">${fmtDateTime(ev.timestamp)}</span>
@@ -520,8 +614,8 @@ function renderTimeline() {
     return;
   }
 
-  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout' };
-  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie' };
+  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text' };
+  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
 
   el.innerHTML = evs.map(ev => {
     const plant = S.plants.find(p => p.id === ev.plantId);
@@ -537,7 +631,7 @@ function renderTimeline() {
       <div class="tl-dot ${ev.type}">${icon(typeIco[ev.type]||'circle',10)}</div>
       <div class="tl-card">
         <div class="tl-head">
-          <span class="tl-title">${typeLabel[ev.type]||ev.type}</span>
+          <span class="tl-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</span>
           <span class="tl-time">${fmtDateTime(ev.timestamp)}</span>
         </div>
         <div class="tl-plant">${icon('leaf',12)} ${pName}</div>
@@ -635,9 +729,9 @@ function renderCalEvents() {
     new Date(a.timestamp||a.date) - new Date(b.timestamp||b.date)
   );
 
-  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout' };
-  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie' };
-  const typeCls   = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant' };
+  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text' };
+  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
+  const typeCls   = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom' };
 
   const ds = date.toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'});
 
@@ -652,7 +746,7 @@ function renderCalEvents() {
         return `<div class="cal-ev-item">
           <div class="cal-ev-icon ${cls}">${icon(typeIco[ev.type]||'circle',18)}</div>
           <div class="cal-ev-info">
-            <div class="cal-ev-title">${typeLabel[ev.type]||ev.type}</div>
+            <div class="cal-ev-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</div>
             <div class="cal-ev-sub">${pName}${isSched?' · Zaplanowane':''}</div>
           </div>
           ${isSched ? `<button class="cal-ev-del" data-sched-del="${ev.id}" title="Usuń">${icon('trash-2',14)}</button>` : ''}
@@ -1009,6 +1103,7 @@ function init() {
       if (actionBtn.dataset.action === 'water')     openWaterModal(plantId, 'water');
       if (actionBtn.dataset.action === 'fertilize') openWaterModal(plantId, 'fertilize');
       if (actionBtn.dataset.action === 'harvest')   openHarvestModal(plantId);
+      if (actionBtn.dataset.action === 'custom')    openCustomModal(plantId);
       return;
     }
     const card = e.target.closest('.plant-card');
@@ -1094,6 +1189,7 @@ function init() {
     if (act === 'water')     { closeModal('modal-detail'); openWaterModal(pid,'water'); }
     if (act === 'fertilize') { closeModal('modal-detail'); openWaterModal(pid,'fertilize'); }
     if (act === 'harvest')   { closeModal('modal-detail'); openHarvestModal(pid); }
+    if (act === 'custom')    { closeModal('modal-detail'); openCustomModal(pid); }
     if (act === 'edit')      { closeModal('modal-detail'); openPlantModal(pid); }
     if (act === 'delete')    { deletePlant(pid); }
   });
@@ -1114,7 +1210,26 @@ function init() {
   // Notifications
   document.getElementById('btn-notif').addEventListener('click', requestNotifPermission);
 
+  // Bulk Logic
+  document.getElementById('btn-bulk-action')?.addEventListener('click', openBulkModal);
+  document.getElementById('btn-save-bulk').addEventListener('click', saveBulkAction);
+  
+  document.getElementById('btn-bulk-select-all')?.addEventListener('click', () => {
+    const cbs = document.querySelectorAll('.bulk-cb');
+    const allChecked = Array.from(cbs).every(cb => cb.checked);
+    cbs.forEach(cb => cb.checked = !allChecked);
+  });
 
+  document.getElementById('bulk-type-group').addEventListener('click', e => {
+    const btn = e.target.closest('.btn-toggle');
+    if (!btn) return;
+    setGroupActive('bulk-type-group', btn.dataset.value);
+    document.getElementById('bulk-fertilizer-group').classList.toggle('hidden', btn.dataset.value !== 'fertilize');
+    document.getElementById('bulk-custom-group').classList.toggle('hidden', btn.dataset.value !== 'custom');
+  });
+
+  // Custom Modal
+  document.getElementById('btn-save-custom').addEventListener('click', saveCustom);
 
   // Backup
   document.getElementById('btn-export-data').addEventListener('click', exportData);

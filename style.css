@@ -25,6 +25,9 @@
   --harvest:     #FB923C;
   --harvest-bg:  rgba(251, 146, 60, 0.10);
   --harvest-bd:  rgba(251, 146, 60, 0.20);
+  --custom:      #F472B6;
+  --custom-bg:   rgba(244, 114, 182, 0.10);
+  --custom-bd:   rgba(244, 114, 182, 0.20);
   --planted:     #a78bfa;
   --planted-bg:  rgba(167, 139, 250, 0.10);
 
@@ -64,7 +67,7 @@ body::before {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.60;
+  opacity: 0.12;
   background-image: url('./vine-bg.svg');
   background-repeat: no-repeat;
   background-position: left center;
@@ -230,6 +233,11 @@ body::before {
   border-color: var(--harvest-bd);
   color: var(--harvest);
 }
+.plant-btn.custom {
+  background: var(--custom-bg);
+  border-color: var(--custom-bd);
+  color: var(--custom);
+}
 .plant-btn:hover {
   transform: scale(1.08);
 }
@@ -273,6 +281,7 @@ body::before {
 .tl-dot.water    { background: var(--water); }
 .tl-dot.fertilize { background: var(--fert); }
 .tl-dot.harvest  { background: var(--harvest); }
+.tl-dot.custom   { background: var(--custom); }
 .tl-dot.plant    { background: var(--planted); }
 
 .tl-card {
@@ -331,6 +340,7 @@ body::before {
 .cal-dot.water    { background: var(--water); }
 .cal-dot.fertilize { background: var(--fert); }
 .cal-dot.harvest  { background: var(--harvest); }
+.cal-dot.custom   { background: var(--custom); }
 .cal-dot.plant    { background: var(--planted); }
 
 .calendar-events { display: flex; flex-direction: column; gap: 10px; }
@@ -352,6 +362,7 @@ body::before {
 .cal-ev-icon.water    { background: var(--water-bg); color: var(--water); }
 .cal-ev-icon.fertilize { background: var(--fert-bg); color: var(--fert); }
 .cal-ev-icon.harvest  { background: var(--harvest-bg); color: var(--harvest); }
+.cal-ev-icon.custom   { background: var(--custom-bg); color: var(--custom); }
 .cal-ev-icon.plant    { background: var(--planted-bg); color: var(--planted); }
 .cal-ev-info { flex: 1; }
 .cal-ev-title { font-size: 14px; font-weight: 600; }
@@ -496,6 +507,24 @@ body::before {
 input[type="date"], input[type="datetime-local"], input[type="time"] { color-scheme: dark; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
+/* ===== BULK ACTIONS ===== */
+.bulk-plant-list {
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: 250px; overflow-y: auto; padding-right: 4px;
+}
+.bulk-plant-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: var(--bg2);
+  border: 1px solid var(--bd2); border-radius: var(--r-sm);
+  cursor: pointer; transition: border-color 0.2s, background 0.2s;
+}
+.bulk-plant-item:hover { border-color: var(--accent-bd); background: rgba(255,255,255,0.02); }
+.bulk-plant-item input[type="checkbox"] {
+  width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0;
+}
+.bulk-plant-name { flex: 1; font-size: 14px; font-weight: 500; }
+.bulk-plant-meta { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
+
 /* ===== BTN GROUP ===== */
 .btn-group { display: flex; gap: 8px; }
 .btn-group.flex-wrap { flex-wrap: wrap; }
@@ -624,6 +653,7 @@ input[type="date"], input[type="datetime-local"], input[type="time"] { color-sch
 .detail-action-btn.water    { background: var(--water-bg); border-color: var(--water-bd); color: var(--water); }
 .detail-action-btn.fertilize { background: var(--fert-bg); border-color: var(--fert-bd); color: var(--fert); }
 .detail-action-btn.harvest  { background: var(--harvest-bg); border-color: var(--harvest-bd); color: var(--harvest); }
+.detail-action-btn.custom   { background: var(--custom-bg); border-color: var(--custom-bd); color: var(--custom); }
 .detail-action-btn.danger   { color: #ef4444; border-color: rgba(239,68,68,.18); }
 .detail-action-btn.danger:hover { background: rgba(239,68,68,.08); }
 .detail-action-btn:active   { transform: scale(0.95); }
@@ -653,6 +683,7 @@ input[type="date"], input[type="datetime-local"], input[type="time"] { color-sch
 .history-icon.water    { background: var(--water-bg); color: var(--water); }
 .history-icon.fertilize { background: var(--fert-bg); color: var(--fert); }
 .history-icon.harvest  { background: var(--harvest-bg); color: var(--harvest); }
+.history-icon.custom   { background: var(--custom-bg); color: var(--custom); }
 .history-icon.plant    { background: var(--planted-bg); color: var(--planted); }
 .history-text { flex: 1; }
 .history-title { font-weight: 500; }
