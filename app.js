@@ -132,7 +132,7 @@ const S = {
   defaultSpeciesVersion: 0,
   view: 'home', locationFilter: 'all', timelineFilter: 'all',
   calMonth: new Date(), selectedDate: new Date(),
-  editingPlantId: null, waterPlantId: null, harvestPlantId: null, customPlantId: null,
+  editingPlantId: null, waterPlantId: null, harvestPlantId: null, customPlantId: null, editingSpeciesId: null,
   schedType: 'water',
   sortOrder: 'urgency', timelinePlant: 'all', calPlant: 'all',
   charts: {}
@@ -941,7 +941,7 @@ function renderCalEvents() {
         const pName = plant ? plant.name : '—';
         const isSched = !ev.timestamp || !ev.timestamp.includes('T');
         const cls = typeCls[ev.type]||'water';
-        return `<div class="cal-ev-item">
+        return `<div class="cal-ev-item" data-plant-id="${plant ? plant.id : ''}" style="cursor: ${plant ? 'pointer' : 'default'}">
           <div class="cal-ev-icon ${cls}">${icon(typeIco[ev.type]||'circle',18)}</div>
           <div class="cal-ev-info">
             <div class="cal-ev-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</div>
@@ -1071,9 +1071,12 @@ function renderSpeciesList() {
   }
   container.innerHTML = S.species.map(s => `
     <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; padding: 10px; position: relative;">
-      <div style="font-weight: 500; font-size: 14px; color: var(--text1); margin-bottom: 4px; padding-right: 24px;">${s.name}</div>
+      <div style="font-weight: 500; font-size: 14px; color: var(--text1); margin-bottom: 4px; padding-right: 50px;">${s.name}</div>
       <div style="font-size: 13px; color: var(--text2); line-height: 1.4; white-space: pre-wrap;">${s.description}</div>
-      <button class="btn-delete-species" data-sid="${s.id}" style="position: absolute; top: 8px; right: 8px; background: none; border: none; color: var(--danger); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px;">${icon('trash-2', 14)}</button>
+      <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
+        <button class="btn-edit-species" data-sid="${s.id}" style="background: none; border: none; color: var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px;" title="Edytuj">${icon('edit-2', 14)}</button>
+        <button class="btn-delete-species" data-sid="${s.id}" style="background: none; border: none; color: var(--danger); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px;" title="Usuń">${icon('trash-2', 14)}</button>
+      </div>
     </div>
   `).join('');
   renderIcons();
@@ -1084,15 +1087,27 @@ function addSpecies() {
   const descInput = document.getElementById('species-desc-input');
   const name = nameInput.value.trim();
   const desc = descInput.value.trim();
+  const btn = document.getElementById('btn-add-species');
   if (!name) { toast('Podaj nazwę gatunku', true); return; }
   if (!desc) { toast('Podaj opis gatunku', true); return; }
 
-  S.species.push({ id: uid(), name, description: desc });
+  if (S.editingSpeciesId) {
+    const sp = S.species.find(s => s.id === S.editingSpeciesId);
+    if (sp) { sp.name = name; sp.description = desc; }
+    toast('✓ Zmiany zapisane');
+    S.editingSpeciesId = null;
+    btn.innerHTML = icon('plus') + ' Dodaj gatunek';
+    btn.classList.remove('btn-secondary');
+    btn.classList.add('btn-primary');
+  } else {
+    S.species.push({ id: uid(), name, description: desc });
+    toast('✓ Gatunek dodany do Bazy Wiedzy');
+  }
+  
   save();
   nameInput.value = '';
   descInput.value = '';
   renderSpeciesList();
-  toast('✓ Gatunek dodany do Bazy Wiedzy');
 }
 
 // ───── BACKUP / EXPORT / IMPORT ─────
