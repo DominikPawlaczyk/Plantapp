@@ -620,13 +620,13 @@ function openBulkModal() {
 
   const list = document.getElementById('bulk-plant-list');
   list.innerHTML = S.plants.map(p => `
-    <div class="bulk-plant-item" data-pid="${p.id}">
-      <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" style="pointer-events: none;" />
-      <div style="flex:1; pointer-events: none;">
-        <div class="bulk-plant-name">${p.name}</div>
-        <div class="bulk-plant-meta">${p.location}</div>
+    <label class="bulk-plant-item" for="bulk-cb-${p.id}" data-pid="${p.id}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.07);margin-bottom:6px;background:rgba(255,255,255,0.03);user-select:none;">
+      <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" style="width:16px;height:16px;flex-shrink:0;cursor:pointer;" />
+      <div style="flex:1;">
+        <div class="bulk-plant-name" style="font-weight:500;font-size:14px;color:var(--text1)">${p.name}</div>
+        <div class="bulk-plant-meta" style="font-size:12px;color:var(--text3)">${p.location}</div>
       </div>
-    </div>
+    </label>
   `).join('');
 
   openModal('modal-bulk');
@@ -1658,12 +1658,7 @@ function init() {
     document.getElementById('bulk-custom-group').classList.toggle('hidden', btn.dataset.value !== 'custom');
   });
 
-  document.getElementById('bulk-plant-list')?.addEventListener('click', e => {
-    const item = e.target.closest('.bulk-plant-item');
-    if (!item) return;
-    const cb = item.querySelector('.bulk-cb');
-    if (cb) cb.checked = !cb.checked;
-  });
+  // bulk-plant-list uses <label> elements — native checkbox toggle via label click
 
   // Custom event modal: save
   document.getElementById('btn-save-custom').addEventListener('click', (e) => { e.preventDefault(); saveCustom(); });
