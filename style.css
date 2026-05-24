@@ -64,11 +64,11 @@ body::before {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.20;
+  opacity: 0.60;
   background-image: url('./vine-bg.svg');
   background-repeat: no-repeat;
-  background-position: right bottom;
-  background-size: 65% auto;
+  background-position: left center;
+  background-size: cover;
 }
 
 /* ===== LUCIDE ICON SIZING ===== */
