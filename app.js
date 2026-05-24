@@ -96,10 +96,30 @@ function toast(msg, err = false) {
 function openModal(id) {
   document.getElementById(id).classList.remove('hidden');
   renderIcons();
+  if (!history.state || !history.state.modal) {
+    history.pushState({ view: S.view, modal: true }, '');
+  }
 }
 function closeModal(id) {
   document.getElementById(id).classList.add('hidden');
+  setTimeout(() => {
+    const anyOpen = Array.from(document.querySelectorAll('.modal-overlay')).some(m => !m.classList.contains('hidden'));
+    if (!anyOpen && history.state && history.state.modal) {
+      history.back();
+    }
+  }, 10);
 }
+
+window.addEventListener('popstate', e => {
+  const st = e.state;
+  if (!st) return;
+  if (!st.modal) {
+    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+  }
+  if (st.view && st.view !== S.view) {
+    switchView(st.view, true);
+  }
+});
 
 // ───── SERVICE WORKER ─────
 async function registerSW() {
@@ -653,7 +673,7 @@ function renderTimeline() {
     if (ev.quantity) detail += (detail?' · ':'')+ev.quantity+' szt.';
     if (ev.notes) detail += (detail?' · ':'')+ev.notes;
 
-    return `<div class="tl-item">
+    return `<div class="tl-item" data-plant-id="${plant ? plant.id : ''}">
       <div class="tl-dot ${ev.type}">${icon(typeIco[ev.type]||'circle',10)}</div>
       <div class="tl-card">
         <div class="tl-head">
@@ -1065,7 +1085,7 @@ function renderHarvestChart() {
 }
 
 // ───── NAVIGATION ─────
-function switchView(name) {
+function switchView(name, fromPop = false) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(`view-${name}`)?.classList.add('active');
@@ -1077,6 +1097,10 @@ function switchView(name) {
   if (name==='stats')     renderCharts();
 
   renderIcons();
+
+  if (!fromPop) {
+    history.pushState({ view: name, modal: false }, '');
+  }
 }
 
 // ───── GROUP TOGGLE HELPER ─────
@@ -1150,6 +1174,7 @@ function addDemo() {
 function init() {
   load();
   registerSW();
+  history.replaceState({ view: 'home', modal: false }, '');
 
   if (S.plants.length === 0) addDemo();
 
