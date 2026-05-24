@@ -974,44 +974,53 @@ function renderCharts() {
   renderWaterChart();
   renderHarvestChart();
   renderEventChart();
+  renderGrowthChart();
+  renderPlantsTable();
 }
 
 function renderEventChart() {
   const canvas = document.getElementById('chart-events');
   if (!canvas || !window.Chart) return;
-  
   const filters = Array.from(document.querySelectorAll('#events-chart-filters input:checked')).map(el => el.value);
   const evs = S.events.filter(e => filters.includes(e.type));
-  
   const counts = {};
   filters.forEach(f => counts[f] = 0);
   evs.forEach(e => counts[e.type]++);
 
-  const labelsMap = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
-  const colorsMap = { water:'#60A5FA', fertilize:'#A3E635', harvest:'#FB923C', plant:'#A78BFA', custom:'#F472B6' };
+  const labelsMap = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Sadzenie', custom:'Inne' };
+  const colorsMap = { water:'#38bdf8', fertilize:'#a3e635', harvest:'#fb923c', plant:'#a78bfa', custom:'#f472b6' };
 
   const labels = filters.map(f => labelsMap[f]);
   const data = filters.map(f => counts[f]);
   const bgColors = filters.map(f => colorsMap[f]);
 
   if (S.charts.events) S.charts.events.destroy();
-  
   if (evs.length === 0) {
     S.charts.events = new Chart(canvas, {
       type: 'doughnut',
-      data: { labels: ['Brak danych'], datasets: [{ data: [1], backgroundColor: ['#3f3f46'] }] },
-      options: { plugins: { tooltip: { enabled: false } }, cutout: '70%' }
+      data: { labels: ['Brak'], datasets: [{ data: [1], backgroundColor: ['#3f3f46'], borderWidth:0 }] },
+      options: { cutout: '80%', plugins: { tooltip: { enabled: false } } }
     });
     return;
   }
-
   S.charts.events = new Chart(canvas, {
     type: 'doughnut',
-    data: { labels, datasets: [{ data, backgroundColor: bgColors, borderColor: '#222225', borderWidth: 2 }] },
+    data: { labels, datasets: [{ data, backgroundColor: bgColors, borderWidth: 0, hoverOffset: 4 }] },
     options: {
       responsive: true,
-      plugins: { legend: { position: 'right', labels: { color: '#A1A1AA', font: { family: 'Inter', size: 12 } } } },
-      cutout: '60%'
+      cutout: '80%',
+      layout: { padding: 10 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          titleFont: { family: 'Inter', size: 13 },
+          bodyFont: { family: 'Inter', size: 13 },
+          padding: 10,
+          cornerRadius: 8,
+          displayColors: true
+        }
+      }
     }
   });
 }
@@ -1019,6 +1028,15 @@ function renderEventChart() {
 function renderWaterChart() {
   const canvas = document.getElementById('chart-waterings');
   if (!canvas || !window.Chart) return;
+  
+  const ctx = canvas.getContext('2d');
+  const gradW = ctx.createLinearGradient(0, 0, 0, 300);
+  gradW.addColorStop(0, 'rgba(56,189,248,0.5)');
+  gradW.addColorStop(1, 'rgba(56,189,248,0.0)');
+  
+  const gradF = ctx.createLinearGradient(0, 0, 0, 300);
+  gradF.addColorStop(0, 'rgba(163,230,53,0.4)');
+  gradF.addColorStop(1, 'rgba(163,230,53,0.0)');
 
   const labels=[], wData=[], fData=[];
   for (let i=29;i>=0;i--) {
@@ -1030,20 +1048,24 @@ function renderWaterChart() {
 
   if (S.charts.water) S.charts.water.destroy();
   S.charts.water = new Chart(canvas, {
-    type:'bar',
+    type:'line',
     data:{
       labels,
       datasets:[
-        {label:'Podlewanie',data:wData,backgroundColor:'rgba(56,189,248,0.5)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4},
-        {label:'Nawożenie', data:fData,backgroundColor:'rgba(163,230,53,0.4)',borderColor:'#a3e635',borderWidth:1,borderRadius:4}
+        { label:'Podlewanie', data:wData, backgroundColor:gradW, borderColor:'#38bdf8', borderWidth:2, fill:true, tension:0.4, pointRadius:0, pointHitRadius:10 },
+        { label:'Nawożenie', data:fData, backgroundColor:gradF, borderColor:'#a3e635', borderWidth:2, fill:true, tension:0.4, pointRadius:0, pointHitRadius:10 }
       ]
     },
     options:{
       responsive:true,
-      plugins:{legend:{labels:{color:'#A1A1AA',font:{family:'Inter',size:11}}}},
+      interaction: { mode: 'index', intersect: false },
+      plugins:{
+        legend:{ position: 'top', labels:{color:'#A1A1AA',font:{family:'Inter',size:12}, usePointStyle: true, boxWidth: 8} },
+        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, cornerRadius: 8 }
+      },
       scales:{
-        x:{ticks:{color:'#52525B',font:{size:9},maxRotation:45},grid:{color:'rgba(255,255,255,0.04)'}},
-        y:{ticks:{color:'#52525B',stepSize:1},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}
+        x:{ ticks:{color:'#71717A',font:{size:10},maxRotation:45}, grid:{display:false} },
+        y:{ ticks:{color:'#71717A',stepSize:1}, grid:{color:'rgba(255,255,255,0.05)', drawBorder:false}, beginAtZero:true }
       }
     }
   });
@@ -1052,7 +1074,7 @@ function renderWaterChart() {
 function renderHarvestChart() {
   const canvas = document.getElementById('chart-harvests');
   if (!canvas || !window.Chart) return;
-
+  
   const map={};
   S.events.filter(e=>e.type==='harvest').forEach(e=>{
     const p=S.plants.find(x=>x.id===e.plantId);
@@ -1064,24 +1086,102 @@ function renderHarvestChart() {
   const data=Object.values(map);
 
   if (labels.length===0) {
-    canvas.parentElement.innerHTML='<h3>Plony per roślina (kg)</h3><div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Brak danych o plonach</div>';
+    canvas.parentElement.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Brak danych o plonach</div>';
     return;
   }
 
   if (S.charts.harvest) S.charts.harvest.destroy();
-  const colors=['rgba(251,146,60,.7)','rgba(74,222,128,.7)','rgba(56,189,248,.7)','rgba(167,139,250,.7)','rgba(251,191,36,.7)'];
+  const colors=['#fb923c','#4ade80','#38bdf8','#a78bfa','#fbbf24'];
 
   S.charts.harvest = new Chart(canvas,{
-    type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderColor:'#222225',borderWidth:2}]},
+    type:'bar',
+    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length), borderRadius: 4, barThickness: 16}]},
     options:{
+      indexAxis: 'y',
       responsive:true,
       plugins:{
-        legend:{position:'bottom',labels:{color:'#A1A1AA',font:{family:'Inter',size:12},padding:12}},
-        tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.parsed.toFixed(2)} kg`}}
+        legend:{display:false},
+        tooltip:{ backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, callbacks:{label:ctx=>` ${ctx.parsed.x.toFixed(2)} kg`} }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#71717A' } },
+        y: { grid: { display: false }, ticks: { color: '#A1A1AA', font: { family: 'Inter', size: 12 } } }
       }
     }
   });
+}
+
+function renderGrowthChart() {
+  const canvas = document.getElementById('chart-growth');
+  if (!canvas || !window.Chart) return;
+
+  const labels=[], data=[];
+  for (let i=5;i>=0;i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    labels.push(d.toLocaleDateString('pl-PL',{month:'short', year:'numeric'}));
+    
+    const count = S.plants.filter(p => {
+      if (!p.createdAt && !p.planted) return false;
+      const pd = new Date(p.planted || p.createdAt);
+      return pd.getMonth() === d.getMonth() && pd.getFullYear() === d.getFullYear();
+    }).length;
+    data.push(count);
+  }
+
+  if (S.charts.growth) S.charts.growth.destroy();
+  S.charts.growth = new Chart(canvas, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{ label:'Nowe rośliny', data, backgroundColor:'#a78bfa', borderRadius: 4, barThickness: 24 }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{ display:false },
+        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, cornerRadius: 8 }
+      },
+      scales:{
+        x:{ ticks:{color:'#71717A',font:{size:10}}, grid:{display:false} },
+        y:{ ticks:{color:'#71717A',stepSize:1}, grid:{color:'rgba(255,255,255,0.05)', drawBorder:false}, beginAtZero:true }
+      }
+    }
+  });
+}
+
+function renderPlantsTable() {
+  const tbody = document.querySelector('#plants-table tbody');
+  if (!tbody) return;
+  
+  if (S.plants.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text3)">Brak roślin w kolekcji</td></tr>';
+    return;
+  }
+  
+  const locLabels = { balkon:'Balkon', parapet:'Parapet', polka:'Półka', okno:'Okno' };
+
+  tbody.innerHTML = S.plants.map(p => {
+    const wEvs = S.events.filter(e => e.plantId === p.id && e.type === 'water').sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    const days = daysAgo(wEvs[0]?.timestamp);
+    
+    let statusHtml = '<span class="table-status ok">Zadbana</span>';
+    if (days !== null && days >= p.waterFreq) {
+      statusHtml = '<span class="table-status danger">Wymaga uwagi</span>';
+    } else if (days !== null && days >= p.waterFreq - 1) {
+      statusHtml = '<span class="table-status warn">Wkrótce</span>';
+    } else if (days === null) {
+      statusHtml = '<span class="table-status warn">Brak danych</span>';
+    }
+    
+    return `
+      <tr>
+        <td style="font-weight:500; color:var(--text1)">${p.name}</td>
+        <td>${locLabels[p.location] || p.location}</td>
+        <td>${statusHtml}</td>
+      </tr>
+    `;
+  }).join('');
 }
 
 // ───── NAVIGATION ─────

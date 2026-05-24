@@ -130,28 +130,56 @@
         </div>
       </div>
       <div class="chart-card">
-        <h3>Podlewania i nawożenia (30 dni)</h3>
-        <div style="background:var(--bg2); border:1px solid var(--bd2); border-radius:var(--r-md); padding:16px;">
+        <h3>Aktywność (ost. 30 dni)</h3>
+        <div class="modern-chart-container">
           <canvas id="chart-waterings"></canvas>
         </div>
       </div>
       
-      <div style="margin-top:20px">
+      <div class="chart-card">
+        <h3>Historia sadzenia (Wzrost kolekcji)</h3>
+        <div class="modern-chart-container">
+          <canvas id="chart-growth"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
         <h3>Rozkład Zdarzeń</h3>
-        <div class="chart-container">
-          <div class="chart-filters" id="events-chart-filters">
-            <label class="chart-filter-lbl"><input type="checkbox" value="water" checked> Podlewanie</label>
-            <label class="chart-filter-lbl"><input type="checkbox" value="fertilize" checked> Nawożenie</label>
-            <label class="chart-filter-lbl"><input type="checkbox" value="harvest" checked> Zbiory</label>
-            <label class="chart-filter-lbl"><input type="checkbox" value="plant" checked> Sadzenie</label>
-            <label class="chart-filter-lbl"><input type="checkbox" value="custom" checked> Inne</label>
-          </div>
+        <div class="chart-filters" id="events-chart-filters">
+          <label class="chart-filter-lbl"><input type="checkbox" value="water" checked> Podlewanie</label>
+          <label class="chart-filter-lbl"><input type="checkbox" value="fertilize" checked> Nawożenie</label>
+          <label class="chart-filter-lbl"><input type="checkbox" value="harvest" checked> Zbiory</label>
+          <label class="chart-filter-lbl"><input type="checkbox" value="plant" checked> Sadzenie</label>
+          <label class="chart-filter-lbl"><input type="checkbox" value="custom" checked> Inne</label>
+        </div>
+        <div class="modern-chart-container" style="max-height: 250px; display: flex; justify-content: center;">
           <canvas id="chart-events"></canvas>
         </div>
       </div>
+
       <div class="chart-card">
-        <h3>Plony per roślina (kg)</h3>
-        <canvas id="chart-harvests" height="200"></canvas>
+        <h3>Plony per roślina</h3>
+        <div class="modern-chart-container">
+          <canvas id="chart-harvests"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Wszystkie Twoje Rośliny</h3>
+        <div class="table-responsive">
+          <table class="modern-table" id="plants-table">
+            <thead>
+              <tr>
+                <th>Roślina</th>
+                <th>Lokalizacja</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- rendered by JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
