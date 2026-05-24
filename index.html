@@ -52,10 +52,20 @@
           </button>
         </div>
       </div>
-      <div class="filter-tabs" id="location-filter">
-        <button class="filter-tab active" data-filter="all">Wszystkie</button>
-        <button class="filter-tab" data-filter="balkon">Balkon</button>
-        <button class="filter-tab" data-filter="parapet">Parapet</button>
+      <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap;">
+        <div class="filter-tabs" id="location-filter" style="margin-bottom: 0;">
+          <button class="filter-tab active" data-filter="all">Wszystkie</button>
+          <button class="filter-tab" data-filter="balkon">Balkon</button>
+          <button class="filter-tab" data-filter="parapet">Parapet</button>
+          <button class="filter-tab" data-filter="mieszkanie">Mieszkanie</button>
+          <button class="filter-tab" data-filter="ogrod">Ogród</button>
+        </div>
+        <select class="form-select" id="sort-plants">
+          <select class="form-select" id="sort-plants">
+            <option value="urgency">Sortuj: Najpilniejsze</option>
+            <option value="name">Sortuj: Od A do Z</option>
+          </select>
+        </select>
       </div>
       <div class="plants-grid" id="plants-grid"></div>
       <div class="empty-state hidden" id="empty-plants">
@@ -69,25 +79,37 @@
     </div>
 
     <!-- TIMELINE -->
-    <div class="view" id="view-timeline">
-      <div class="section-header">
-        <h2>Oś Czasu</h2>
-        <div class="filter-chips" id="timeline-filters">
-          <button class="filter-chip active" data-type="all">Wszystko</button>
-          <button class="filter-chip" data-type="water">Podlewanie</button>
-          <button class="filter-chip" data-type="fertilize">Nawóz</button>
-          <button class="filter-chip" data-type="plant">Sadzenie</button>
-          <button class="filter-chip" data-type="harvest">Zbiory</button>
-          <button class="filter-chip" data-type="custom">Inne</button>
+    <div class="view hidden" id="view-timeline">
+      <div class="section-header" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+          <h2>Oś czasu</h2>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <div class="filter-tabs" id="timeline-filters" style="margin-bottom: 0;">
+            <button class="filter-chip active" data-type="all">Wszystko</button>
+            <button class="filter-chip" data-type="water">Podlewanie</button>
+            <button class="filter-chip" data-type="fertilize">Nawóz</button>
+            <button class="filter-chip" data-type="plant">Sadzenie</button>
+            <button class="filter-chip" data-type="harvest">Zbiory</button>
+            <button class="filter-chip" data-type="custom">Inne</button>
+          </div>
+          <select class="form-select" id="timeline-plant-filter" style="max-width: 150px;">
+            <option value="all">Wszystkie rośliny</option>
+          </select>
         </div>
       </div>
       <div class="timeline-container" id="timeline-container"></div>
     </div>
 
     <!-- CALENDAR -->
-    <div class="view" id="view-calendar">
-      <div class="section-header">
-        <h2>Kalendarz</h2>
+    <div class="view hidden" id="view-calendar">
+      <div class="section-header" style="justify-content: space-between;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <h2>Kalendarz</h2>
+          <select class="form-select" id="cal-plant-filter" style="max-width: 150px;">
+            <option value="all">Wszystkie</option>
+          </select>
+        </div>
         <button class="btn-add" id="btn-add-event">
           <i data-lucide="plus"></i>
           Zaplanuj
@@ -124,8 +146,24 @@
         </div>
       </div>
       <div class="chart-card">
-        <h3>Podlewanie — ostatnie 30 dni</h3>
-        <canvas id="chart-waterings" height="200"></canvas>
+        <h3>Podlewania i nawożenia (30 dni)</h3>
+        <div style="background:var(--bg2); border:1px solid var(--bd2); border-radius:var(--r-md); padding:16px;">
+          <canvas id="chart-waterings"></canvas>
+        </div>
+      </div>
+      
+      <div style="margin-top:20px">
+        <h3>Rozkład Zdarzeń</h3>
+        <div class="chart-container">
+          <div class="chart-filters" id="events-chart-filters">
+            <label class="chart-filter-lbl"><input type="checkbox" value="water" checked> Podlewanie</label>
+            <label class="chart-filter-lbl"><input type="checkbox" value="fertilize" checked> Nawożenie</label>
+            <label class="chart-filter-lbl"><input type="checkbox" value="harvest" checked> Zbiory</label>
+            <label class="chart-filter-lbl"><input type="checkbox" value="plant" checked> Sadzenie</label>
+            <label class="chart-filter-lbl"><input type="checkbox" value="custom" checked> Inne</label>
+          </div>
+          <canvas id="chart-events"></canvas>
+        </div>
       </div>
       <div class="chart-card">
         <h3>Plony per roślina (kg)</h3>
@@ -231,6 +269,12 @@
           </button>
           <button class="btn-toggle" data-value="parapet">
             <i data-lucide="layout-panel-left"></i> Parapet
+          </button>
+          <button class="btn-toggle" data-value="mieszkanie">
+            <i data-lucide="home"></i> Mieszkanie
+          </button>
+          <button class="btn-toggle" data-value="ogrod">
+            <i data-lucide="tree-pine"></i> Ogród
           </button>
         </div>
       </div>

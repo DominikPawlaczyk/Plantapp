@@ -23,8 +23,9 @@ const S = {
   plants: [], events: [], scheduled: [], aiForecasts: {},
   view: 'home', locationFilter: 'all', timelineFilter: 'all',
   calMonth: new Date(), selectedDate: new Date(),
-  editingPlantId: null, waterPlantId: null, harvestPlantId: null,
+  editingPlantId: null, waterPlantId: null, harvestPlantId: null, customPlantId: null,
   schedType: 'water',
+  sortOrder: 'urgency', timelinePlant: 'all', calPlant: 'all',
   charts: {}
 };
 
@@ -202,6 +203,17 @@ function renderPlants() {
 
   let plants = filter === 'all' ? S.plants : S.plants.filter(p => p.location === filter);
 
+  if (S.sortOrder === 'name') {
+    plants.sort((a,b) => a.name.localeCompare(b.name));
+  } else {
+    plants.sort((a,b) => {
+      const pa = predict(a), pb = predict(b);
+      const ua = pa ? daysUntil(pa.nextDate) : 999;
+      const ub = pb ? daysUntil(pb.nextDate) : 999;
+      return ua - ub;
+    });
+  }
+
   if (plants.length === 0) {
     grid.innerHTML = '';
     empty.classList.remove('hidden');
@@ -224,8 +236,10 @@ function renderPlants() {
     const imgHtml = p.photo
       ? `<img class="plant-img" src="${p.photo}" alt="${p.name}" loading="lazy" />`
       : `<div class="plant-placeholder">${icon(plantEmoji(p.name), 44)}</div>`;
-    const locLabel = p.location === 'balkon' ? 'Balkon' : 'Parapet';
-    const locIco = p.location === 'balkon' ? 'sun' : 'layout-panel-left';
+    const locLabels = { balkon:'Balkon', parapet:'Parapet', mieszkanie:'Mieszkanie', ogrod:'Ogród' };
+    const locIcos   = { balkon:'sun', parapet:'layout-panel-left', mieszkanie:'home', ogrod:'tree-pine' };
+    const locLabel = locLabels[p.location] || p.location;
+    const locIco = locIcos[p.location] || 'layout-panel-left';
 
     return `<div class="plant-card" data-plant-id="${p.id}">
       ${imgHtml}
@@ -517,6 +531,11 @@ function openPlantDetail(plantId) {
   const typeLabel= { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
   const typeCls  = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom' };
 
+  const locLabels = { balkon:'Balkon', parapet:'Parapet', mieszkanie:'Mieszkanie', ogrod:'Ogród' };
+  const locIcos   = { balkon:'sun', parapet:'layout-panel-left', mieszkanie:'home', ogrod:'tree-pine' };
+  const locLabel = locLabels[p.location] || p.location;
+  const locIco = locIcos[p.location] || 'layout-panel-left';
+
   document.getElementById('detail-title').textContent = p.name;
   document.getElementById('modal-detail-body').innerHTML = `
     <div class="detail-header">
@@ -525,7 +544,7 @@ function openPlantDetail(plantId) {
         <div class="detail-name">${p.name}</div>
         ${p.species ? `<div class="detail-species">${p.species}</div>` : ''}
         <div class="detail-badges">
-          <span class="detail-badge">${icon(p.location==='balkon'?'sun':'layout-panel-left',11)} ${p.location==='balkon'?'Balkon':'Parapet'}</span>
+          <span class="detail-badge">${icon(locIco,11)} ${locLabel}</span>
           ${p.planted ? `<span class="detail-badge">${icon('calendar',11)} ${fmtDate(p.planted)}</span>` : ''}
           <span class="detail-badge">${icon('droplets',11)} co ${p.waterFreq||7}d</span>
         </div>
@@ -607,6 +626,13 @@ function renderTimeline() {
   const f  = S.timelineFilter;
   let evs  = [...S.events].sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp));
   if (f !== 'all') evs = evs.filter(e => e.type === f);
+  if (S.timelinePlant !== 'all') evs = evs.filter(e => e.plantId === S.timelinePlant);
+
+  const pSelect = document.getElementById('timeline-plant-filter');
+  if (pSelect) {
+    pSelect.innerHTML = '<option value="all">Wszystkie rośliny</option>' + 
+      S.plants.map(p => `<option value="${p.id}" ${p.id===S.timelinePlant?'selected':''}>${p.name}</option>`).join('');
+  }
 
   if (evs.length === 0) {
     el.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon('clock',56)}</div><p>Brak zdarzeń</p><span>Podlej rośliny lub dodaj zbiory</span></div>`;
@@ -669,10 +695,16 @@ function renderCalendar() {
 
   function dotsForDay(date) {
     const types = new Set([
-      ...S.events.filter(e => sameDay(e.timestamp,date)).map(e=>e.type),
-      ...S.scheduled.filter(e => e.date && sameDay(e.date,date)).map(e=>e.type)
+      ...S.events.filter(e => sameDay(e.timestamp,date) && (S.calPlant==='all'||e.plantId===S.calPlant)).map(e=>e.type),
+      ...S.scheduled.filter(e => e.date && sameDay(e.date,date) && (S.calPlant==='all'||e.plantId===S.calPlant)).map(e=>e.type)
     ]);
     return [...types].slice(0,3).map(t=>`<div class="cal-dot ${t}"></div>`).join('');
+  }
+
+  const calSelect = document.getElementById('cal-plant-filter');
+  if (calSelect) {
+    calSelect.innerHTML = '<option value="all">Wszystkie</option>' + 
+      S.plants.map(p => `<option value="${p.id}" ${p.id===S.calPlant?'selected':''}>${p.name}</option>`).join('');
   }
 
   widget.innerHTML = `
@@ -723,8 +755,12 @@ function renderCalEvents() {
   const el   = document.getElementById('calendar-events');
   const date = S.selectedDate;
 
-  const dayEvs = S.events.filter(e => sameDay(e.timestamp, date));
-  const scheEvs = S.scheduled.filter(e => e.date && sameDay(e.date, date));
+  let dayEvs = S.events.filter(e => sameDay(e.timestamp, date));
+  let scheEvs = S.scheduled.filter(e => e.date && sameDay(e.date, date));
+  if (S.calPlant !== 'all') {
+    dayEvs = dayEvs.filter(e => e.plantId === S.calPlant);
+    scheEvs = scheEvs.filter(e => e.plantId === S.calPlant);
+  }
   const all = [...dayEvs, ...scheEvs].sort((a,b) =>
     new Date(a.timestamp||a.date) - new Date(b.timestamp||b.date)
   );
@@ -917,6 +953,47 @@ function renderCharts() {
   updateStats();
   renderWaterChart();
   renderHarvestChart();
+  renderEventChart();
+}
+
+function renderEventChart() {
+  const canvas = document.getElementById('chart-events');
+  if (!canvas || !window.Chart) return;
+  
+  const filters = Array.from(document.querySelectorAll('#events-chart-filters input:checked')).map(el => el.value);
+  const evs = S.events.filter(e => filters.includes(e.type));
+  
+  const counts = {};
+  filters.forEach(f => counts[f] = 0);
+  evs.forEach(e => counts[e.type]++);
+
+  const labelsMap = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
+  const colorsMap = { water:'#60A5FA', fertilize:'#A3E635', harvest:'#FB923C', plant:'#A78BFA', custom:'#F472B6' };
+
+  const labels = filters.map(f => labelsMap[f]);
+  const data = filters.map(f => counts[f]);
+  const bgColors = filters.map(f => colorsMap[f]);
+
+  if (S.charts.events) S.charts.events.destroy();
+  
+  if (evs.length === 0) {
+    S.charts.events = new Chart(canvas, {
+      type: 'doughnut',
+      data: { labels: ['Brak danych'], datasets: [{ data: [1], backgroundColor: ['#3f3f46'] }] },
+      options: { plugins: { tooltip: { enabled: false } }, cutout: '70%' }
+    });
+    return;
+  }
+
+  S.charts.events = new Chart(canvas, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: bgColors, borderColor: '#222225', borderWidth: 2 }] },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'right', labels: { color: '#A1A1AA', font: { family: 'Inter', size: 12 } } } },
+      cutout: '60%'
+    }
+  });
 }
 
 function renderWaterChart() {
@@ -1135,6 +1212,21 @@ function init() {
     S.timelineFilter = chip.dataset.type;
     renderTimeline();
   });
+
+  document.getElementById('sort-plants')?.addEventListener('change', e => {
+    S.sortOrder = e.target.value;
+    renderPlants();
+  });
+  document.getElementById('timeline-plant-filter')?.addEventListener('change', e => {
+    S.timelinePlant = e.target.value;
+    renderTimeline();
+  });
+  document.getElementById('cal-plant-filter')?.addEventListener('change', e => {
+    S.calPlant = e.target.value;
+    renderCalendar();
+    renderCalEvents();
+  });
+  document.getElementById('events-chart-filters')?.addEventListener('change', renderEventChart);
 
   // Plant modal: save
   document.getElementById('btn-save-plant').addEventListener('click', savePlant);
