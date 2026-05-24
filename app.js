@@ -620,14 +620,23 @@ function openBulkModal() {
 
   const list = document.getElementById('bulk-plant-list');
   list.innerHTML = S.plants.map(p => `
-    <label class="bulk-plant-item" data-pid="${p.id}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.07);margin-bottom:6px;background:rgba(255,255,255,0.03);user-select:none;">
-      <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" style="width:16px;height:16px;flex-shrink:0;cursor:pointer;" />
-      <div style="flex:1;">
-        <div class="bulk-plant-name" style="font-weight:500;font-size:14px;color:var(--text1)">${p.name}</div>
+    <div class="bulk-plant-item" data-pid="${p.id}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,0.07);margin-bottom:6px;background:rgba(255,255,255,0.03);user-select:none;">
+      <input type="checkbox" id="bulk-cb-${p.id}" value="${p.id}" class="bulk-cb" style="width:16px;height:16px;flex-shrink:0;pointer-events:none;" />
+      <div style="flex:1;pointer-events:none;">
+        <div class="bulk-plant-name" style="font-weight:500;font-size:14px;">${p.name}</div>
         <div class="bulk-plant-meta" style="font-size:12px;color:var(--text3)">${p.location}</div>
       </div>
-    </label>
+    </div>
   `).join('');
+
+  list.querySelectorAll('.bulk-plant-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const cb = item.querySelector('.bulk-cb');
+      cb.checked = !cb.checked;
+      item.style.borderColor = cb.checked ? 'var(--accent)' : 'rgba(255,255,255,0.07)';
+      item.style.background = cb.checked ? 'rgba(74,222,128,0.07)' : 'rgba(255,255,255,0.03)';
+    });
+  });
 
   openModal('modal-bulk');
 }
@@ -1647,7 +1656,14 @@ function init() {
     e.preventDefault();
     const cbs = document.querySelectorAll('.bulk-cb');
     const allChecked = Array.from(cbs).every(cb => cb.checked);
-    cbs.forEach(cb => cb.checked = !allChecked);
+    cbs.forEach(cb => {
+      cb.checked = !allChecked;
+      const item = cb.closest('.bulk-plant-item');
+      if (item) {
+        item.style.borderColor = cb.checked ? 'var(--accent)' : 'rgba(255,255,255,0.07)';
+        item.style.background = cb.checked ? 'rgba(74,222,128,0.07)' : 'rgba(255,255,255,0.03)';
+      }
+    });
   });
 
   document.getElementById('bulk-type-group').addEventListener('click', e => {
