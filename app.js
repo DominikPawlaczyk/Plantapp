@@ -20,7 +20,7 @@ function renderIcons() {
 
 // ───── STATE ─────
 const S = {
-  plants: [], events: [], scheduled: [], aiForecasts: {},
+  plants: [], events: [], scheduled: [], aiForecasts: {}, species: [],
   view: 'home', locationFilter: 'all', timelineFilter: 'all',
   calMonth: new Date(), selectedDate: new Date(),
   editingPlantId: null, waterPlantId: null, harvestPlantId: null, customPlantId: null,
@@ -34,7 +34,7 @@ function save() {
   try {
     localStorage.setItem(CFG.STORE, JSON.stringify({
       plants: S.plants, events: S.events,
-      scheduled: S.scheduled, aiForecasts: S.aiForecasts
+      scheduled: S.scheduled, aiForecasts: S.aiForecasts, species: S.species
     }));
   } catch(e) { console.error(e); }
 }
@@ -46,6 +46,7 @@ function load() {
     S.events     = d.events     || [];
     S.scheduled  = d.scheduled  || [];
     S.aiForecasts = d.aiForecasts || {};
+    S.species    = d.species    || [];
   } catch(e) { console.error(e); }
 }
 
@@ -79,6 +80,12 @@ function sameDay(a, b) {
          da.getMonth() === db.getMonth() &&
          da.getDate() === db.getDate();
 }
+
+function getSpeciesName(val) {
+  const s = S.species.find(x => x.id === val);
+  return s ? s.name : val;
+}
+
 function nowLocal() {
   const d = new Date();
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -266,7 +273,7 @@ function renderPlants() {
       ${urgTxt ? `<div class="predict-badge">${urgTxt}</div>` : ''}
       <div class="plant-body">
         <div class="plant-name">${p.name}</div>
-        ${p.species ? `<div class="plant-species">${p.species}</div>` : ''}
+        ${p.species ? `<div class="plant-species">${getSpeciesName(p.species)}</div>` : ''}
         <div class="plant-meta">
           <span class="loc-badge">${icon(locIco,10)} ${locLabel}</span>
           ${ago!==null ? `<span class="next-water ${urgCls}">${icon('droplet',12)} ${ago===0?'Dziś':ago+'d temu'}</span>` : ''}
@@ -297,10 +304,15 @@ function openPlantModal(editId = null) {
   const preview   = document.getElementById('plant-photo-preview');
 
   // Reset
-  nameEl.value = ''; speciesEl.value = ''; notesEl.value = ''; freqEl.value = 7;
+  nameEl.value = ''; notesEl.value = ''; freqEl.value = 7;
   plantedEl.value = new Date().toISOString().split('T')[0];
   preview.innerHTML = `${icon('image',32)}<span>Dodaj zdjęcie</span>`;
   setGroupActive('location-group', 'balkon');
+
+  // Populate species select
+  speciesEl.innerHTML = '<option value="">-- Wybierz z bazy (lub brak) --</option>' + 
+    S.species.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  speciesEl.value = '';
 
   if (editId) {
     const p = S.plants.find(x => x.id === editId);
@@ -556,13 +568,15 @@ function openPlantDetail(plantId) {
   const locLabel = locLabels[p.location] || p.location;
   const locIco = locIcos[p.location] || 'layout-panel-left';
 
+  const sObj = S.species.find(x => x.id === p.species);
+
   document.getElementById('detail-title').textContent = p.name;
   document.getElementById('modal-detail-body').innerHTML = `
     <div class="detail-header">
       ${imgHtml}
       <div>
         <div class="detail-name">${p.name}</div>
-        ${p.species ? `<div class="detail-species">${p.species}</div>` : ''}
+        ${p.species ? `<div class="detail-species">${getSpeciesName(p.species)}</div>` : ''}
         <div class="detail-badges">
           <span class="detail-badge">${icon(locIco,11)} ${locLabel}</span>
           ${p.planted ? `<span class="detail-badge">${icon('calendar',11)} ${fmtDate(p.planted)}</span>` : ''}
@@ -593,6 +607,12 @@ function openPlantDetail(plantId) {
         <div class="stat-card"><div class="stat-icon harvest-color">${icon('scale',20)}</div><div class="stat-value">${totalKg.toFixed(2)}<small style="font-size:12px"> kg</small></div><div class="stat-label">Waga</div></div>
         <div class="stat-card"><div class="stat-icon harvest-color">${icon('hash',20)}</div><div class="stat-value">${totalQty}</div><div class="stat-label">Sztuki</div></div>
       </div>
+    </div>` : ''}
+
+    ${sObj ? `
+    <div class="detail-section" style="margin-bottom:14px; background: rgba(167, 139, 250, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(167, 139, 250, 0.1);">
+      <h5 style="color: var(--plant); display:flex; align-items:center; gap:6px; margin-bottom:6px;">${icon('book-open',14)} Wiedza o gatunku</h5>
+      <p style="font-size:13px; color:var(--text2); margin:0; line-height:1.5; white-space:pre-wrap;">${sObj.description}</p>
     </div>` : ''}
 
     <div class="detail-section">
@@ -917,6 +937,40 @@ function applyAiForecast() {
   renderPlants();
   renderIcons();
   toast('🤖 AI forecast zastosowany!');
+}
+
+// ───── SPECIES KNOWLEDGE BASE ─────
+function renderSpeciesList() {
+  const container = document.getElementById('species-list-container');
+  if (!container) return;
+  if (S.species.length === 0) {
+    container.innerHTML = '<div style="color:var(--text3); font-size:13px;">Brak dodanych gatunków.</div>';
+    return;
+  }
+  container.innerHTML = S.species.map(s => `
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; padding: 10px; position: relative;">
+      <div style="font-weight: 500; font-size: 14px; color: var(--text1); margin-bottom: 4px; padding-right: 24px;">${s.name}</div>
+      <div style="font-size: 13px; color: var(--text2); line-height: 1.4; white-space: pre-wrap;">${s.description}</div>
+      <button class="btn-delete-species" data-sid="${s.id}" style="position: absolute; top: 8px; right: 8px; background: none; border: none; color: var(--danger); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px;">${icon('trash-2', 14)}</button>
+    </div>
+  `).join('');
+  renderIcons();
+}
+
+function addSpecies() {
+  const nameInput = document.getElementById('species-name-input');
+  const descInput = document.getElementById('species-desc-input');
+  const name = nameInput.value.trim();
+  const desc = descInput.value.trim();
+  if (!name) { toast('Podaj nazwę gatunku', true); return; }
+  if (!desc) { toast('Podaj opis gatunku', true); return; }
+
+  S.species.push({ id: uid(), name, description: desc });
+  save();
+  nameInput.value = '';
+  descInput.value = '';
+  renderSpeciesList();
+  toast('✓ Gatunek dodany do Bazy Wiedzy');
 }
 
 // ───── BACKUP / EXPORT / IMPORT ─────
@@ -1468,6 +1522,22 @@ function init() {
 
   // Custom event modal: save
   document.getElementById('btn-save-custom').addEventListener('click', (e) => { e.preventDefault(); saveCustom(); });
+
+  // Species Knowledge Base
+  document.getElementById('btn-add-species')?.addEventListener('click', addSpecies);
+  document.getElementById('species-list-container')?.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-delete-species');
+    if (btn) {
+      if (confirm('Usunąć ten gatunek z Bazy Wiedzy?')) {
+        S.species = S.species.filter(s => s.id !== btn.dataset.sid);
+        save();
+        renderSpeciesList();
+        renderPlants();
+        toast('Gatunek usunięty');
+      }
+    }
+  });
+  renderSpeciesList();
 
   // Backup
   document.getElementById('btn-export-data').addEventListener('click', exportData);
