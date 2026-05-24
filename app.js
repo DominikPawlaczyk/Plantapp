@@ -235,7 +235,7 @@ function renderPlants() {
         ${p.species ? `<div class="plant-species">${p.species}</div>` : ''}
         <div class="plant-meta">
           <span class="loc-badge">${icon(locIco,10)} ${locLabel}</span>
-          ${ago!==null ? `<span class="next-water ${urgCls}">💧 ${ago===0?'Dziś':ago+'d temu'}</span>` : ''}
+          ${ago!==null ? `<span class="next-water ${urgCls}">${icon('droplet',12)} ${ago===0?'Dziś':ago+'d temu'}</span>` : ''}
         </div>
       </div>
       <div class="plant-actions">
@@ -812,10 +812,10 @@ function renderWaterChart() {
     },
     options:{
       responsive:true,
-      plugins:{legend:{labels:{color:'#7aab80',font:{family:'Inter',size:11}}}},
+      plugins:{legend:{labels:{color:'#A1A1AA',font:{family:'Inter',size:11}}}},
       scales:{
-        x:{ticks:{color:'#3d5e42',font:{size:9},maxRotation:45},grid:{color:'rgba(74,222,128,0.05)'}},
-        y:{ticks:{color:'#3d5e42',stepSize:1},grid:{color:'rgba(74,222,128,0.05)'},beginAtZero:true}
+        x:{ticks:{color:'#52525B',font:{size:9},maxRotation:45},grid:{color:'rgba(255,255,255,0.04)'}},
+        y:{ticks:{color:'#52525B',stepSize:1},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}
       }
     }
   });
@@ -845,11 +845,11 @@ function renderHarvestChart() {
 
   S.charts.harvest = new Chart(canvas,{
     type:'doughnut',
-    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderColor:'#111911',borderWidth:2}]},
+    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length),borderColor:'#222225',borderWidth:2}]},
     options:{
       responsive:true,
       plugins:{
-        legend:{position:'bottom',labels:{color:'#7aab80',font:{family:'Inter',size:12},padding:12}},
+        legend:{position:'bottom',labels:{color:'#A1A1AA',font:{family:'Inter',size:12},padding:12}},
         tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.parsed.toFixed(2)} kg`}}
       }
     }
