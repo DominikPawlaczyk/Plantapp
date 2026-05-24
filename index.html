@@ -131,6 +131,23 @@
       <div class="section-header">
         <h2>Ustawienia</h2>
       </div>
+
+      <!-- Backup -->
+      <div class="ai-forecast-card">
+        <div class="ai-forecast-header">
+          <span class="ai-badge" style="background: var(--water-bg); color: var(--water); box-shadow: none;"><i data-lucide="database"></i> Dane</span>
+          <h3>Kopia zapasowa</h3>
+        </div>
+        <p class="ai-forecast-desc">Eksportuj ustawienia, zdjęcia i wpisy do pliku. Użyj przed aktualizacją, aby niczego nie stracić.</p>
+        <div class="ai-forecast-actions">
+          <button class="btn-primary" id="btn-export-data"><i data-lucide="download"></i> Eksportuj</button>
+          <label class="btn-secondary" for="import-data-file">
+            <i data-lucide="upload"></i> Importuj
+          </label>
+          <input type="file" id="import-data-file" accept=".json" class="hidden" />
+        </div>
+      </div>
+
       <!-- AI Forecast -->
       <div class="ai-forecast-card">
         <div class="ai-forecast-header">

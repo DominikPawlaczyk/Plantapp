@@ -769,6 +769,43 @@ function applyAiForecast() {
   toast('🤖 AI forecast zastosowany!');
 }
 
+// ───── BACKUP / EXPORT / IMPORT ─────
+function exportData() {
+  const data = localStorage.getItem(CFG.STORE) || '{}';
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const dateStr = new Date().toISOString().split('T')[0];
+  a.download = `plant_tracker_backup_${dateStr}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Dane wyeksportowane');
+}
+
+function handleImport(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const txt = ev.target.result;
+      JSON.parse(txt); // Validate JSON
+      localStorage.setItem(CFG.STORE, txt);
+      load();
+      renderPlants();
+      renderTimeline();
+      renderCalendar();
+      updateStats();
+      toast('✓ Dane zaimportowane pomyślnie!');
+    } catch(err) {
+      toast('Błąd formatu pliku', true);
+    }
+    e.target.value = ''; // Reset input
+  };
+  reader.readAsText(file);
+}
+
 // ───── STATS / CHARTS ─────
 function updateStats() {
   const waters = S.events.filter(e=>e.type==='water').length;
@@ -1078,6 +1115,10 @@ function init() {
   document.getElementById('btn-notif').addEventListener('click', requestNotifPermission);
 
 
+
+  // Backup
+  document.getElementById('btn-export-data').addEventListener('click', exportData);
+  document.getElementById('import-data-file').addEventListener('change', handleImport);
 
   // AI forecast
   document.getElementById('btn-apply-ai-forecast').addEventListener('click', applyAiForecast);
