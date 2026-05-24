@@ -118,13 +118,18 @@ const DEFAULT_SPECIES = [
     id: 'sp_zamioculcas',
     name: 'Zamioculcas Zamikulkas',
     description: 'Opis: Sukulent o grubych, błyszczących liściach ułożonych na mięsistych łodygach.\nHistoria: Wprowadzony na szeroki rynek florystyczny stosunkowo niedawno (w 1996 roku).\nPochodzenie: Afryka Wschodnia (Tanzania, Zanzibar).\nNasłonecznienie: Cień do lekko rozproszonego światła.\nNawodnienie: Bardzo rzadkie (magazynuje wodę w podziemnych bulwach).\nCechy szczególne: Nazywany "żelazną rośliną" – niemal niezniszczalny.\nFunkcje: Ozdobna, idealna dla zapracowanych i początkujących.'
+  },
+  {
+    id: 'sp_euphorbia_lactea',
+    name: 'Euphorbia lactea (Wilczomlecz mleczny)',
+    description: 'Opis: Oryginalny sukulent o rzeźbiarskich, pofalowanych pędach z jasnym, marmurkowym wzorem.\nHistoria: Niezwykle popularny w zmutowanej formie grzebieniastej (\'Cristata\'), która przypomina rafę koralową.\nPochodzenie: Tropikalne regiony Azji (głównie Indie i Sri Lanka).\nNasłonecznienie: Jasne, rozproszone światło do pełnego słońca.\nNawodnienie: Bardzo rzadkie, podłoże musi całkowicie wyschnąć przed kolejnym podlaniem.\nCechy szczególne: Wydziela biały, toksyczny sok mleczny, który może silnie podrażnić skórę i oczy.\nFunkcje: Wysoce dekoracyjna, architektoniczna ozdoba nowoczesnych wnętrz.'
   }
 ];
 
 // ───── STATE ─────
 const S = {
   plants: [], events: [], scheduled: [], aiForecasts: {}, species: [],
-  defaultSpeciesAdded: false,
+  defaultSpeciesVersion: 0,
   view: 'home', locationFilter: 'all', timelineFilter: 'all',
   calMonth: new Date(), selectedDate: new Date(),
   editingPlantId: null, waterPlantId: null, harvestPlantId: null, customPlantId: null,
@@ -139,7 +144,7 @@ function save() {
     localStorage.setItem(CFG.STORE, JSON.stringify({
       plants: S.plants, events: S.events,
       scheduled: S.scheduled, aiForecasts: S.aiForecasts, species: S.species,
-      defaultSpeciesAdded: S.defaultSpeciesAdded
+      defaultSpeciesVersion: S.defaultSpeciesVersion
     }));
   } catch(e) { console.error(e); }
 }
@@ -152,13 +157,16 @@ function load() {
     S.scheduled  = d.scheduled  || [];
     S.aiForecasts = d.aiForecasts || {};
     S.species    = d.species    || [];
-    S.defaultSpeciesAdded = d.defaultSpeciesAdded || false;
+    
+    // Migracja z defaultSpeciesAdded -> defaultSpeciesVersion
+    if (d.defaultSpeciesAdded && !d.defaultSpeciesVersion) d.defaultSpeciesVersion = 1;
+    S.defaultSpeciesVersion = d.defaultSpeciesVersion || 0;
 
-    if (!S.defaultSpeciesAdded) {
+    if (S.defaultSpeciesVersion < 2) {
       DEFAULT_SPECIES.forEach(ds => {
         if (!S.species.find(s => s.name === ds.name)) S.species.push(ds);
       });
-      S.defaultSpeciesAdded = true;
+      S.defaultSpeciesVersion = 2;
       save(); // Save immediately to persist defaults
     }
   } catch(e) { console.error(e); }
