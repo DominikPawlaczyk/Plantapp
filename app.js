@@ -934,12 +934,15 @@ function renderTimeline() {
     if (ev.height) detail += (detail?' · ':'')+ev.height+' cm';
     if (ev.notes) detail += (detail?' · ':'')+ev.notes;
 
-    return `<div class="tl-item" data-plant-id="${plant ? plant.id : ''}">
+    return `<div class="tl-item" data-plant-id="${plant ? plant.id : ''}" data-ev-id="${ev.id}">
       <div class="tl-dot ${ev.type}">${icon(typeIco[ev.type]||'circle',10)}</div>
       <div class="tl-card">
         <div class="tl-head">
           <span class="tl-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</span>
-          <span class="tl-time">${fmtDateTime(ev.timestamp)}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="tl-time">${fmtDateTime(ev.timestamp)}</span>
+            <button class="tl-delete-btn" data-ev-id="${ev.id}" title="Usuń zdarzenie" style="background:none;border:none;cursor:pointer;color:var(--text3);display:flex;align-items:center;padding:2px;border-radius:4px;transition:color 0.2s;" onclick="event.stopPropagation()">${icon('trash-2',13)}</button>
+          </div>
         </div>
         <div class="tl-plant">${icon('leaf',12)} ${pName}</div>
         ${detail ? `<div class="tl-detail">${detail}</div>` : ''}
@@ -1784,8 +1787,22 @@ function init() {
     if (card?.dataset.plantId) openPlantDetail(card.dataset.plantId);
   });
 
-  // Timeline clicks -> open plant detail
+  // Timeline clicks -> delete event or open plant detail
   document.getElementById('timeline-container').addEventListener('click', e => {
+    const delBtn = e.target.closest('.tl-delete-btn');
+    if (delBtn) {
+      e.stopPropagation();
+      const evId = delBtn.dataset.evId;
+      if (confirm('Usunąć to zdarzenie?')) {
+        S.events = S.events.filter(ev => ev.id !== evId);
+        save();
+        renderTimeline();
+        renderPlants();
+        updateStats();
+        toast('Zdarzenie usunięte');
+      }
+      return;
+    }
     const tlItem = e.target.closest('.tl-item');
     if (tlItem && tlItem.dataset.plantId) {
       openPlantDetail(tlItem.dataset.plantId);
