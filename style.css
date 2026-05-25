@@ -660,7 +660,7 @@ input[type="date"], input[type="datetime-local"], input[type="time"] { color-sch
 
 .detail-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 .detail-action-btn {
-  flex: 1; min-width: 0; padding: 10px 8px;
+  flex: 1 1 calc(33.33% - 8px); min-width: 90px; padding: 10px 8px;
   border-radius: var(--r-sm); border: 1px solid var(--bd2);
   background: transparent; font-size: 13px; font-weight: 600;
   cursor: pointer; font-family: var(--font); transition: all 0.2s;

@@ -1636,28 +1636,79 @@ function calculatePlantValue(plant) {
   return val;
 }
 
+function calculatePlantValueAtDate(plant, timestamp) {
+  let val = { base: 0, yields: 0, total: 0 };
+  if (!plant.species) return val;
+
+  const rules = S.priceRules.filter(r => r.speciesId === plant.species);
+  if (rules.length === 0) return val;
+
+  const hRules = rules.filter(r => r.type === 'height').sort((a,b) => a.threshold - b.threshold);
+  const hEvents = S.events.filter(e => e.plantId === plant.id && e.type === 'height' && new Date(e.timestamp).getTime() <= timestamp).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const currentHeight = hEvents.length > 0 ? hEvents[0].height : 0;
+
+  if (hRules.length > 0) {
+    if (currentHeight <= hRules[0].threshold) {
+      val.base = (currentHeight / hRules[0].threshold) * hRules[0].price;
+    } else if (currentHeight >= hRules[hRules.length-1].threshold) {
+      val.base = hRules[hRules.length-1].price;
+    } else {
+      for (let i = 0; i < hRules.length - 1; i++) {
+        if (currentHeight >= hRules[i].threshold && currentHeight <= hRules[i+1].threshold) {
+          const r1 = hRules[i], r2 = hRules[i+1];
+          const factor = (currentHeight - r1.threshold) / (r2.threshold - r1.threshold);
+          val.base = r1.price + factor * (r2.price - r1.price);
+          break;
+        }
+      }
+    }
+  }
+
+  const qtyRules = rules.filter(r => r.type === 'quantity');
+  const wgtRules = rules.filter(r => r.type === 'weight');
+  const harvests = S.events.filter(e => e.plantId === plant.id && e.type === 'harvest' && new Date(e.timestamp).getTime() <= timestamp);
+  const totalQty = harvests.reduce((s,e) => s + (e.quantity||0), 0);
+  const totalWgt = harvests.reduce((s,e) => s + (e.weight||0), 0);
+
+  if (qtyRules.length > 0) val.yields += totalQty * (qtyRules[0].price / (qtyRules[0].threshold || 1));
+  if (wgtRules.length > 0) val.yields += totalWgt * (wgtRules[0].price / (wgtRules[0].threshold || 1));
+
+  const cutRules = rules.filter(r => r.type === 'cutting');
+  const cuttings = S.events.filter(e => e.plantId === plant.id && e.type === 'cutting' && new Date(e.timestamp).getTime() <= timestamp);
+  const totalCut = cuttings.reduce((s,e) => s + (e.quantity||0), 0);
+
+  if (cutRules.length > 0) val.yields += totalCut * (cutRules[0].price / (cutRules[0].threshold || 1));
+
+  val.total = val.base + val.yields;
+  return val;
+}
+
 function renderFinances() {
   const tVal = document.getElementById('fin-total-value');
   const tExp = document.getElementById('fin-total-expenses');
   const tBal = document.getElementById('fin-net-balance');
   const vTable = document.querySelector('#valuation-table tbody');
   const eTable = document.querySelector('#expenses-table tbody');
+  const searchInput = document.getElementById('valuation-search');
   if (!tVal || !vTable) return;
+
+  const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
 
   // Wycena
   let totalValue = 0;
-  vTable.innerHTML = S.plants.map(p => {
+  const valuationRows = S.plants.map(p => {
     const v = calculatePlantValue(p);
     totalValue += v.total;
     if (v.total === 0) return '';
+    if (searchQuery && !p.name.toLowerCase().includes(searchQuery)) return '';
     return `<tr>
       <td style="font-weight:500;">${p.name}</td>
       <td>${v.base.toFixed(2)} zł</td>
       <td>${v.yields.toFixed(2)} zł</td>
       <td style="color:var(--harvest);font-weight:600;">${v.total.toFixed(2)} zł</td>
     </tr>`;
-  }).join('');
-  if (vTable.innerHTML === '') vTable.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text3)">Brak danych o wartości</td></tr>';
+  }).filter(Boolean).join('');
+  vTable.innerHTML = valuationRows || '<tr><td colspan="4" style="text-align:center;color:var(--text3)">Brak danych o wartości</td></tr>';
 
   // Wydatki
   let totalExpenses = 0;
@@ -1698,7 +1749,129 @@ function renderFinances() {
   });
 
   renderIcons();
+
+  if (!window.Chart) return;
+  
+  // Wykres 1: Wartość vs Koszt (Zysk vs Koszt w czasie)
+  const chartFC = document.getElementById('chart-fin-profit-cost');
+  if (chartFC) {
+    const labels = [];
+    const profitData = [];
+    const costData = [];
+    
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - i);
+      labels.push(d.toLocaleDateString('pl-PL', { month: 'short', year: 'numeric' }));
+      
+      const mStart = new Date(d.getFullYear(), d.getMonth(), 1).getTime();
+      const mEnd = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59).getTime();
+      
+      let mCost = 0;
+      S.expenses.forEach(ex => {
+        const t = new Date(ex.date).getTime();
+        if (t <= mEnd) mCost += ex.amount;
+      });
+      costData.push(mCost);
+      
+      let mProfit = 0;
+      S.plants.forEach(p => {
+        const v = calculatePlantValueAtDate(p, mEnd);
+        mProfit += v.total;
+      });
+      profitData.push(mProfit);
+    }
+    
+    if (S.charts.finProfitCost) S.charts.finProfitCost.destroy();
+    S.charts.finProfitCost = new Chart(chartFC, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Skumulowana Wartość', data: profitData, borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.1)', borderWidth: 2, fill: true, tension: 0.4 },
+          { label: 'Skumulowane Wydatki', data: costData, borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.1)', borderWidth: 2, fill: true, tension: 0.4 }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { labels: { color: '#A1A1AA', font: { family: 'Inter', size: 12 } } },
+          tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, cornerRadius: 8 }
+        },
+        scales: {
+          x: { ticks: { color: '#71717A' }, grid: { display: false } },
+          y: { ticks: { color: '#71717A' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Wykres 2: Wzrost w czasie
+  const chartFH = document.getElementById('chart-fin-height');
+  if (chartFH) {
+    const heightEvs = S.events.filter(e => e.type === 'height').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+    
+    if (heightEvs.length > 0) {
+      const plantCounts = {};
+      heightEvs.forEach(e => { plantCounts[e.plantId] = (plantCounts[e.plantId] || 0) + 1; });
+      const topPlants = Object.keys(plantCounts).sort((a,b) => plantCounts[b] - plantCounts[a]).slice(0, 3);
+      
+      const allTimestamps = [...new Set(heightEvs.filter(e => topPlants.includes(e.plantId)).map(e => new Date(e.timestamp).toLocaleDateString('pl-PL', { day:'numeric', month:'short'})))];
+      
+      const colors = ['#38bdf8', '#a78bfa', '#fbbf24'];
+      const datasets = topPlants.map((pid, idx) => {
+        const p = S.plants.find(x => x.id === pid);
+        const pEvs = heightEvs.filter(e => e.plantId === pid);
+        const data = allTimestamps.map(tsLabel => {
+          const ev = pEvs.slice().reverse().find(e => new Date(e.timestamp).toLocaleDateString('pl-PL', { day:'numeric', month:'short'}) === tsLabel);
+          return ev ? ev.height : null;
+        });
+        
+        let lastVal = null;
+        const filledData = data.map(v => {
+          if (v !== null) lastVal = v;
+          return lastVal;
+        });
+
+        return {
+          label: p ? p.name : 'Nieznana',
+          data: filledData,
+          borderColor: colors[idx],
+          backgroundColor: colors[idx],
+          borderWidth: 2,
+          tension: 0.3,
+          spanGaps: true
+        };
+      });
+
+      if (S.charts.finHeight) S.charts.finHeight.destroy();
+      S.charts.finHeight = new Chart(chartFH, {
+        type: 'line',
+        data: { labels: allTimestamps, datasets },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { labels: { color: '#A1A1AA', font: { family: 'Inter', size: 12 } } },
+            tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, callbacks: { label: ctx => ` ${ctx.parsed.y} cm` } }
+          },
+          scales: {
+            x: { ticks: { color: '#71717A' }, grid: { display: false } },
+            y: { ticks: { color: '#71717A' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+          }
+        }
+      });
+    } else {
+      if (S.charts.finHeight) S.charts.finHeight.destroy();
+      S.charts.finHeight = new Chart(chartFH, {
+        type: 'line',
+        data: { labels: ['Brak pomiarów'], datasets: [] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { display: false } } }
+      });
+    }
+  }
 }
+
 
 function renderPriceRulesList() {
   const sel = document.getElementById('price-rule-species');
@@ -1910,6 +2083,8 @@ function init() {
     if (act === 'harvest')   { closeModal('modal-detail'); openHarvestModal(pid); }
     if (act === 'custom')    { closeModal('modal-detail'); openCustomModal(pid); }
     if (act === 'edit')      { closeModal('modal-detail'); openPlantModal(pid); }
+    if (act === 'cutting')   { closeModal('modal-detail'); openCuttingModal(pid); }
+    if (act === 'height')    { closeModal('modal-detail'); openHeightModal(pid); }
     if (act === 'delete')    { deletePlant(pid); }
   });
 
@@ -1968,6 +2143,7 @@ function init() {
   document.getElementById('btn-save-cutting')?.addEventListener('click', (e) => { e.preventDefault(); saveCutting(); });
   document.getElementById('btn-add-expense')?.addEventListener('click', (e) => { e.preventDefault(); openExpenseModal(); });
   document.getElementById('btn-save-expense')?.addEventListener('click', (e) => { e.preventDefault(); saveExpense(); });
+  document.getElementById('valuation-search')?.addEventListener('input', renderFinances);
 
   // Price Rules
   document.getElementById('btn-add-price-rule')?.addEventListener('click', (e) => { e.preventDefault(); addPriceRule(); });

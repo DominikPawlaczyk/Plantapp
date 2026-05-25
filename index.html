@@ -210,8 +210,22 @@
       </div>
 
       <div class="chart-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h3>Wydatki</h3>
+        <h3>Zysk vs Koszt w czasie</h3>
+        <div class="modern-chart-container">
+          <canvas id="chart-fin-profit-cost"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Wzrost (wysokość) w czasie</h3>
+        <div class="modern-chart-container">
+          <canvas id="chart-fin-height"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="margin: 0;">Wydatki</h3>
           <button class="btn-secondary" id="btn-add-expense" style="padding: 6px 12px; font-size: 12px;"><i data-lucide="plus"></i> Dodaj</button>
         </div>
         <div class="table-responsive">
@@ -233,7 +247,10 @@
       </div>
 
       <div class="chart-card">
-        <h3>Wycena Kolekcji</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="margin: 0;">Wycena Kolekcji per roślina</h3>
+          <input type="text" id="valuation-search" placeholder="Szukaj rośliny..." style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 6px 12px; font-size: 13px; max-width: 200px; outline: none; width: 100%;" />
+        </div>
         <div class="table-responsive">
           <table class="modern-table" id="valuation-table">
             <thead>
