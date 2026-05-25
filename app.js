@@ -941,7 +941,7 @@ function renderTimeline() {
           <span class="tl-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</span>
           <div style="display:flex;align-items:center;gap:8px;">
             <span class="tl-time">${fmtDateTime(ev.timestamp)}</span>
-            <button class="tl-delete-btn" data-ev-id="${ev.id}" title="Usuń zdarzenie" style="background:none;border:none;cursor:pointer;color:var(--text3);display:flex;align-items:center;padding:2px;border-radius:4px;transition:color 0.2s;" onclick="event.stopPropagation()">${icon('trash-2',13)}</button>
+            <button class="tl-delete-btn" data-ev-id="${ev.id}" title="Usuń zdarzenie" style="background:none;border:none;cursor:pointer;color:var(--text3);display:flex;align-items:center;padding:2px;border-radius:4px;transition:color 0.2s;">${icon('trash-2',13)}</button>
           </div>
         </div>
         <div class="tl-plant">${icon('leaf',12)} ${pName}</div>
@@ -2006,6 +2006,16 @@ function init() {
     chip.classList.add('active');
     S.timelineFilter = chip.dataset.type;
     renderTimeline();
+  });
+
+  // Settings tabs
+  document.getElementById('settings-tabs')?.addEventListener('click', e => {
+    const tab = e.target.closest('.filter-tab');
+    if (!tab) return;
+    document.querySelectorAll('#settings-tabs .filter-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.settings-tab-content').forEach(c => c.classList.add('hidden'));
+    document.getElementById(`settings-tab-${tab.dataset.tab}`)?.classList.remove('hidden');
   });
 
   document.getElementById('sort-plants')?.addEventListener('change', e => {
