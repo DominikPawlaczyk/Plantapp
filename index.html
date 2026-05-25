@@ -75,6 +75,8 @@
             <button class="filter-chip" data-type="fertilize">Nawóz</button>
             <button class="filter-chip" data-type="plant">Sadzenie</button>
             <button class="filter-chip" data-type="harvest">Zbiory</button>
+            <button class="filter-chip" data-type="height">Wysokość</button>
+            <button class="filter-chip" data-type="cutting">Sadzonki</button>
             <button class="filter-chip" data-type="custom">Inne</button>
           </div>
           <select class="form-select" id="timeline-plant-filter" style="max-width: 150px;">
@@ -183,6 +185,73 @@
       </div>
     </div>
 
+    <!-- FINANCES -->
+    <div class="view" id="view-finances">
+      <div class="section-header">
+        <h2>Finanse</h2>
+      </div>
+      
+      <div class="stats-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+        <div class="stat-card">
+          <div class="stat-icon plant-color"><i data-lucide="leaf"></i></div>
+          <div class="stat-value" id="fin-total-value">0 zł</div>
+          <div class="stat-label">Wartość kolekcji</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon danger-color" style="color: #f87171; background: rgba(248,113,113,0.1);"><i data-lucide="trending-down"></i></div>
+          <div class="stat-value" id="fin-total-expenses">0 zł</div>
+          <div class="stat-label">Wydatki</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon water-color" style="color: #38bdf8; background: rgba(56,189,248,0.1);"><i data-lucide="wallet"></i></div>
+          <div class="stat-value" id="fin-net-balance">0 zł</div>
+          <div class="stat-label">Bilans Netto</div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3>Wydatki</h3>
+          <button class="btn-secondary" id="btn-add-expense" style="padding: 6px 12px; font-size: 12px;"><i data-lucide="plus"></i> Dodaj</button>
+        </div>
+        <div class="table-responsive">
+          <table class="modern-table" id="expenses-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Tytuł</th>
+                <th>Kwota</th>
+                <th>Roślina</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Wycena Kolekcji</h3>
+        <div class="table-responsive">
+          <table class="modern-table" id="valuation-table">
+            <thead>
+              <tr>
+                <th>Roślina</th>
+                <th>Baza (Wzrost)</th>
+                <th>Plony / Sadzonki</th>
+                <th>Suma</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- SETTINGS -->
     <div class="view" id="view-settings">
       <div class="section-header">
@@ -237,6 +306,43 @@
         <div id="species-list-container" style="display:flex; flex-direction:column; gap:8px;"></div>
       </div>
 
+      <!-- Cennik (Wartości) -->
+      <div class="ai-forecast-card">
+        <div class="ai-forecast-header">
+          <span class="ai-badge" style="background: var(--harvest-bg); color: var(--harvest); box-shadow: none;"><i data-lucide="coins"></i> Finanse</span>
+          <h3>Cennik i Wycena</h3>
+        </div>
+        <p class="ai-forecast-desc">Zdefiniuj wartość roślin wg wzrostu (np. 10cm=15zł, 50cm=40zł), plonów (za kg/szt) lub sadzonek.</p>
+        
+        <div class="form-group" style="margin-bottom: 8px;">
+          <select id="price-rule-species" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; width: 100%;">
+            <option value="">-- Wybierz gatunek --</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom: 8px;">
+            <select id="price-rule-type" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; width: 100%;">
+              <option value="height">Wysokość (cm)</option>
+              <option value="weight">Plon (kg)</option>
+              <option value="quantity">Plon (szt.)</option>
+              <option value="cutting">Sadzonka (szt.)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom: 8px;">
+            <input type="number" id="price-rule-threshold" placeholder="Wymiar/Szt." min="0" step="0.1" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; width: 100%;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 8px;">
+            <input type="number" id="price-rule-price" placeholder="Cena (zł)" min="0" step="0.1" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; width: 100%;" />
+          </div>
+        </div>
+        <div class="ai-forecast-actions" style="margin-bottom: 12px;">
+          <button class="btn-primary" id="btn-add-price-rule"><i data-lucide="plus"></i> Dodaj regułę</button>
+        </div>
+        <div id="price-rules-list-container" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
       <!-- AI Forecast -->
       <div class="ai-forecast-card">
         <div class="ai-forecast-header">
@@ -275,6 +381,10 @@
     <button class="nav-btn" data-view="stats">
       <i data-lucide="bar-chart-2"></i>
       <span>Statsy</span>
+    </button>
+    <button class="nav-btn" data-view="finances">
+      <i data-lucide="wallet"></i>
+      <span>Finanse</span>
     </button>
     <button class="nav-btn" data-view="settings">
       <i data-lucide="settings"></i>
@@ -519,6 +629,98 @@
     <div class="modal-footer">
       <button class="btn-secondary" data-modal="modal-custom">Anuluj</button>
       <button class="btn-primary" id="btn-save-custom">Zapisz zdarzenie</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Expense -->
+<div class="modal-overlay hidden" id="modal-expense">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Dodaj wydatek</h3>
+      <button class="modal-close" data-modal="modal-expense"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="expense-date">Data</label>
+        <input type="date" id="expense-date" />
+      </div>
+      <div class="form-group">
+        <label for="expense-title">Tytuł</label>
+        <input type="text" id="expense-title" placeholder="np. Ziemia, nawóz, doniczka..." autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label for="expense-amount">Kwota (zł)</label>
+        <input type="number" id="expense-amount" min="0" step="0.01" placeholder="0.00" />
+      </div>
+      <div class="form-group">
+        <label for="expense-plant">Przypisz do rośliny (opcjonalnie)</label>
+        <select id="expense-plant">
+          <option value="">-- Brak / Ogólne --</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-expense">Anuluj</button>
+      <button class="btn-primary" id="btn-save-expense">Zapisz wydatek</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Height -->
+<div class="modal-overlay hidden" id="modal-height">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Zmierz wysokość</h3>
+      <button class="modal-close" data-modal="modal-height"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="plant-badge-display" id="height-plant-badge"></div>
+      <div class="form-group">
+        <label for="height-date">Data</label>
+        <input type="date" id="height-date" />
+      </div>
+      <div class="form-group">
+        <label for="height-value">Wysokość (cm)</label>
+        <input type="number" id="height-value" min="0" step="0.1" placeholder="np. 35" />
+      </div>
+      <div class="form-group">
+        <label for="height-notes">Notatki</label>
+        <input type="text" id="height-notes" placeholder="Opcjonalne uwagi…" autocomplete="off" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-height">Anuluj</button>
+      <button class="btn-primary" id="btn-save-height">Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Cutting -->
+<div class="modal-overlay hidden" id="modal-cutting">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Pobierz sadzonki</h3>
+      <button class="modal-close" data-modal="modal-cutting"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="plant-badge-display" id="cutting-plant-badge"></div>
+      <div class="form-group">
+        <label for="cutting-date">Data</label>
+        <input type="date" id="cutting-date" />
+      </div>
+      <div class="form-group">
+        <label for="cutting-quantity">Ilość sadzonek (szt.)</label>
+        <input type="number" id="cutting-quantity" min="1" step="1" value="1" />
+      </div>
+      <div class="form-group">
+        <label for="cutting-notes">Notatki</label>
+        <input type="text" id="cutting-notes" placeholder="Opcjonalne uwagi…" autocomplete="off" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-cutting">Anuluj</button>
+      <button class="btn-primary" id="btn-save-cutting">Zapisz</button>
     </div>
   </div>
 </div>

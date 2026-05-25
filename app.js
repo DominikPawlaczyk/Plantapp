@@ -128,11 +128,12 @@ const DEFAULT_SPECIES = [
 
 // ───── STATE ─────
 const S = {
-  plants: [], events: [], scheduled: [], aiForecasts: {}, species: [],
+  plants: [], events: [], scheduled: [], aiForecasts: {}, species: [], expenses: [], priceRules: [],
   defaultSpeciesVersion: 0,
   view: 'home', locationFilter: 'all', timelineFilter: 'all',
   calMonth: new Date(), selectedDate: new Date(),
   editingPlantId: null, waterPlantId: null, harvestPlantId: null, customPlantId: null, editingSpeciesId: null,
+  heightPlantId: null, cuttingPlantId: null,
   schedType: 'water',
   sortOrder: 'urgency', timelinePlant: 'all', calPlant: 'all',
   charts: {}
@@ -144,6 +145,7 @@ function save() {
     localStorage.setItem(CFG.STORE, JSON.stringify({
       plants: S.plants, events: S.events,
       scheduled: S.scheduled, aiForecasts: S.aiForecasts, species: S.species,
+      expenses: S.expenses, priceRules: S.priceRules,
       defaultSpeciesVersion: S.defaultSpeciesVersion
     }));
   } catch(e) { console.error(e); }
@@ -157,6 +159,8 @@ function load() {
     S.scheduled  = d.scheduled  || [];
     S.aiForecasts = d.aiForecasts || {};
     S.species    = d.species    || [];
+    S.expenses   = d.expenses   || [];
+    S.priceRules = d.priceRules || [];
     
     // Migracja z defaultSpeciesAdded -> defaultSpeciesVersion
     if (d.defaultSpeciesAdded && !d.defaultSpeciesVersion) d.defaultSpeciesVersion = 1;
@@ -606,6 +610,108 @@ function saveCustom() {
   toast('Zdarzenie zapisane!');
 }
 
+// ───── HEIGHT MODAL ─────
+function openHeightModal(plantId) {
+  S.heightPlantId = plantId;
+  const p = S.plants.find(x => x.id === plantId);
+  if (!p) return;
+
+  document.getElementById('height-plant-badge').textContent = p.name;
+  document.getElementById('height-date').value = nowLocal().split('T')[0];
+  document.getElementById('height-value').value = '';
+  document.getElementById('height-notes').value = '';
+
+  openModal('modal-height');
+}
+
+function saveHeight() {
+  const dateVal = document.getElementById('height-date').value;
+  const heightVal = parseFloat(document.getElementById('height-value').value);
+  if (!dateVal || isNaN(heightVal)) { toast('Podaj datę i poprawną wysokość', true); return; }
+
+  S.events.push({
+    id: uid(), plantId: S.heightPlantId, type: 'height',
+    timestamp: new Date(dateVal).toISOString(),
+    height: heightVal,
+    notes: document.getElementById('height-notes').value.trim()
+  });
+
+  save();
+  closeModal('modal-height');
+  renderTimeline();
+  if (S.view === 'finances') renderFinances();
+  toast('Wysokość zapisana!');
+}
+
+// ───── CUTTING MODAL ─────
+function openCuttingModal(plantId) {
+  S.cuttingPlantId = plantId;
+  const p = S.plants.find(x => x.id === plantId);
+  if (!p) return;
+
+  document.getElementById('cutting-plant-badge').textContent = p.name;
+  document.getElementById('cutting-date').value = nowLocal().split('T')[0];
+  document.getElementById('cutting-quantity').value = '1';
+  document.getElementById('cutting-notes').value = '';
+
+  openModal('modal-cutting');
+}
+
+function saveCutting() {
+  const dateVal = document.getElementById('cutting-date').value;
+  const qty = parseInt(document.getElementById('cutting-quantity').value);
+  if (!dateVal || isNaN(qty) || qty <= 0) { toast('Podaj datę i ilość', true); return; }
+
+  S.events.push({
+    id: uid(), plantId: S.cuttingPlantId, type: 'cutting',
+    timestamp: new Date(dateVal).toISOString(),
+    quantity: qty,
+    notes: document.getElementById('cutting-notes').value.trim()
+  });
+
+  save();
+  closeModal('modal-cutting');
+  renderTimeline();
+  if (S.view === 'finances') renderFinances();
+  toast('Sadzonki zapisane!');
+}
+
+// ───── EXPENSE MODAL ─────
+function openExpenseModal() {
+  document.getElementById('expense-date').value = nowLocal().split('T')[0];
+  document.getElementById('expense-title').value = '';
+  document.getElementById('expense-amount').value = '';
+  
+  const plantSel = document.getElementById('expense-plant');
+  plantSel.innerHTML = '<option value="">-- Brak / Ogólne --</option>' + 
+    S.plants.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  
+  openModal('modal-expense');
+}
+
+function saveExpense() {
+  const dateVal = document.getElementById('expense-date').value;
+  const title = document.getElementById('expense-title').value.trim();
+  const amount = parseFloat(document.getElementById('expense-amount').value);
+  const plantId = document.getElementById('expense-plant').value;
+
+  if (!dateVal || !title || isNaN(amount) || amount <= 0) { toast('Wypełnij poprawnie wszystkie pola', true); return; }
+
+  S.expenses.push({
+    id: uid(),
+    date: dateVal,
+    title,
+    amount,
+    plantId: plantId || null,
+    createdAt: new Date().toISOString()
+  });
+
+  save();
+  closeModal('modal-expense');
+  if (S.view === 'finances') renderFinances();
+  toast('Wydatek zapisany!');
+}
+
 // ───── BULK MODAL ─────
 function openBulkModal() {
   if (S.plants.length === 0) { toast('Najpierw dodaj rośliny', true); return; }
@@ -690,9 +796,9 @@ function openPlantDetail(plantId) {
     ? `<img class="detail-img" src="${p.photo}" alt="${p.name}" />`
     : `<div class="detail-placeholder">${icon(plantEmoji(p.name), 40)}</div>`;
 
-  const typeIco  = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text' };
-  const typeLabel= { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
-  const typeCls  = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom' };
+  const typeIco  = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text', height:'ruler', cutting:'scissors' };
+  const typeLabel= { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne', height:'Wysokość', cutting:'Sadzonka' };
+  const typeCls  = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom', height:'plant', cutting:'harvest' };
 
   const locLabels = { balkon:'Balkon', parapet:'Parapet', polka:'Półka', okno:'Okno' };
   const locIcos   = { balkon:'sun', parapet:'layout-panel-left', polka:'layers', okno:'app-window' };
@@ -720,6 +826,8 @@ function openPlantDetail(plantId) {
       <button class="detail-action-btn water"     data-detail-action="water"     data-pid="${p.id}">${icon('droplets',14)} Podlej</button>
       <button class="detail-action-btn fertilize" data-detail-action="fertilize" data-pid="${p.id}">${icon('flask-conical',14)} Nawóź</button>
       <button class="detail-action-btn harvest"   data-detail-action="harvest"   data-pid="${p.id}">${icon('apple',14)} Zbiory</button>
+      <button class="detail-action-btn custom"    data-detail-action="cutting"   data-pid="${p.id}">${icon('scissors',14)} Sadzonki</button>
+      <button class="detail-action-btn custom"    data-detail-action="height"    data-pid="${p.id}">${icon('ruler',14)} Wysokość</button>
       <button class="detail-action-btn custom"    data-detail-action="custom"    data-pid="${p.id}">${icon('file-text',14)} Inne</button>
       <button class="detail-action-btn danger"    data-detail-action="delete"    data-pid="${p.id}">${icon('trash-2',14)}</button>
     </div>
@@ -755,6 +863,7 @@ function openPlantDetail(plantId) {
         if (ev.fertilizer) detail += (detail?' · ':'')+ev.fertilizer;
         if (ev.weight) detail += (detail?' · ':'')+ev.weight+' kg';
         if (ev.quantity) detail += (detail?' · ':'')+ev.quantity+' szt.';
+        if (ev.height) detail += (detail?' · ':'')+ev.height+' cm';
         if (ev.notes) detail += (detail?' · ':'')+ev.notes;
         return `<div class="history-item">
           <div class="history-icon ${tCls}">${icon(typeIco[ev.type]||'circle',14)}</div>
@@ -822,6 +931,7 @@ function renderTimeline() {
     if (ev.fertilizer) detail += (detail?' · ':'')+ev.fertilizer;
     if (ev.weight) detail += (detail?' · ':'')+ev.weight+' kg';
     if (ev.quantity) detail += (detail?' · ':'')+ev.quantity+' szt.';
+    if (ev.height) detail += (detail?' · ':'')+ev.height+' cm';
     if (ev.notes) detail += (detail?' · ':'')+ev.notes;
 
     return `<div class="tl-item" data-plant-id="${plant ? plant.id : ''}">
@@ -936,9 +1046,9 @@ function renderCalEvents() {
     new Date(a.timestamp||a.date) - new Date(b.timestamp||b.date)
   );
 
-  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text' };
-  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
-  const typeCls   = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom' };
+  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text', height:'ruler', cutting:'scissors' };
+  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne', height:'Wysokość', cutting:'Sadzonka' };
+  const typeCls   = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom', height:'plant', cutting:'harvest' };
 
   const ds = date.toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'});
 
@@ -1395,6 +1505,8 @@ function switchView(name, fromPop = false) {
   if (name==='timeline')  renderTimeline();
   if (name==='calendar')  renderCalendar();
   if (name==='stats')     renderCharts();
+  if (name==='finances')  renderFinances();
+  if (name==='settings')  renderPriceRulesList();
 
   renderIcons();
 
@@ -1468,6 +1580,166 @@ function addDemo() {
     quantity:8, weight:0.6, notes:'Pierwsze pomidory sezonu!', photo:null });
 
   save();
+}
+
+// ───── FINANCES & PRICING ─────
+function calculatePlantValue(plant) {
+  let val = { base: 0, yields: 0, total: 0 };
+  if (!plant.species) return val;
+
+  const rules = S.priceRules.filter(r => r.speciesId === plant.species);
+  if (rules.length === 0) return val;
+
+  // Wzrost (Interpolacja liniowa)
+  const hRules = rules.filter(r => r.type === 'height').sort((a,b) => a.threshold - b.threshold);
+  const hEvents = S.events.filter(e => e.plantId === plant.id && e.type === 'height').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const currentHeight = hEvents.length > 0 ? hEvents[0].height : 0;
+
+  if (hRules.length > 0) {
+    if (currentHeight <= hRules[0].threshold) {
+      val.base = (currentHeight / hRules[0].threshold) * hRules[0].price;
+    } else if (currentHeight >= hRules[hRules.length-1].threshold) {
+      val.base = hRules[hRules.length-1].price;
+    } else {
+      for (let i = 0; i < hRules.length - 1; i++) {
+        if (currentHeight >= hRules[i].threshold && currentHeight <= hRules[i+1].threshold) {
+          const r1 = hRules[i], r2 = hRules[i+1];
+          const factor = (currentHeight - r1.threshold) / (r2.threshold - r1.threshold);
+          val.base = r1.price + factor * (r2.price - r1.price);
+          break;
+        }
+      }
+    }
+  }
+
+  // Plony (Sztuki i Kg)
+  const qtyRules = rules.filter(r => r.type === 'quantity');
+  const wgtRules = rules.filter(r => r.type === 'weight');
+  const harvests = S.events.filter(e => e.plantId === plant.id && e.type === 'harvest');
+  const totalQty = harvests.reduce((s,e) => s + (e.quantity||0), 0);
+  const totalWgt = harvests.reduce((s,e) => s + (e.weight||0), 0);
+
+  if (qtyRules.length > 0) val.yields += totalQty * (qtyRules[0].price / (qtyRules[0].threshold || 1));
+  if (wgtRules.length > 0) val.yields += totalWgt * (wgtRules[0].price / (wgtRules[0].threshold || 1));
+
+  // Sadzonki
+  const cutRules = rules.filter(r => r.type === 'cutting');
+  const cuttings = S.events.filter(e => e.plantId === plant.id && e.type === 'cutting');
+  const totalCut = cuttings.reduce((s,e) => s + (e.quantity||0), 0);
+
+  if (cutRules.length > 0) val.yields += totalCut * (cutRules[0].price / (cutRules[0].threshold || 1));
+
+  val.total = val.base + val.yields;
+  return val;
+}
+
+function renderFinances() {
+  const tVal = document.getElementById('fin-total-value');
+  const tExp = document.getElementById('fin-total-expenses');
+  const tBal = document.getElementById('fin-net-balance');
+  const vTable = document.querySelector('#valuation-table tbody');
+  const eTable = document.querySelector('#expenses-table tbody');
+  if (!tVal || !vTable) return;
+
+  // Wycena
+  let totalValue = 0;
+  vTable.innerHTML = S.plants.map(p => {
+    const v = calculatePlantValue(p);
+    totalValue += v.total;
+    if (v.total === 0) return '';
+    return `<tr>
+      <td style="font-weight:500;">${p.name}</td>
+      <td>${v.base.toFixed(2)} zł</td>
+      <td>${v.yields.toFixed(2)} zł</td>
+      <td style="color:var(--harvest);font-weight:600;">${v.total.toFixed(2)} zł</td>
+    </tr>`;
+  }).join('');
+  if (vTable.innerHTML === '') vTable.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text3)">Brak danych o wartości</td></tr>';
+
+  // Wydatki
+  let totalExpenses = 0;
+  S.expenses.sort((a,b) => new Date(b.date) - new Date(a.date));
+  eTable.innerHTML = S.expenses.map(e => {
+    totalExpenses += e.amount;
+    const p = e.plantId ? S.plants.find(x => x.id === e.plantId) : null;
+    return `<tr>
+      <td>${fmtDate(e.date)}</td>
+      <td style="font-weight:500;">${e.title}</td>
+      <td style="color:var(--danger);">- ${e.amount.toFixed(2)} zł</td>
+      <td>${p ? p.name : '—'}</td>
+      <td style="text-align:right;">
+        <button class="btn-delete-expense" data-eid="${e.id}" style="background:none;border:none;color:var(--danger);cursor:pointer;">${icon('trash-2',14)}</button>
+      </td>
+    </tr>`;
+  }).join('');
+  if (S.expenses.length === 0) eTable.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text3)">Brak wydatków</td></tr>';
+
+  // Stats
+  tVal.textContent = totalValue.toFixed(2) + ' zł';
+  tExp.textContent = totalExpenses.toFixed(2) + ' zł';
+  
+  const balance = totalValue - totalExpenses;
+  tBal.textContent = balance.toFixed(2) + ' zł';
+  tBal.style.color = balance >= 0 ? 'var(--harvest)' : 'var(--danger)';
+  
+  document.querySelectorAll('.btn-delete-expense').forEach(b => {
+    b.addEventListener('click', (e) => {
+      const eid = e.currentTarget.dataset.eid;
+      if (confirm('Usunąć wydatek?')) {
+        S.expenses = S.expenses.filter(x => x.id !== eid);
+        save();
+        renderFinances();
+        toast('Wydatek usunięty');
+      }
+    });
+  });
+
+  renderIcons();
+}
+
+function renderPriceRulesList() {
+  const sel = document.getElementById('price-rule-species');
+  if (sel) {
+    sel.innerHTML = '<option value="">-- Wybierz gatunek --</option>' + 
+      S.species.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  }
+
+  const container = document.getElementById('price-rules-list-container');
+  if (!container) return;
+  if (S.priceRules.length === 0) {
+    container.innerHTML = '<div style="color:var(--text3); font-size:13px;">Brak zdefiniowanych cen.</div>';
+    return;
+  }
+  
+  const typeMap = { height: 'Wzrost (cm)', weight: 'Plon (kg)', quantity: 'Plon (szt.)', cutting: 'Sadzonka (szt.)' };
+
+  container.innerHTML = S.priceRules.map(r => {
+    const s = S.species.find(x => x.id === r.speciesId);
+    return `<div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-weight: 500; font-size: 14px; color: var(--text1);">${s ? s.name : '?'}</div>
+        <div style="font-size: 13px; color: var(--text2);">${typeMap[r.type]}: ${r.threshold} = <span style="color:var(--harvest);font-weight:600;">${r.price} zł</span></div>
+      </div>
+      <button class="btn-delete-pricerule" data-rid="${r.id}" style="background: none; border: none; color: var(--danger); cursor: pointer;" title="Usuń">${icon('trash-2', 14)}</button>
+    </div>`;
+  }).join('');
+  renderIcons();
+}
+
+function addPriceRule() {
+  const speciesId = document.getElementById('price-rule-species').value;
+  const type = document.getElementById('price-rule-type').value;
+  const threshold = parseFloat(document.getElementById('price-rule-threshold').value);
+  const price = parseFloat(document.getElementById('price-rule-price').value);
+
+  if (!speciesId || isNaN(threshold) || isNaN(price)) { toast('Wypełnij wszystkie pola', true); return; }
+
+  S.priceRules.push({ id: uid(), speciesId, type, threshold, price });
+  save();
+  renderPriceRulesList();
+  toast('Reguła cenowa dodana');
+  document.getElementById('price-rule-threshold').value = '';
+  document.getElementById('price-rule-price').value = '';
 }
 
 // ───── INIT ─────
@@ -1674,7 +1946,23 @@ function init() {
     document.getElementById('bulk-custom-group').classList.toggle('hidden', btn.dataset.value !== 'custom');
   });
 
-  // bulk-plant-list uses <label> elements — native checkbox toggle via label click
+  // Height & Cutting & Expense
+  document.getElementById('btn-save-height')?.addEventListener('click', (e) => { e.preventDefault(); saveHeight(); });
+  document.getElementById('btn-save-cutting')?.addEventListener('click', (e) => { e.preventDefault(); saveCutting(); });
+  document.getElementById('btn-add-expense')?.addEventListener('click', (e) => { e.preventDefault(); openExpenseModal(); });
+  document.getElementById('btn-save-expense')?.addEventListener('click', (e) => { e.preventDefault(); saveExpense(); });
+
+  // Price Rules
+  document.getElementById('btn-add-price-rule')?.addEventListener('click', (e) => { e.preventDefault(); addPriceRule(); });
+  document.getElementById('price-rules-list-container')?.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-delete-pricerule');
+    if (btn) {
+      S.priceRules = S.priceRules.filter(r => r.id !== btn.dataset.rid);
+      save();
+      renderPriceRulesList();
+      toast('Reguła usunięta');
+    }
+  });
 
   // Custom event modal: save
   document.getElementById('btn-save-custom').addEventListener('click', (e) => { e.preventDefault(); saveCustom(); });
