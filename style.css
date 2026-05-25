@@ -417,12 +417,22 @@ body::before {
   transition: border-color 0.2s, transform 0.2s;
 }
 .stat-card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-1px); }
-.stat-icon { font-size: 24px; }
+.stat-icon {
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
 .stat-icon [data-lucide] svg { width: 24px; height: 24px; }
-.water-color   { color: var(--water); }
-.fert-color    { color: var(--fert); }
-.harvest-color { color: var(--harvest); }
-.plant-color   { color: var(--planted); }
+.water-color   { color: var(--water); background: var(--water-bg); }
+.fert-color    { color: var(--fert); background: var(--fert-bg); }
+.harvest-color { color: var(--harvest); background: var(--harvest-bg); }
+.plant-color   { color: var(--planted); background: var(--planted-bg); }
+.danger-color  { color: #ef4444; background: rgba(239,68,68,0.1); }
 .stat-value { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
 .stat-label { font-size: 12px; color: var(--text2); }
 .chart-card {
