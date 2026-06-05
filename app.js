@@ -22,107 +22,233 @@ const DEFAULT_SPECIES = [
   {
     id: 'sp_truskawka',
     name: 'Truskawka wieloletnia',
-    description: 'Opis: Bylina owocująca dająca słodkie, czerwone jagody.\nHistoria: Współczesna truskawka powstała w XVIII wieku we Francji.\nPochodzenie: Krzyżówka odmian z Ameryki Północnej i Południowej.\nNasłonecznienie: Pełne słońce.\nNawodnienie: Umiarkowane, ale regularne (nie znosi suszy).\nCechy szczególne: Wypuszcza rozłogi, owocuje przez kilka sezonów.\nFunkcje: Jadalna, dekoracyjna do donic i skrzynek.'
+    pochodzenie: 'Krzyżówka poziomki chilijskiej i wirginijskiej (Ameryka Północna i Południowa).',
+    historia: 'Współczesna truskawka (Fragaria × ananassa) została wyhodowana w XVIII wieku w Bretanii we Francji.',
+    zachowanie: 'Bylina tworząca gęste kępy. Intensywnie wypuszcza rozłogi (tzw. wąsy), za pomocą których szybko się rozrasta.',
+    preferencje: 'Pełne słońce, żyzna, lekko kwaśna i dobrze przepuszczalna gleba.',
+    nawodnienie: 'Umiarkowane, ale regularne. Płytki system korzeniowy sprawia, że jest bardzo wrażliwa na przesuszenie, szczególnie w fazie kwitnienia.',
+    funkcje: 'Roślina jadalna (słodkie owoce) oraz dekoracyjna do donic, skrzynek i gruntu.',
+    ciekawostki: 'Z botanicznego punktu widzenia to, co nazywamy owocem truskawki, jest rozrośniętym dnem kwiatowym, a prawdziwymi owocami są małe, żółte orzeszki na jej powierzchni.'
   },
   {
     id: 'sp_tom_red',
     name: 'Pomidor wiszący Tumbling Tom Red',
-    description: 'Opis: Karłowa odmiana o kaskadowym pokroju i czerwonych owocach.\nHistoria: Stworzona specjalnie z myślą o uprawach miejskich i balkonowych.\nPochodzenie: Europa (współczesna odmiana hodowlana).\nNasłonecznienie: Pełne słońce.\nNawodnienie: Częste (ziemia powinna być stale lekko wilgotna).\nCechy szczególne: Zwisające pędy, nie wymaga palikowania ani cięcia.\nFunkcje: Kulinarna (przekąska), ozdobna.'
+    pochodzenie: 'Europa (współczesna odmiana hodowlana).',
+    historia: 'Odmiana stworzona stosunkowo niedawno przez hodowców nasion, z myślą o rosnącej popularności miejskiego ogrodnictwa (urban gardening).',
+    zachowanie: 'Odmiana karłowa, samokończąca. Tworzy gęsty, krzaczasty pokrój z pędami, które naturalnie opadają kaskadowo w dół.',
+    preferencje: 'Pełne słońce i miejsca osłonięte od silnego wiatru. Wymaga żyznej ziemi do warzyw.',
+    nawodnienie: 'Częste i obfite. Ze względu na ograniczoną bryłę korzeniową w donicy, w upalne dni wymaga podlewania nawet codziennie.',
+    funkcje: 'Kulinarna (słodkie, czerwone pomidorki idealne na przekąskę) oraz wysoce ozdobna.',
+    ciekawostki: 'Dzięki zwisającemu pokrojowi nie wymaga palikowania ani tzw. "wilkowania" (usuwania bocznych pędów), co czyni ją idealną dla początkujących.'
   },
   {
     id: 'sp_black_cherry',
     name: 'Pomidor Black Cherry',
-    description: 'Opis: Wysoka roślina rodząca ciemne, brunatno-bordowe pomidorki koktajlowe.\nHistoria: Szybko zdobyła popularność dzięki unikalnemu, dymno-słodkiemu smakowi.\nPochodzenie: USA (Floryda).\nNasłonecznienie: Pełne słońce, osłonięte od wiatru.\nNawodnienie: Regularne, obfite.\nCechy szczególne: Szybki i silny wzrost, wymaga wysokich podpór.\nFunkcje: Kulinarna, idealna do letnich sałatek.'
+    pochodzenie: 'Stany Zjednoczone (Floryda).',
+    historia: 'Wyhodowana w 2003 roku przez Vince\'a Sappa. Szybko zdobyła światową popularność dzięki unikalnemu wyglądowi i smakowi.',
+    zachowanie: 'Odmiana wysoko rosnąca (niekończąca). Rośnie bardzo dynamicznie i silnie w górę, tworząc długie grona owoców.',
+    preferencje: 'Stanowisko w pełni nasłonecznione i ciepłe. Wymaga solidnych podpór (palików lub sznurków).',
+    nawodnienie: 'Regularne i dość obfite, aby zapobiec pękaniu owoców i wspierać silny wzrost krzaka.',
+    funkcje: 'Kulinarna (idealna do letnich sałatek i jako kolorowy akcent na talerzu).',
+    ciekawostki: 'Ciemne, brunatno-bordowe zabarwienie owoców to zasługa antocyjanów – silnych przeciwutleniaczy. Smak jest często opisywany jako dymno-słodki.'
   },
   {
     id: 'sp_yellow_pear',
     name: 'Pomidor Żółta gruszka (Yellow Pear)',
-    description: 'Opis: Wysoka odmiana rodząca małe, żółte owoce w kształcie gruszek.\nHistoria: Odmiana historyczna, znana w Europie już w XVIII wieku.\nPochodzenie: Europa.\nNasłonecznienie: Dużo słońca.\nNawodnienie: Umiarkowane do częstego.\nCechy szczególne: Bardzo słodki, łagodny smak i unikalny kształt owoców.\nFunkcje: Kulinarna, dekoracyjna na talerzu.'
+    pochodzenie: 'Europa.',
+    historia: 'Jest to odmiana historyczna (heirloom), której uprawy datuje się już na XVIII wiek w Europie, a w XIX wieku trafiła do USA.',
+    zachowanie: 'Wysoka, silnie rosnąca roślina (indeterminate). Tworzy potężne krzaki produkujące ogromne ilości drobnych owoców.',
+    preferencje: 'Bardzo dużo słońca, regularne nawożenie potasem i fosforem. Konieczne wysokie palikowanie.',
+    nawodnienie: 'Umiarkowane do częstego, ważne, by unikać drastycznych zmian wilgotności gleby.',
+    funkcje: 'Kulinarna i dekoracyjna (przetwory, sałatki, ozdoba potraw).',
+    ciekawostki: 'Unikalny, gruszkowaty kształt to wynik naturalnej, starodawnej mutacji genetycznej. Owoce mają bardzo łagodny, mało kwasowy smak.'
   },
   {
     id: 'sp_tom_yellow',
     name: 'Pomidor wiszący Tumbling Tom Yellow',
-    description: 'Opis: Żółty odpowiednik wersji Red, o kaskadowym, krzaczastym pokroju.\nHistoria: Wyhodowana do upraw pojemnikowych na małych przestrzeniach.\nPochodzenie: Europa.\nNasłonecznienie: Pełne słońce.\nNawodnienie: Częste, latem wymaga codziennego podlewania.\nCechy szczególne: Owoce o złocistym kolorze, pędy naturalnie opadające.\nFunkcje: Jadalna, idealna do wiszących donic na balkon.'
+    pochodzenie: 'Europa (siostrzana odmiana dla Tumbling Tom Red).',
+    historia: 'Powstała jako rozwinięcie linii "Tumbling Tom", by zapewnić większą różnorodność kolorystyczną w uprawach balkonowych.',
+    zachowanie: 'Karłowa, samokończąca, kaskadowa. Pędy przewieszają się przez krawędź donicy na długość około 30-50 cm.',
+    preferencje: 'Pełne słońce (choć toleruje lekki półcień lepiej niż odmiany wielkoowocowe).',
+    nawodnienie: 'Bardzo regularne – w upalne lato podłoże w wiszącej donicy szybko wysycha, dlatego należy je stale kontrolować.',
+    funkcje: 'Jadalna (słodkie owoce) i wysoce dekoracyjna (świetnie wygląda posadzona w jednej donicy z czerwoną odmianą).',
+    ciekawostki: 'Żółte pomidorki koktajlowe są często lepiej tolerowane przez osoby z nadkwaśnością żołądka, ponieważ zawierają mniej kwasów organicznych niż odmiany czerwone.'
   },
   {
     id: 'sp_maliniak',
     name: 'Pomidor Maliniak',
-    description: 'Opis: Niska, sztywno-łodygowa odmiana o dużych, malinowych owocach.\nHistoria: Bardzo popularna, polska odmiana amatorska.\nPochodzenie: Polska.\nNasłonecznienie: Słoneczne i ciepłe stanowisko.\nNawodnienie: Regularne, unikać moczenia liści.\nCechy szczególne: Krzaczasty pokrój, nie wymaga palikowania ani usuwania pędów.\nFunkcje: Kulinarna (kanapki, przetwory, sosy).'
+    pochodzenie: 'Polska.',
+    historia: 'Popularna, tradycyjna polska odmiana amatorska wyselekcjonowana z myślą o uprawie gruntowej bez skomplikowanych zabiegów.',
+    zachowanie: 'Niska, sztywno-łodygowa odmiana karłowa. Nie rośnie wysoko, lecz tworzy zwarty, mocny krzak.',
+    preferencje: 'Słoneczne, zaciszne stanowisko z glebą bogatą w kompost.',
+    nawodnienie: 'Regularne. Należy unikać moczenia liści podczas podlewania, aby zapobiec chorobom grzybowym (np. zarazie ziemniaczanej).',
+    funkcje: 'Kulinarna (klasyczny pomidor "kanapkowy", świetny na domowe przeciągi i sosy).',
+    ciekawostki: 'Zalicza się do typu "malinowych" ze względu na specyficzny, cienki, różowawy naskórek i mięsisty, bardzo słodki miąższ. Nie wymaga palikowania.'
   },
   {
     id: 'sp_jalapeno',
     name: 'Papryka Jalapeño',
-    description: 'Opis: Pikantna papryka o mięsistych, zielonych (dojrzewających na czerwono) strąkach.\nHistoria: Uprawiana od tysiącleci przez rdzennych mieszkańców Ameryki.\nPochodzenie: Meksyk (stan Veracruz).\nNasłonecznienie: Pełne, intensywne słońce.\nNawodnienie: Umiarkowane, lubi przeschnąć między podlewaniami.\nCechy szczególne: Średnia ostrość (2,5-8 tys. w skali Scoville\'a).\nFunkcje: Kulinarna, przyprawowa (salsy, marynaty).'
+    pochodzenie: 'Meksyk (nazwa wywodzi się od miasta Xalapa w stanie Veracruz).',
+    historia: 'Uprawiana w Mezoameryce od tysiącleci, jeszcze przed przybyciem Hiszpanów. Dziś to jedna z najpopularniejszych papryczek na świecie.',
+    zachowanie: 'Krzaczasta roślina, która z czasem drewnieje u podstawy. Owoce zwisają z gałązek, osiągając długość ok. 5-9 cm.',
+    preferencje: 'Ciepłolubna – wymaga pełnego, intensywnego słońca i temperatury powyżej 20°C do prawidłowego wiązania owoców.',
+    nawodnienie: 'Umiarkowane. Gleba powinna lekko przeschnąć między podlewaniami. Lekki stres wodny potrafi zwiększyć ostrość owoców.',
+    funkcje: 'Kulinarna i przyprawowa (niezastąpiona w salsach, nachos i do marynowania).',
+    ciekawostki: 'Dość niska ostrość: 2,5 do 8 tysięcy w skali Scoville\'a (SHU). Czerwone (w pełni dojrzałe) Jalapeño suszone dymem to popularne Chipotle.'
   },
   {
     id: 'sp_chilli',
-    name: 'Papryka Chilli',
-    description: 'Opis: Bardzo ostra papryka o smukłych, intensywnie czerwonych owocach.\nHistoria: Rozprzestrzeniona na całym świecie przez hiszpańskich odkrywców.\nPochodzenie: Ameryka Środkowa i Południowa.\nNasłonecznienie: Bardzo słoneczne i ciepłe.\nNawodnienie: Umiarkowane.\nCechy szczególne: Wysoka zawartość kapsaicyny (silna ostrość).\nFunkcje: Przyprawowa, lecznicza (działanie rozgrzewające).'
+    name: 'Papryka Chilli (odmiany ostre)',
+    pochodzenie: 'Ameryka Środkowa i Południowa.',
+    historia: 'Krzysztof Kolumb przywiózł nasiona do Europy, a stamtąd portugalscy i hiszpańscy kupcy rozprzestrzenili je w Azji i Afryce.',
+    zachowanie: 'Roślina silnie krzewiąca się. W zależności od odmiany może być niska i zwarta lub dorastać do ponad metra. Strąki często rosną ku górze.',
+    preferencje: 'Wybitnie słońcolubna. Optymalny rozwój wymaga długiego okresu wegetacyjnego i żyznej, przepuszczalnej ziemi.',
+    nawodnienie: 'Umiarkowane, wrażliwa na przelanie, które powoduje gnicie korzeni.',
+    funkcje: 'Przyprawowa (zapewnia pikantność) oraz lecznicza (kapsaicyna działa rozgrzewająco i przeciwbólowo).',
+    ciekawostki: 'Ostrość papryczki chilli jest mechanizmem obronnym przeciwko ssakom, ale ptaki nie posiadają odpowiednich receptorów, dlatego mogą jeść je i rozsiewać nasiona bez uczucia pieczenia.'
   },
   {
     id: 'sp_bazylia_ziel',
     name: 'Bazylia Zielona',
-    description: 'Opis: Jednoroczne zioło o niezwykle aromatycznych, jasnozielonych liściach.\nHistoria: Uznawana za świętą roślinę w starożytnych Indiach.\nPochodzenie: Tropikalne regiony Azji / Indie.\nNasłonecznienie: Jasne, ale osłonięte przed palącym, popołudniowym słońcem.\nNawodnienie: Częste, podłoże musi być stale lekko wilgotne.\nCechy szczególne: Bardzo wrażliwa na chłód, odstrasza owady.\nFunkcje: Kulinarna (pesto, dania włoskie).'
+    pochodzenie: 'Tropikalne regiony Azji (głównie Indie i Azja Południowo-Wschodnia).',
+    historia: 'W starożytnych Indiach traktowana jako roślina święta (tzw. Tulasi). W Europie Południowej (Włochy) stała się fundamentem lokalnej kuchni.',
+    zachowanie: 'Roślina jednoroczna o krzaczastym pokroju. Regularne uszczykiwanie (obcinanie) wierzchołków stymuluje rozkrzewianie.',
+    preferencje: 'Jasne stanowisko, ale warto osłonić ją przed ostrym, popołudniowym słońcem, które potrafi poparzyć delikatne liście. Lubi ciepło.',
+    nawodnienie: 'Częste i obfite. Bazylia szybko więdnie przy braku wody, jej ziemia powinna być stale lekko wilgotna, ale nie zalana.',
+    funkcje: 'Kulinarna (podstawa pesto, caprese i sosów).',
+    ciekawostki: 'Nigdy nie tnij bazylii nożyczkami do samego zdrewniałego dołu – zawsze obrywaj górne partie nad liśćmi, aby mogła odrastać.'
   },
   {
     id: 'sp_mieta_czek',
     name: 'Mięta Czekoladowa',
-    description: 'Opis: Odmiana mięty o ciemniejszych pędach i unikalnym, kakaowym zapachu.\nHistoria: Powstała z selekcji odmian mięty pieprzowej.\nPochodzenie: Europa (odmiana hodowlana).\nNasłonecznienie: Półcień do pełnego słońca.\nNawodnienie: Regularne, preferuje wilgotną glebę.\nCechy szczególne: Zapach i smak przypominający miętową czekoladę.\nFunkcje: Kulinarna (desery, zimne napoje), aromaterapeutyczna.'
+    pochodzenie: 'Europa / Stany Zjednoczone (odmiana hodowlana).',
+    historia: 'Jest wyselekcjonowaną odmianą mięty pieprzowej (Mentha × piperita).',
+    zachowanie: 'Wysoce ekspansywna bylina, która rozrasta się agresywnie przez podziemne kłącza. Liście są ciemnozielone z purpurowo-brązowymi użyłkowaniami.',
+    preferencje: 'Półcień do pełnego słońca. Nie jest wymagająca co do jakości gleby.',
+    nawodnienie: 'Lubi stanowiska wilgotne, dlatego wymaga regularnego podlewania, zwłaszcza w mocnym słońcu.',
+    funkcje: 'Kulinarna (idealna do deserów, lodów, kawy mrożonej) i aromaterapeutyczna.',
+    ciekawostki: 'Zmiażdżone liście autentycznie pachną jak czekoladki "After Eight". Najlepiej uprawiać ją w osobnej donicy, by nie zagłuszyła innych roślin.'
   },
   {
     id: 'sp_mieta_pom',
     name: 'Mięta Pomarańczowa',
-    description: 'Opis: Aromatyczne zioło o silnym, cytrusowo-orzeźwiającym zapachu.\nHistoria: Ceniona w medycynie ludowej od setek lat.\nPochodzenie: Europa / Azja Zachodnia.\nNasłonecznienie: Półcień do słońca.\nNawodnienie: Regularne i obfite.\nCechy szczególne: Mocny aromat bergamotki i pomarańczy; roślina ekspansywna.\nFunkcje: Kulinarna (herbaty, sałatki, drinki), relaksująca.'
+    pochodzenie: 'Basen Morza Śródziemnego / Azja Zachodnia.',
+    historia: 'Naturalna wariacja mięty wodnej (Mentha aquatica f. citrata), wykorzystywana od wieków w medycynie ludowej i perfumiarstwie.',
+    zachowanie: 'Bylina bardzo rzadko kwitnąca, mocno rozkrzewiająca się i płożąca, tworząca gęsty dywan liści z czerwonawymi łodygami.',
+    preferencje: 'Od półcienia po słońce. Odporna na niższe temperatury.',
+    nawodnienie: 'Bardzo obfite – mięty wodne naturalnie rosną nad brzegami zbiorników wodnych, więc trudno ją przelać.',
+    funkcje: 'Kulinarna (aromatyzowanie wody, herbat, sałatek) oraz relaksująca.',
+    ciekawostki: 'Jej olejki eteryczne (głównie linalol) przypominają aromat bergamotki i skórki pomarańczowej. Często używana do robienia naturalnych potpourri.'
   },
   {
     id: 'sp_melisa',
-    name: 'Melisa',
-    description: 'Opis: Wieloletnie zioło o karbowanych liściach i cytrynowym aromacie.\nHistoria: Stosowana już w starożytnej Grecji jako środek uspokajający.\nPochodzenie: Basen Morza Śródziemnego.\nNasłonecznienie: Półcień do pełnego słońca.\nNawodnienie: Umiarkowane (podlewać po lekkim przeschnięciu).\nCechy szczególne: Silnie przyciąga pszczoły (roślina miododajna).\nFunkcje: Lecznicza (łagodzi stres), kulinarna (napary).'
+    name: 'Melisa (Melissa officinalis)',
+    pochodzenie: 'Basen Morza Śródziemnego i południowa Europa.',
+    historia: 'Znana od ponad 2000 lat. Aulus Korneliusz Celsus (starożytny Rzym) opisywał ją jako lek na rany i dolegliwości nerwowe.',
+    zachowanie: 'Bylina zimująca w gruncie. Szybko rośnie i łatwo się rozsiewa. Liście są lekko owłosione i ząbkowane.',
+    preferencje: 'Preferuje lekki półcień – w pełnym, ostrym słońcu jej liście mogą żółknąć i tracić aromat.',
+    nawodnienie: 'Umiarkowane. Najlepiej podlewać, gdy wierzchnia warstwa podłoża wyraźnie przeschnie.',
+    funkcje: 'Lecznicza (uspokajająca, ułatwiająca zasypianie) oraz kulinarna (dodatek do owoców, naparów, twarogów).',
+    ciekawostki: 'Nazwa "Melissa" pochodzi z greckiego słowa oznaczającego pszczołę miodną. Jest to jedna z najlepszych roślin miododajnych, silnie wabiąca zapylacze.'
   },
   {
     id: 'sp_rozmaryn',
     name: 'Rozmaryn',
-    description: 'Opis: Zimozielony krzewinka o igiełkowatych liściach i leśnym, żywicznym zapachu.\nHistoria: Symbol pamięci i wierności w starożytnym Rzymie.\nPochodzenie: Region Morza Śródziemnego.\nNasłonecznienie: Pełne, mocne słońce.\nNawodnienie: Rzadkie, roślina bardzo dobrze znosi suszę.\nCechy szczególne: Łodygi z czasem drewnieją, bogaty w olejki eteryczne.\nFunkcje: Przyprawowa (do mięs, pieczeni), ozdobna.'
+    pochodzenie: 'Kraje leżące wokół Morza Śródziemnego (suche i skaliste tereny).',
+    historia: 'W starożytnym Rzymie i Grecji był uznawany za roślinę świętą, symbolizującą wierność i pamięć. Często noszono go w wieńcach na głowie.',
+    zachowanie: 'Krzewinka zimozielona. Jej łodygi z czasem drewnieją. Rośnie stosunkowo wolno, ale może osiągnąć ponad 1,5 metra wysokości.',
+    preferencje: 'Pełne, intensywne słońce, stanowisko ciepłe i bardzo przewiewne. Toleruje ubogą, piaszczystą glebę.',
+    nawodnienie: 'Rzadkie. Roślina wybitnie odporna na suszę. Podłoże w doniczce musi całkowicie wyschnąć przed kolejnym podlaniem. Przelanie błyskawicznie zabija korzenie.',
+    funkcje: 'Przyprawowa (klasyczny dodatek do pieczeni, ziemniaków, drobiu) i ozdobna.',
+    ciekawostki: 'Jego łacińska nazwa "Rosmarinus" oznacza dosłownie "rosę morza" – naturalnie rósł na wybrzeżach, gdzie zraszała go bryza morska.'
   },
   {
     id: 'sp_oregano',
     name: 'Oregano (Lebiodka pospolita)',
-    description: 'Opis: Drobne, krzewiaste zioło o intensywnym, lekko pikantnym smaku.\nHistoria: Niezbędny element kuchni i medycyny antycznej Grecji.\nPochodzenie: Europa, Azja Zachodnia.\nNasłonecznienie: Pełne słońce.\nNawodnienie: Umiarkowane (ziemia powinna przesychać między podlewaniami).\nCechy szczególne: Wysoce odporne na suszę i łatwe w uprawie.\nFunkcje: Kulinarna (pizza, sosy pomidorowe), antybakteryjna.'
+    pochodzenie: 'Europa, Azja Zachodnia i Środkowa.',
+    historia: 'Niezbędny element medycyny antycznej – Hipokrates używał go jako środka odkażającego. Na popularności kulinarnej zyskało dzięki włoskiej pizzy po II Wojnie Światowej.',
+    zachowanie: 'Drobna bylina kłączowa o pokroju rozłożystym. Późnym latem wypuszcza delikatne, liliowo-różowe kwiatostany.',
+    preferencje: 'Pełne słońce i mocno przepuszczalne podłoże z dodatkiem piasku/żwiru.',
+    nawodnienie: 'Umiarkowane. Ziemia musi porządnie przeschnąć między podlewaniami. Jest odporne na krótkotrwałe susze.',
+    funkcje: 'Kulinarna (dania kuchni śródziemnomorskiej) oraz antybakteryjna (olejek z oregano to silny antybiotyk naturalny).',
+    ciekawostki: 'Oregano suszone jest zazwyczaj znacznie bardziej aromatyczne i wyraziste w smaku niż jego świeże liście.'
   },
   {
     id: 'sp_szczypiorek',
     name: 'Szczypiorek wieloletni',
-    description: 'Opis: Roślina cebulowa o rurkowatych, zielonych liściach i fioletowych kwiatach.\nHistoria: Uprawiany i ceniony w Chinach już 3000 lat p.n.e.\nPochodzenie: Europa, Azja, Ameryka Północna.\nNasłonecznienie: Słońce do lekkiego półcienia.\nNawodnienie: Umiarkowane, regularne.\nCechy szczególne: Szybko odrasta po ścięciu, jadalne, miododajne kwiaty.\nFunkcje: Kulinarna (dodatek do twarogów, jaj, sałatek).'
+    pochodzenie: 'Strefy umiarkowane Europy, Azji (Syberia) i Ameryki Północnej.',
+    historia: 'W Chinach stosowano go jako przyprawę i lek ponad 3000 lat p.n.e. W Europie spopularyzował się szeroko dopiero w Średniowieczu.',
+    zachowanie: 'Roślina cebulowa (tworzy małe, zwarte cebulki). Wypuszcza gęste kępy rurkowatych, ciemnozielonych liści i okrągłe, fioletowe kwiaty.',
+    preferencje: 'Stanowisko słoneczne lub delikatnie półcieniste. Ziemia żyzna i dość wilgotna.',
+    nawodnienie: 'Umiarkowane do regularnego. Nie lubi przesuszenia, które powoduje żółknięcie i zasychanie końcówek.',
+    funkcje: 'Kulinarna (klasyczny dodatek do jajek, twarogów, sałatek).',
+    ciekawostki: 'Jego fioletowe kwiaty są nie tylko jadalne, ale mają delikatny, bardzo przyjemny cebulowo-czosnkowy smak, idealny do dekoracji potraw.'
   },
   {
     id: 'sp_tuja',
-    name: 'Tuja Szmaragdowa (Żywotnik zachodni)',
-    description: 'Opis: Elegancki iglak o stożkowym pokroju i soczyście zielonych łuskach.\nHistoria: Odmiana wyselekcjonowana w 1950 roku w Danii.\nPochodzenie: Ameryka Północna.\nNasłonecznienie: Słońce do półcienia.\nNawodnienie: Regularne (ma płytki system korzeniowy, wrażliwa na suszę).\nCechy szczególne: Zachowuje szmaragdową zieleń zimą, nie brązowieje.\nFunkcje: Ozdobna, idealna na gęste żywopłoty na balkonach/tarasach.'
+    name: 'Tuja Szmaragdowa (Żywotnik zachodni "Smaragd")',
+    pochodzenie: 'Gatunek podstawowy (Thuja occidentalis) pochodzi z Ameryki Północnej. Odmiana wywodzi się z Europy.',
+    historia: 'Odmiana "Smaragd" została wyselekcjonowana w 1950 roku w Danii i stała się światowym hitem jako roślina żywopłotowa.',
+    zachowanie: 'Drzewo iglaste o zwartym, idealnie stożkowym i wąskim pokroju. Rośnie dość wolno (ok. 20 cm rocznie).',
+    preferencje: 'Stanowisko słoneczne lub delikatny półcień. Wymaga podłoża o odczynie lekko kwaśnym.',
+    nawodnienie: 'Wymaga regularnego podlewania. Posiada niezwykle płytki system korzeniowy, przez co szybko odczuwa suszę (co objawia się brązowieniem).',
+    funkcje: 'Ozdobna, izolacyjna (idealna do tworzenia gęstych, zimozielonych żywopłotów i ekranów prywatności na tarasie).',
+    ciekawostki: 'Jedna z nielicznych odmian żywotnika, która nie zmienia koloru na brunatny w okresie zimowym, zachowując piękną, żywą zieleń przez cały rok.'
   },
   {
     id: 'sp_philo_brasil',
     name: 'Philodendron Brasil',
-    description: 'Opis: Efektowne pnącze o sercowatych liściach z neonowo-żółtymi paskami.\nHistoria: Odkryty jako naturalna mutacja Philodendrona pnącego (hederaceum).\nPochodzenie: Ameryka Południowa (Brazylia).\nNasłonecznienie: Jasne, rozproszone światło.\nNawodnienie: Umiarkowane (podlewać, gdy wierzchnia warstwa ziemi przeschnie).\nCechy szczególne: Bardzo szybki wzrost, wybacza błędy początkujących.\nFunkcje: Ozdobna (do makram i kwietników), oczyszczająca powietrze.'
+    pochodzenie: 'Ameryka Południowa (Brazylia).',
+    historia: 'Jest to naturalna mutacja popularnego Philodendrona hederaceum. Został odkryty w 1991 roku w brazylijskiej szkółce przez Rubena Ernesto Acostę.',
+    zachowanie: 'Bujnie rosnące pnącze, które wypuszcza długie pędy (często o różowawym odcieniu na młodych przyrostach) i sercowate liście.',
+    preferencje: 'Jasne, rozproszone światło. W zbyt ciemnym miejscu z liści zniknie żółto-neonowy wzór (rewersja).',
+    nawodnienie: 'Umiarkowane. Podlewaj obficie dopiero wtedy, gdy górna połowa doniczki całkowicie przeschnie.',
+    funkcje: 'Ozdobna (świetnie wygląda na wyższych półkach lub prowadzona po paliku) oraz oczyszczająca powietrze z toksyn lotnych.',
+    ciekawostki: 'Każdy liść tej rośliny jest unikalny. Żółto-zielone wybarwienie przypomina flagę Brazylii, skąd roślina wzięła swoją nazwę.'
   },
   {
     id: 'sp_philo_scandens',
-    name: 'Philodendron scandens (pnący)',
-    description: 'Opis: Klasyczne pnącze o jednolitych, ciemnozielonych, sercowatych liściach.\nHistoria: Jedna z najstarszych i najchętniej uprawianych roślin domowych.\nPochodzenie: Ameryka Środkowa i Karaiby.\nNasłonecznienie: Toleruje słabe oświetlenie i głęboki półcień.\nNawodnienie: Umiarkowane.\nCechy szczególne: Wyjątkowo odporny na zaniedbania i brak światła.\nFunkcje: Ozdobna, silnie filtruje toksyny z powietrza.'
+    name: 'Philodendron scandens (Filodendron pnący)',
+    pochodzenie: 'Ameryka Środkowa, Karaiby, Meksyk.',
+    historia: 'Jeden z pierwszych gatunków z tropików, który z sukcesem wprowadzono jako masową roślinę doniczkową ze względu na ogromną wytrzymałość.',
+    zachowanie: 'Pnącze o bardzo elastycznych pędach i jednolitych, ciemnozielonych, aksamitnie wyglądających liściach z charakterystycznym zagiętym wierzchołkiem.',
+    preferencje: 'Znakomicie adaptuje się do warunków. Może rosnąć w miejscach ciemniejszych, choć w mocnym, rozproszonym świetle rośnie najszybciej.',
+    nawodnienie: 'Umiarkowane do rzadkiego. Odporny na krótkotrwałe okresy suszy (liście stają się wtedy matowe i lekko opadają – to znak, by podlać).',
+    funkcje: 'Ozdobna, filtrująca formaldehyd i inne substancje chemiczne z domowego powietrza.',
+    ciekawostki: 'Prowadzony na wilgotnym paliku kokosowym/torfowym potrafi wielokrotnie zwiększyć rozmiar swoich liści, przypominając rośliny z dżungli.'
   },
   {
     id: 'sp_sansewiera',
-    name: 'Sansewiera Laurentii (Wężownica)',
-    description: 'Opis: Sukulent o mieczowatych, sztywnych liściach z żółtym marginesem.\nHistoria: Popularna w europejskich domach i biurach od początku XX wieku.\nPochodzenie: Afryka Zachodnia.\nNasłonecznienie: Rośnie wszędzie: od pełnego słońca po głęboki cień.\nNawodnienie: Bardzo rzadkie (dopiero gdy ziemia w donicy całkowicie wyschnie).\nCechy szczególne: Produkuje tlen w nocy (idealna do sypialni).\nFunkcje: Ozdobna, uznana przez NASA za oczyszczającą powietrze.'
+    name: 'Sansewiera Laurentii (Wężownica, Języki Teściowej)',
+    pochodzenie: 'Afryka Zachodnia (od Nigerii po Kongo).',
+    historia: 'Sprowadzona do Europy w XVIII wieku. Nazwana na cześć księcia San Severo, włoskiego uczonego i wynalazcy.',
+    zachowanie: 'Twardy, mięsisty sukulent liściowy. Pionowe, sztywne liście o wyraźnym, żółtym marginesie wyrastają z mocnego podziemnego kłącza.',
+    preferencje: 'Ekstremalnie tolerancyjna. Rośnie zarówno w palącym słońcu na południowym oknie, jak i w głębokim cieniu na korytarzu.',
+    nawodnienie: 'Bardzo rzadkie. Podlewaj tylko wtedy, gdy ziemia jest sucha jak pieprz. Przelanie to jedyny skuteczny sposób na uśmiercenie tej rośliny.',
+    funkcje: 'Ozdobna, architektoniczna, wysoce filtrująca powietrze.',
+    ciekawostki: 'Przeprowadza proces fotosyntezy typu CAM, co oznacza, że otwiera aparaty szparkowe i pochłania dwutlenek węgla w nocy – dlatego to idealna roślina do sypialni.'
   },
   {
     id: 'sp_zamioculcas',
-    name: 'Zamioculcas Zamikulkas',
-    description: 'Opis: Sukulent o grubych, błyszczących liściach ułożonych na mięsistych łodygach.\nHistoria: Wprowadzony na szeroki rynek florystyczny stosunkowo niedawno (w 1996 roku).\nPochodzenie: Afryka Wschodnia (Tanzania, Zanzibar).\nNasłonecznienie: Cień do lekko rozproszonego światła.\nNawodnienie: Bardzo rzadkie (magazynuje wodę w podziemnych bulwach).\nCechy szczególne: Nazywany "żelazną rośliną" – niemal niezniszczalny.\nFunkcje: Ozdobna, idealna dla zapracowanych i początkujących.'
+    name: 'Zamioculcas (Zamiokulkas zamiolistny)',
+    pochodzenie: 'Afryka Wschodnia (Tanzania, Kenia, Zanzibar).',
+    historia: 'Został opisany już w XIX wieku, ale holenderskie szkółki rozpoczęły jego komercyjną produkcję na dużą skalę dopiero w 1996 roku.',
+    zachowanie: 'Sukulent. Tworzy grube, podziemne bulwy i bardzo mięsiste łodygi z ciemnozielonymi, błyszczącymi, jakby "woskowanymi" liśćmi.',
+    preferencje: 'Lubi stanowiska półcieniste do lekko jasnych. Bezpośrednie, palące słońce może przypalić liście na żółto.',
+    nawodnienie: 'Bardzo, bardzo rzadkie. Posiada ogromne rezerwy wody w bulwach. W zimie wystarczy go podlać raz na miesiąc lub rzadziej.',
+    funkcje: 'Ozdobna – to jedna z absolutnie najłatwiejszych w utrzymaniu roślin doniczkowych na świecie.',
+    ciekawostki: 'Zyskał przydomek "żelaznej rośliny". Nawet jeśli straci wszystkie liście z powodu drastycznej suszy, z podziemnej bulwy potrafi z czasem wypuścić nowe pędy.'
   },
   {
     id: 'sp_euphorbia_lactea',
     name: 'Euphorbia lactea (Wilczomlecz mleczny)',
-    description: 'Opis: Oryginalny sukulent o rzeźbiarskich, pofalowanych pędach z jasnym, marmurkowym wzorem.\nHistoria: Niezwykle popularny w zmutowanej formie grzebieniastej (\'Cristata\'), która przypomina rafę koralową.\nPochodzenie: Tropikalne regiony Azji (głównie Indie i Sri Lanka).\nNasłonecznienie: Jasne, rozproszone światło do pełnego słońca.\nNawodnienie: Bardzo rzadkie, podłoże musi całkowicie wyschnąć przed kolejnym podlaniem.\nCechy szczególne: Wydziela biały, toksyczny sok mleczny, który może silnie podrażnić skórę i oczy.\nFunkcje: Wysoce dekoracyjna, architektoniczna ozdoba nowoczesnych wnętrz.'
+    pochodzenie: 'Tropikalna Azja, głównie Indie i Sri Lanka.',
+    historia: 'Choć podstawowa roślina rośnie jako kandelabrowe drzewo, w handlu dominuje mutacja "Cristata" (często zaszczepiona na innym wilczomleczu).',
+    zachowanie: 'Sukulent pędowy o trójbocznych łodygach, nierzadko tworzący fascynujące, falbaste i pofalowane formy grzebieniaste z białym lub różowym wzorem.',
+    preferencje: 'Dużo światła (jasne, rozproszone do pełnego słońca), bardzo luźne, piaskowo-żwirowe podłoże dla kaktusów.',
+    nawodnienie: 'Znikome. Należy podlewać rzadko i ostrożnie, pilnując, by woda nie stała w podstawce.',
+    funkcje: 'Ozdobna, awangardowa roślina o niezwykle rzeźbiarskim wyglądzie, idealna do nowoczesnych wnętrz.',
+    ciekawostki: 'Gdy roślina zostanie uszkodzona (zadrapana/cięta), wydziela biały, mleczny sok (lateks), który jest wysoce toksyczny i może spowodować silne poparzenia skóry oraz oczu.'
   }
 ];
 
@@ -148,20 +274,20 @@ function save() {
       expenses: S.expenses, priceRules: S.priceRules,
       defaultSpeciesVersion: S.defaultSpeciesVersion
     }));
-  } catch(e) { console.error(e); }
+  } catch (e) { console.error(e); }
 }
 
 function load() {
   try {
     const d = JSON.parse(localStorage.getItem(CFG.STORE) || '{}');
-    S.plants     = d.plants     || [];
-    S.events     = d.events     || [];
-    S.scheduled  = d.scheduled  || [];
+    S.plants = d.plants || [];
+    S.events = d.events || [];
+    S.scheduled = d.scheduled || [];
     S.aiForecasts = d.aiForecasts || {};
-    S.species    = d.species    || [];
-    S.expenses   = d.expenses   || [];
+    S.species = d.species || [];
+    S.expenses = d.expenses || [];
     S.priceRules = d.priceRules || [];
-    
+
     // Migracja z defaultSpeciesAdded -> defaultSpeciesVersion
     if (d.defaultSpeciesAdded && !d.defaultSpeciesVersion) d.defaultSpeciesVersion = 1;
     S.defaultSpeciesVersion = d.defaultSpeciesVersion || 0;
@@ -173,21 +299,21 @@ function load() {
       S.defaultSpeciesVersion = 2;
       save(); // Save immediately to persist defaults
     }
-  } catch(e) { console.error(e); }
+  } catch (e) { console.error(e); }
 }
 
 // ───── HELPERS ─────
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
 function fmtDate(ts) {
   if (!ts) return '—';
-  return new Date(ts).toLocaleDateString('pl-PL', { day:'numeric', month:'short', year:'numeric' });
+  return new Date(ts).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 function fmtDateTime(ts) {
   if (!ts) return '—';
   const d = new Date(ts);
-  return d.toLocaleDateString('pl-PL', { day:'numeric', month:'short' }) + ' ' +
-         d.toLocaleTimeString('pl-PL', { hour:'2-digit', minute:'2-digit' });
+  return d.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' }) + ' ' +
+    d.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
 }
 function daysAgo(ts) {
   if (!ts) return null;
@@ -203,8 +329,8 @@ function addDays(date, n) {
 function sameDay(a, b) {
   const da = new Date(a), db = new Date(b);
   return da.getFullYear() === db.getFullYear() &&
-         da.getMonth() === db.getMonth() &&
-         da.getDate() === db.getDate();
+    da.getMonth() === db.getMonth() &&
+    da.getDate() === db.getDate();
 }
 
 function getSpeciesName(val) {
@@ -269,7 +395,7 @@ async function registerSW() {
   if (!('serviceWorker' in navigator)) return;
   try {
     await navigator.serviceWorker.register('./sw.js');
-  } catch(e) { console.warn('SW:', e); }
+  } catch (e) { console.warn('SW:', e); }
 }
 
 // ───── NOTIFICATIONS ─────
@@ -313,7 +439,7 @@ function predict(plant) {
 
   const waters = S.events.filter(e =>
     e.plantId === plant.id && (e.type === 'water' || e.type === 'fertilize')
-  ).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+  ).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
   if (waters.length === 0) {
     if (plant.waterFreq && plant.planted) {
@@ -325,13 +451,13 @@ function predict(plant) {
   const recent = waters.slice(-5);
   const intervals = [];
   for (let i = 1; i < recent.length; i++) {
-    intervals.push((new Date(recent[i].timestamp) - new Date(recent[i-1].timestamp)) / 86400000);
+    intervals.push((new Date(recent[i].timestamp) - new Date(recent[i - 1].timestamp)) / 86400000);
   }
   const avgInterval = intervals.length
-    ? Math.round(intervals.reduce((a,b) => a+b,0) / intervals.length)
+    ? Math.round(intervals.reduce((a, b) => a + b, 0) / intervals.length)
     : (plant.waterFreq || 7);
 
-  const last = new Date(recent[recent.length-1].timestamp);
+  const last = new Date(recent[recent.length - 1].timestamp);
   return {
     nextDate: addDays(last, avgInterval).toISOString(),
     freq: avgInterval,
@@ -342,17 +468,17 @@ function predict(plant) {
 
 function lastEvent(plantId, types) {
   return S.events.filter(e => e.plantId === plantId && types.includes(e.type))
-    .sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))[0] || null;
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0] || null;
 }
 
 function plantEmoji(name) {
-  const n = (name||'').toLowerCase();
-  if (n.includes('pomidor')||n.includes('tomat')) return 'cherry';
+  const n = (name || '').toLowerCase();
+  if (n.includes('pomidor') || n.includes('tomat')) return 'cherry';
   if (n.includes('papryka')) return 'flame';
-  if (n.includes('bazylia')||n.includes('zioł')) return 'leaf';
-  if (n.includes('monstera')||n.includes('fikus')) return 'leaf';
-  if (n.includes('kaktus')||n.includes('sukulent')) return 'mountain';
-  if (n.includes('orchidea')||n.includes('storczyk')) return 'sparkles';
+  if (n.includes('bazylia') || n.includes('zioł')) return 'leaf';
+  if (n.includes('monstera') || n.includes('fikus')) return 'leaf';
+  if (n.includes('kaktus') || n.includes('sukulent')) return 'mountain';
+  if (n.includes('orchidea') || n.includes('storczyk')) return 'sparkles';
   if (n.includes('lawend')) return 'flower-2';
   if (n.includes('rozmaryn')) return 'leaf';
   return 'sprout';
@@ -367,9 +493,9 @@ function renderPlants() {
   let plants = filter === 'all' ? S.plants : S.plants.filter(p => p.location === filter);
 
   if (S.sortOrder === 'name') {
-    plants.sort((a,b) => a.name.localeCompare(b.name));
+    plants.sort((a, b) => a.name.localeCompare(b.name));
   } else {
-    plants.sort((a,b) => {
+    plants.sort((a, b) => {
       const pa = predict(a), pb = predict(b);
       const ua = pa ? daysUntil(pa.nextDate) : 999;
       const ub = pb ? daysUntil(pb.nextDate) : 999;
@@ -387,20 +513,20 @@ function renderPlants() {
 
   grid.innerHTML = plants.map(p => {
     const pred = predict(p);
-    const lastW = lastEvent(p.id, ['water','fertilize']);
+    const lastW = lastEvent(p.id, ['water', 'fertilize']);
     const ago = lastW ? daysAgo(lastW.timestamp) : null;
     let urgCls = '', urgTxt = '';
     if (pred) {
       const u = daysUntil(pred.nextDate);
-      if (u <= 0)    { urgCls = 'urgent'; urgTxt = 'Podlej!'; }
-      else if (u===1){ urgCls = 'soon';   urgTxt = 'Jutro'; }
-      else            { urgCls = 'ok';     urgTxt = `Za ${u}d`; }
+      if (u <= 0) { urgCls = 'urgent'; urgTxt = 'Podlej!'; }
+      else if (u === 1) { urgCls = 'soon'; urgTxt = 'Jutro'; }
+      else { urgCls = 'ok'; urgTxt = `Za ${u}d`; }
     }
     const imgHtml = p.photo
       ? `<img class="plant-img" src="${p.photo}" alt="${p.name}" loading="lazy" />`
       : `<div class="plant-placeholder">${icon(plantEmoji(p.name), 44)}</div>`;
-    const locLabels = { balkon:'Balkon', parapet:'Parapet', polka:'Półka', okno:'Okno' };
-    const locIcos   = { balkon:'sun', parapet:'layout-panel-left', polka:'layers', okno:'app-window' };
+    const locLabels = { balkon: 'Balkon', parapet: 'Parapet', polka: 'Półka', okno: 'Okno' };
+    const locIcos = { balkon: 'sun', parapet: 'layout-panel-left', polka: 'layers', okno: 'app-window' };
     const locLabel = locLabels[p.location] || p.location;
     const locIco = locIcos[p.location] || 'layout-panel-left';
 
@@ -411,15 +537,15 @@ function renderPlants() {
         <div class="plant-name">${p.name}</div>
         ${p.species ? `<div class="plant-species">${getSpeciesName(p.species)}</div>` : ''}
         <div class="plant-meta">
-          <span class="loc-badge">${icon(locIco,10)} ${locLabel}</span>
-          ${ago!==null ? `<span class="next-water ${urgCls}">${icon('droplet',12)} ${ago===0?'Dziś':ago+'d temu'}</span>` : ''}
+          <span class="loc-badge">${icon(locIco, 10)} ${locLabel}</span>
+          ${ago !== null ? `<span class="next-water ${urgCls}">${icon('droplet', 12)} ${ago === 0 ? 'Dziś' : ago + 'd temu'}</span>` : ''}
         </div>
       </div>
       <div class="plant-actions">
-        <button class="plant-btn water"    data-action="water"     title="Podlej">${icon('droplets',16)}</button>
-        <button class="plant-btn fertilize" data-action="fertilize" title="Nawóź">${icon('flask-conical',16)}</button>
-        <button class="plant-btn harvest"  data-action="harvest"   title="Zbiory">${icon('apple',16)}</button>
-        <button class="plant-btn custom"   data-action="custom"    title="Inne">${icon('file-text',16)}</button>
+        <button class="plant-btn water"    data-action="water"     title="Podlej">${icon('droplets', 16)}</button>
+        <button class="plant-btn fertilize" data-action="fertilize" title="Nawóź">${icon('flask-conical', 16)}</button>
+        <button class="plant-btn harvest"  data-action="harvest"   title="Zbiory">${icon('apple', 16)}</button>
+        <button class="plant-btn custom"   data-action="custom"    title="Inne">${icon('file-text', 16)}</button>
       </div>
     </div>`;
   }).join('');
@@ -432,32 +558,32 @@ function openPlantModal(editId = null) {
   S.editingPlantId = editId;
   document.getElementById('modal-plant-title').textContent = editId ? 'Edytuj roślinę' : 'Nowa roślina';
 
-  const nameEl    = document.getElementById('plant-name');
+  const nameEl = document.getElementById('plant-name');
   const speciesEl = document.getElementById('plant-species');
   const plantedEl = document.getElementById('plant-planted');
-  const freqEl    = document.getElementById('plant-water-freq');
-  const notesEl   = document.getElementById('plant-notes');
-  const preview   = document.getElementById('plant-photo-preview');
+  const freqEl = document.getElementById('plant-water-freq');
+  const notesEl = document.getElementById('plant-notes');
+  const preview = document.getElementById('plant-photo-preview');
 
   // Reset
   nameEl.value = ''; notesEl.value = ''; freqEl.value = 7;
   plantedEl.value = new Date().toISOString().split('T')[0];
-  preview.innerHTML = `${icon('image',32)}<span>Dodaj zdjęcie</span>`;
+  preview.innerHTML = `${icon('image', 32)}<span>Dodaj zdjęcie</span>`;
   setGroupActive('location-group', 'balkon');
 
   // Populate species select
-  speciesEl.innerHTML = '<option value="">-- Wybierz z bazy (lub brak) --</option>' + 
+  speciesEl.innerHTML = '<option value="">-- Wybierz z bazy (lub brak) --</option>' +
     S.species.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
   speciesEl.value = '';
 
   if (editId) {
     const p = S.plants.find(x => x.id === editId);
     if (!p) return;
-    nameEl.value    = p.name    || '';
+    nameEl.value = p.name || '';
     speciesEl.value = p.species || '';
     plantedEl.value = p.planted || '';
-    freqEl.value    = p.waterFreq || 7;
-    notesEl.value   = p.notes  || '';
+    freqEl.value = p.waterFreq || 7;
+    notesEl.value = p.notes || '';
     if (p.photo) preview.innerHTML = `<img src="${p.photo}" />`;
     setGroupActive('location-group', p.location || 'balkon');
   }
@@ -477,11 +603,11 @@ function savePlant() {
   const plant = {
     id: S.editingPlantId || uid(),
     name,
-    species:   document.getElementById('plant-species').value.trim(),
+    species: document.getElementById('plant-species').value.trim(),
     location,
-    planted:   document.getElementById('plant-planted').value,
+    planted: document.getElementById('plant-planted').value,
     waterFreq: parseInt(document.getElementById('plant-water-freq').value) || 7,
-    notes:     document.getElementById('plant-notes').value.trim(),
+    notes: document.getElementById('plant-notes').value.trim(),
     photo,
     createdAt: new Date().toISOString()
   };
@@ -559,7 +685,7 @@ function openHarvestModal(plantId) {
   document.getElementById('harvest-quantity').value = '';
   document.getElementById('harvest-weight').value = '';
   document.getElementById('harvest-notes').value = '';
-  document.getElementById('harvest-photo-preview').innerHTML = `${icon('camera',32)}<span>Dodaj zdjęcie zbiorów</span>`;
+  document.getElementById('harvest-photo-preview').innerHTML = `${icon('camera', 32)}<span>Dodaj zdjęcie zbiorów</span>`;
 
   openModal('modal-harvest');
 }
@@ -695,11 +821,11 @@ function openExpenseModal() {
   document.getElementById('expense-date').value = nowLocal().split('T')[0];
   document.getElementById('expense-title').value = '';
   document.getElementById('expense-amount').value = '';
-  
+
   const plantSel = document.getElementById('expense-plant');
-  plantSel.innerHTML = '<option value="">-- Brak / Ogólne --</option>' + 
+  plantSel.innerHTML = '<option value="">-- Brak / Ogólne --</option>' +
     S.plants.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-  
+
   openModal('modal-expense');
 }
 
@@ -734,7 +860,7 @@ function openBulkModal() {
   document.getElementById('bulk-notes').value = '';
   document.getElementById('bulk-fertilizer-name').value = '';
   document.getElementById('bulk-custom-title').value = '';
-  
+
   setGroupActive('bulk-type-group', 'water');
   document.getElementById('bulk-fertilizer-group').classList.add('hidden');
   document.getElementById('bulk-custom-group').classList.add('hidden');
@@ -802,21 +928,21 @@ function openPlantDetail(plantId) {
 
   const pred = predict(p);
   const history = S.events.filter(e => e.plantId === plantId)
-    .sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   const harvests = history.filter(e => e.type === 'harvest');
-  const totalKg  = harvests.reduce((s,e) => s + (e.weight||0), 0);
-  const totalQty = harvests.reduce((s,e) => s + (e.quantity||0), 0);
+  const totalKg = harvests.reduce((s, e) => s + (e.weight || 0), 0);
+  const totalQty = harvests.reduce((s, e) => s + (e.quantity || 0), 0);
 
   const imgHtml = p.photo
     ? `<img class="detail-img" src="${p.photo}" alt="${p.name}" />`
     : `<div class="detail-placeholder">${icon(plantEmoji(p.name), 40)}</div>`;
 
-  const typeIco  = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text', height:'ruler', cutting:'scissors' };
-  const typeLabel= { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne', height:'Wysokość', cutting:'Sadzonka' };
-  const typeCls  = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom', height:'plant', cutting:'harvest' };
+  const typeIco = { water: 'droplets', fertilize: 'flask-conical', harvest: 'apple', plant: 'sprout', custom: 'file-text', height: 'ruler', cutting: 'scissors' };
+  const typeLabel = { water: 'Podlewanie', fertilize: 'Nawożenie', harvest: 'Zbiory', plant: 'Posadzenie', custom: 'Inne', height: 'Wysokość', cutting: 'Sadzonka' };
+  const typeCls = { water: 'water', fertilize: 'fertilize', harvest: 'harvest', plant: 'plant', custom: 'custom', height: 'plant', cutting: 'harvest' };
 
-  const locLabels = { balkon:'Balkon', parapet:'Parapet', polka:'Półka', okno:'Okno' };
-  const locIcos   = { balkon:'sun', parapet:'layout-panel-left', polka:'layers', okno:'app-window' };
+  const locLabels = { balkon: 'Balkon', parapet: 'Parapet', polka: 'Półka', okno: 'Okno' };
+  const locIcos = { balkon: 'sun', parapet: 'layout-panel-left', polka: 'layers', okno: 'app-window' };
   const locLabel = locLabels[p.location] || p.location;
   const locIco = locIcos[p.location] || 'layout-panel-left';
 
@@ -830,72 +956,72 @@ function openPlantDetail(plantId) {
         <div class="detail-name">${p.name}</div>
         ${p.species ? `<div class="detail-species">${getSpeciesName(p.species)}</div>` : ''}
         <div class="detail-badges">
-          <span class="detail-badge">${icon(locIco,11)} ${locLabel}</span>
-          ${p.planted ? `<span class="detail-badge">${icon('calendar',11)} ${fmtDate(p.planted)}</span>` : ''}
-          <span class="detail-badge">${icon('droplets',11)} co ${p.waterFreq||7}d</span>
+          <span class="detail-badge">${icon(locIco, 11)} ${locLabel}</span>
+          ${p.planted ? `<span class="detail-badge">${icon('calendar', 11)} ${fmtDate(p.planted)}</span>` : ''}
+          <span class="detail-badge">${icon('droplets', 11)} co ${p.waterFreq || 7}d</span>
         </div>
       </div>
     </div>
 
     <div class="detail-actions">
-      <button class="detail-action-btn water"     data-detail-action="water"     data-pid="${p.id}">${icon('droplets',14)} Podlej</button>
-      <button class="detail-action-btn fertilize" data-detail-action="fertilize" data-pid="${p.id}">${icon('flask-conical',14)} Nawóź</button>
-      <button class="detail-action-btn harvest"   data-detail-action="harvest"   data-pid="${p.id}">${icon('apple',14)} Zbiory</button>
-      <button class="detail-action-btn custom"    data-detail-action="cutting"   data-pid="${p.id}">${icon('scissors',14)} Sadzonki</button>
-      <button class="detail-action-btn custom"    data-detail-action="height"    data-pid="${p.id}">${icon('ruler',14)} Wysokość</button>
-      <button class="detail-action-btn custom"    data-detail-action="custom"    data-pid="${p.id}">${icon('file-text',14)} Inne</button>
-      <button class="detail-action-btn danger"    data-detail-action="delete"    data-pid="${p.id}">${icon('trash-2',14)}</button>
+      <button class="detail-action-btn water"     data-detail-action="water"     data-pid="${p.id}">${icon('droplets', 14)} Podlej</button>
+      <button class="detail-action-btn fertilize" data-detail-action="fertilize" data-pid="${p.id}">${icon('flask-conical', 14)} Nawóź</button>
+      <button class="detail-action-btn harvest"   data-detail-action="harvest"   data-pid="${p.id}">${icon('apple', 14)} Zbiory</button>
+      <button class="detail-action-btn custom"    data-detail-action="cutting"   data-pid="${p.id}">${icon('scissors', 14)} Sadzonki</button>
+      <button class="detail-action-btn custom"    data-detail-action="height"    data-pid="${p.id}">${icon('ruler', 14)} Wysokość</button>
+      <button class="detail-action-btn custom"    data-detail-action="custom"    data-pid="${p.id}">${icon('file-text', 14)} Inne</button>
+      <button class="detail-action-btn danger"    data-detail-action="delete"    data-pid="${p.id}">${icon('trash-2', 14)}</button>
     </div>
 
     ${pred ? `
     <div class="predict-card">
-      <h5>${icon('clock',13)} Predykcja podlewania</h5>
+      <h5>${icon('clock', 13)} Predykcja podlewania</h5>
       <p>Następne: <strong>${fmtDate(pred.nextDate)}</strong> (co ~${pred.freq} dni)</p>
-      <p class="src">Źródło: ${pred.source==='ai'?icon('sparkles',11)+' AI Forecast':pred.source==='algorithm'?icon('bar-chart-2',11)+' Algorytm (pewność: '+pred.conf+')':icon('settings',11)+' Domyślne'}</p>
+      <p class="src">Źródło: ${pred.source === 'ai' ? icon('sparkles', 11) + ' AI Forecast' : pred.source === 'algorithm' ? icon('bar-chart-2', 11) + ' Algorytm (pewność: ' + pred.conf + ')' : icon('settings', 11) + ' Domyślne'}</p>
     </div>` : ''}
 
     ${harvests.length > 0 ? `
     <div class="detail-section" style="margin-bottom:14px">
       <h5>Plony łącznie</h5>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div class="stat-card"><div class="stat-icon harvest-color">${icon('scale',20)}</div><div class="stat-value">${totalKg.toFixed(2)}<small style="font-size:12px"> kg</small></div><div class="stat-label">Waga</div></div>
-        <div class="stat-card"><div class="stat-icon harvest-color">${icon('hash',20)}</div><div class="stat-value">${totalQty}</div><div class="stat-label">Sztuki</div></div>
+        <div class="stat-card"><div class="stat-icon harvest-color">${icon('scale', 20)}</div><div class="stat-value">${totalKg.toFixed(2)}<small style="font-size:12px"> kg</small></div><div class="stat-label">Waga</div></div>
+        <div class="stat-card"><div class="stat-icon harvest-color">${icon('hash', 20)}</div><div class="stat-value">${totalQty}</div><div class="stat-label">Sztuki</div></div>
       </div>
     </div>` : ''}
 
     ${sObj ? `
     <div class="detail-section" style="margin-bottom:14px; background: rgba(167, 139, 250, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(167, 139, 250, 0.1);">
-      <h5 style="color: var(--plant); display:flex; align-items:center; gap:6px; margin-bottom:6px;">${icon('book-open',14)} Wiedza o gatunku</h5>
+      <h5 style="color: var(--plant); display:flex; align-items:center; gap:6px; margin-bottom:6px;">${icon('book-open', 14)} Wiedza o gatunku</h5>
       <p style="font-size:13px; color:var(--text2); margin:0; line-height:1.5; white-space:pre-wrap;">${sObj.description}</p>
     </div>` : ''}
 
     <div class="detail-section">
       <h5>Historia (${history.length})</h5>
-      ${history.slice(0,15).map(ev => {
-        const tCls = typeCls[ev.type] || 'plant';
-        let detail = '';
-        if (ev.amount) detail += `${ev.amount} ml`;
-        if (ev.fertilizer) detail += (detail?' · ':'')+ev.fertilizer;
-        if (ev.weight) detail += (detail?' · ':'')+ev.weight+' kg';
-        if (ev.quantity) detail += (detail?' · ':'')+ev.quantity+' szt.';
-        if (ev.height) detail += (detail?' · ':'')+ev.height+' cm';
-        if (ev.notes) detail += (detail?' · ':'')+ev.notes;
-        return `<div class="history-item">
-          <div class="history-icon ${tCls}">${icon(typeIco[ev.type]||'circle',14)}</div>
+      ${history.slice(0, 15).map(ev => {
+    const tCls = typeCls[ev.type] || 'plant';
+    let detail = '';
+    if (ev.amount) detail += `${ev.amount} ml`;
+    if (ev.fertilizer) detail += (detail ? ' · ' : '') + ev.fertilizer;
+    if (ev.weight) detail += (detail ? ' · ' : '') + ev.weight + ' kg';
+    if (ev.quantity) detail += (detail ? ' · ' : '') + ev.quantity + ' szt.';
+    if (ev.height) detail += (detail ? ' · ' : '') + ev.height + ' cm';
+    if (ev.notes) detail += (detail ? ' · ' : '') + ev.notes;
+    return `<div class="history-item">
+          <div class="history-icon ${tCls}">${icon(typeIco[ev.type] || 'circle', 14)}</div>
           <div class="history-text">
-            <div class="history-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</div>
-            ${detail?`<div class="history-detail">${detail}</div>`:''}
+            <div class="history-title">${ev.customTitle || typeLabel[ev.type] || ev.type}</div>
+            ${detail ? `<div class="history-detail">${detail}</div>` : ''}
           </div>
           <span class="history-time">${fmtDateTime(ev.timestamp)}</span>
         </div>`;
-      }).join('')}
-      ${history.length===0?'<div style="color:var(--text3);font-size:13px">Brak historii</div>':''}
+  }).join('')}
+      ${history.length === 0 ? '<div style="color:var(--text3);font-size:13px">Brak historii</div>' : ''}
     </div>
 
     ${p.notes ? `<div class="detail-section"><h5>Notatki</h5><p style="font-size:14px;color:var(--text2)">${p.notes}</p></div>` : ''}
 
     <button class="btn-secondary" style="width:100%" data-detail-action="edit" data-pid="${p.id}">
-      ${icon('pencil',14)} Edytuj roślinę
+      ${icon('pencil', 14)} Edytuj roślinę
     </button>
   `;
 
@@ -904,8 +1030,8 @@ function openPlantDetail(plantId) {
 
 function deletePlant(plantId) {
   if (!confirm('Usunąć roślinę? Tej operacji nie można cofnąć.')) return;
-  S.plants  = S.plants.filter(p => p.id !== plantId);
-  S.events  = S.events.filter(e => e.plantId !== plantId);
+  S.plants = S.plants.filter(p => p.id !== plantId);
+  S.events = S.events.filter(e => e.plantId !== plantId);
   delete S.aiForecasts[plantId];
   save();
   closeModal('modal-detail');
@@ -918,48 +1044,48 @@ function deletePlant(plantId) {
 // ───── TIMELINE ─────
 function renderTimeline() {
   const el = document.getElementById('timeline-container');
-  const f  = S.timelineFilter;
-  let evs  = [...S.events].sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp));
+  const f = S.timelineFilter;
+  let evs = [...S.events].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   if (f !== 'all') evs = evs.filter(e => e.type === f);
   if (S.timelinePlant !== 'all') evs = evs.filter(e => e.plantId === S.timelinePlant);
 
   const pSelect = document.getElementById('timeline-plant-filter');
   if (pSelect) {
-    pSelect.innerHTML = '<option value="all">Wszystkie rośliny</option>' + 
-      S.plants.map(p => `<option value="${p.id}" ${p.id===S.timelinePlant?'selected':''}>${p.name}</option>`).join('');
+    pSelect.innerHTML = '<option value="all">Wszystkie rośliny</option>' +
+      S.plants.map(p => `<option value="${p.id}" ${p.id === S.timelinePlant ? 'selected' : ''}>${p.name}</option>`).join('');
   }
 
   if (evs.length === 0) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon('clock',56)}</div><p>Brak zdarzeń</p><span>Podlej rośliny lub dodaj zbiory</span></div>`;
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon('clock', 56)}</div><p>Brak zdarzeń</p><span>Podlej rośliny lub dodaj zbiory</span></div>`;
     renderIcons();
     return;
   }
 
-  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text' };
-  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne' };
+  const typeIco = { water: 'droplets', fertilize: 'flask-conical', harvest: 'apple', plant: 'sprout', custom: 'file-text' };
+  const typeLabel = { water: 'Podlewanie', fertilize: 'Nawożenie', harvest: 'Zbiory', plant: 'Posadzenie', custom: 'Inne' };
 
   el.innerHTML = evs.map(ev => {
     const plant = S.plants.find(p => p.id === ev.plantId);
     const pName = plant ? plant.name : 'Nieznana roślina';
     let detail = '';
     if (ev.amount) detail += `${ev.amount} ml`;
-    if (ev.fertilizer) detail += (detail?' · ':'')+ev.fertilizer;
-    if (ev.weight) detail += (detail?' · ':'')+ev.weight+' kg';
-    if (ev.quantity) detail += (detail?' · ':'')+ev.quantity+' szt.';
-    if (ev.height) detail += (detail?' · ':'')+ev.height+' cm';
-    if (ev.notes) detail += (detail?' · ':'')+ev.notes;
+    if (ev.fertilizer) detail += (detail ? ' · ' : '') + ev.fertilizer;
+    if (ev.weight) detail += (detail ? ' · ' : '') + ev.weight + ' kg';
+    if (ev.quantity) detail += (detail ? ' · ' : '') + ev.quantity + ' szt.';
+    if (ev.height) detail += (detail ? ' · ' : '') + ev.height + ' cm';
+    if (ev.notes) detail += (detail ? ' · ' : '') + ev.notes;
 
     return `<div class="tl-item" data-plant-id="${plant ? plant.id : ''}" data-ev-id="${ev.id}">
-      <div class="tl-dot ${ev.type}">${icon(typeIco[ev.type]||'circle',10)}</div>
+      <div class="tl-dot ${ev.type}">${icon(typeIco[ev.type] || 'circle', 10)}</div>
       <div class="tl-card">
         <div class="tl-head">
-          <span class="tl-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</span>
+          <span class="tl-title">${ev.customTitle || typeLabel[ev.type] || ev.type}</span>
           <div style="display:flex;align-items:center;gap:8px;">
             <span class="tl-time">${fmtDateTime(ev.timestamp)}</span>
-            <button class="tl-delete-btn" data-ev-id="${ev.id}" title="Usuń zdarzenie" style="background:none;border:none;cursor:pointer;color:var(--text3);display:flex;align-items:center;padding:2px;border-radius:4px;transition:color 0.2s;">${icon('trash-2',13)}</button>
+            <button class="tl-delete-btn" data-ev-id="${ev.id}" title="Usuń zdarzenie" style="background:none;border:none;cursor:pointer;color:var(--text3);display:flex;align-items:center;padding:2px;border-radius:4px;transition:color 0.2s;">${icon('trash-2', 13)}</button>
           </div>
         </div>
-        <div class="tl-plant">${icon('leaf',12)} ${pName}</div>
+        <div class="tl-plant">${icon('leaf', 12)} ${pName}</div>
         ${detail ? `<div class="tl-detail">${detail}</div>` : ''}
         ${ev.photo ? `<img class="tl-photo" src="${ev.photo}" alt="" />` : ''}
       </div>
@@ -972,25 +1098,25 @@ function renderTimeline() {
 // ───── CALENDAR ─────
 function renderCalendar() {
   const widget = document.getElementById('calendar-widget');
-  const month  = S.calMonth;
-  const today  = new Date();
+  const month = S.calMonth;
+  const today = new Date();
 
-  const first  = new Date(month.getFullYear(), month.getMonth(), 1);
-  const last   = new Date(month.getFullYear(), month.getMonth()+1, 0);
-  let startDow = first.getDay(); if (startDow===0) startDow=7; startDow--;
+  const first = new Date(month.getFullYear(), month.getMonth(), 1);
+  const last = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+  let startDow = first.getDay(); if (startDow === 0) startDow = 7; startDow--;
 
-  const mNames = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec',
-    'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
-  const dNames = ['Pn','Wt','Śr','Cz','Pt','Sb','Nd'];
+  const mNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+    'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+  const dNames = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb', 'Nd'];
 
   const cells = [];
-  for (let i=0;i<startDow;i++) {
-    const d=new Date(first); d.setDate(d.getDate()-(startDow-i));
-    cells.push({date:d,other:true});
+  for (let i = 0; i < startDow; i++) {
+    const d = new Date(first); d.setDate(d.getDate() - (startDow - i));
+    cells.push({ date: d, other: true });
   }
-  for (let i=1;i<=last.getDate();i++) cells.push({date:new Date(month.getFullYear(),month.getMonth(),i),other:false});
-  const rem=42-cells.length;
-  for (let i=1;i<=rem;i++) { const d=new Date(last); d.setDate(d.getDate()+i); cells.push({date:d,other:true}); }
+  for (let i = 1; i <= last.getDate(); i++) cells.push({ date: new Date(month.getFullYear(), month.getMonth(), i), other: false });
+  const rem = 42 - cells.length;
+  for (let i = 1; i <= rem; i++) { const d = new Date(last); d.setDate(d.getDate() + i); cells.push({ date: d, other: true }); }
 
   function getEventsForDay(date) {
     let dayEvs = S.events.filter(e => sameDay(e.timestamp, date));
@@ -1003,14 +1129,14 @@ function renderCalendar() {
   }
 
   function dotsForDay(date) {
-    const types = new Set(getEventsForDay(date).map(e=>e.type));
-    return [...types].slice(0,3).map(t=>`<div class="cal-dot ${t}"></div>`).join('');
+    const types = new Set(getEventsForDay(date).map(e => e.type));
+    return [...types].slice(0, 3).map(t => `<div class="cal-dot ${t}"></div>`).join('');
   }
 
   const calSelect = document.getElementById('cal-plant-filter');
   if (calSelect) {
-    calSelect.innerHTML = '<option value="all">Wszystkie</option>' + 
-      S.plants.map(p => `<option value="${p.id}" ${p.id===S.calPlant?'selected':''}>${p.name}</option>`).join('');
+    calSelect.innerHTML = '<option value="all">Wszystkie</option>' +
+      S.plants.map(p => `<option value="${p.id}" ${p.id === S.calPlant ? 'selected' : ''}>${p.name}</option>`).join('');
   }
 
   widget.innerHTML = `
@@ -1021,32 +1147,32 @@ function renderCalendar() {
       </div>
       <div class="cal-nav">
         <button class="cal-today-btn" id="cal-today">Dziś</button>
-        <button class="cal-nav-btn" id="cal-prev">${icon('chevron-left',16)}</button>
-        <button class="cal-nav-btn" id="cal-next">${icon('chevron-right',16)}</button>
+        <button class="cal-nav-btn" id="cal-prev">${icon('chevron-left', 16)}</button>
+        <button class="cal-nav-btn" id="cal-next">${icon('chevron-right', 16)}</button>
       </div>
     </div>
-    <div class="cal-day-names">${dNames.map(d=>`<div class="cal-dn">${d}</div>`).join('')}</div>
+    <div class="cal-day-names">${dNames.map(d => `<div class="cal-dn">${d}</div>`).join('')}</div>
     <div class="cal-grid">
       ${cells.map(cell => {
-        const isToday    = sameDay(cell.date, today);
-        const isSelected = sameDay(cell.date, S.selectedDate);
-        const evs = getEventsForDay(cell.date);
-        const dots = dotsForDay(cell.date);
-        return `<div class="cal-cell${cell.other?' other-month':''}${isToday&&!isSelected?' today':''}${isSelected?' selected':''}${evs.length>0?' has-events':''}"
+    const isToday = sameDay(cell.date, today);
+    const isSelected = sameDay(cell.date, S.selectedDate);
+    const evs = getEventsForDay(cell.date);
+    const dots = dotsForDay(cell.date);
+    return `<div class="cal-cell${cell.other ? ' other-month' : ''}${isToday && !isSelected ? ' today' : ''}${isSelected ? ' selected' : ''}${evs.length > 0 ? ' has-events' : ''}"
           data-cal-date="${cell.date.toISOString()}" data-count="${evs.length}">
           ${cell.date.getDate()}
           ${dots ? `<div class="cal-dots">${dots}</div>` : ''}
         </div>`;
-      }).join('')}
+  }).join('')}
     </div>
   `;
 
   document.getElementById('cal-prev').addEventListener('click', () => {
-    S.calMonth = new Date(month.getFullYear(), month.getMonth()-1, 1);
+    S.calMonth = new Date(month.getFullYear(), month.getMonth() - 1, 1);
     renderCalendar();
   });
   document.getElementById('cal-next').addEventListener('click', () => {
-    S.calMonth = new Date(month.getFullYear(), month.getMonth()+1, 1);
+    S.calMonth = new Date(month.getFullYear(), month.getMonth() + 1, 1);
     renderCalendar();
   });
   document.getElementById('cal-today').addEventListener('click', () => {
@@ -1069,7 +1195,7 @@ function renderCalendar() {
 }
 
 function renderCalEvents() {
-  const el   = document.getElementById('calendar-events');
+  const el = document.getElementById('calendar-events');
   const date = S.selectedDate;
 
   let dayEvs = S.events.filter(e => sameDay(e.timestamp, date));
@@ -1078,17 +1204,17 @@ function renderCalEvents() {
     dayEvs = dayEvs.filter(e => e.plantId === S.calPlant);
     scheEvs = scheEvs.filter(e => e.plantId === S.calPlant);
   }
-  const all = [...dayEvs, ...scheEvs].sort((a,b) =>
-    new Date(a.timestamp||a.date) - new Date(b.timestamp||b.date)
+  const all = [...dayEvs, ...scheEvs].sort((a, b) =>
+    new Date(a.timestamp || a.date) - new Date(b.timestamp || b.date)
   );
 
-  const typeIco   = { water:'droplets', fertilize:'flask-conical', harvest:'apple', plant:'sprout', custom:'file-text', height:'ruler', cutting:'scissors' };
-  const typeLabel = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Posadzenie', custom:'Inne', height:'Wysokość', cutting:'Sadzonka' };
-  const typeCls   = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom', height:'plant', cutting:'harvest' };
+  const typeIco = { water: 'droplets', fertilize: 'flask-conical', harvest: 'apple', plant: 'sprout', custom: 'file-text', height: 'ruler', cutting: 'scissors' };
+  const typeLabel = { water: 'Podlewanie', fertilize: 'Nawożenie', harvest: 'Zbiory', plant: 'Posadzenie', custom: 'Inne', height: 'Wysokość', cutting: 'Sadzonka' };
+  const typeCls = { water: 'water', fertilize: 'fertilize', harvest: 'harvest', plant: 'plant', custom: 'custom', height: 'plant', cutting: 'harvest' };
 
-  const ds = date.toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'});
-  const mNamesGenitive = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
-  const dayName = date.toLocaleDateString('pl-PL',{weekday:'long'});
+  const ds = date.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+  const mNamesGenitive = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+  const dayName = date.toLocaleDateString('pl-PL', { weekday: 'long' });
   const dayNum = date.getDate();
   const monthName = mNamesGenitive[date.getMonth()];
 
@@ -1103,7 +1229,7 @@ function renderCalEvents() {
       </div>
       <div class="cal-events-count">${all.length} zdarzeń</div>
     </div>
-    ${all.length===0 ? `
+    ${all.length === 0 ? `
       <div class="cal-empty-state">
         <div class="cal-empty-icon">${icon('calendar-x', 24)}</div>
         <div class="cal-empty-text">Brak zdarzeń</div>
@@ -1111,28 +1237,28 @@ function renderCalEvents() {
       </div>
     ` :
       all.map(ev => {
-        const plant = S.plants.find(p=>p.id===ev.plantId);
+        const plant = S.plants.find(p => p.id === ev.plantId);
         const pName = plant ? plant.name : '—';
         const isSched = !ev.timestamp || !ev.timestamp.includes('T');
-        const cls = typeCls[ev.type]||'water';
-        
+        const cls = typeCls[ev.type] || 'water';
+
         let timeStr = '';
         if (ev.time) timeStr = ev.time;
         else if (ev.timestamp && ev.timestamp.includes('T')) {
-          timeStr = new Date(ev.timestamp).toLocaleTimeString('pl-PL', {hour:'2-digit', minute:'2-digit'});
+          timeStr = new Date(ev.timestamp).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
         }
 
         return `<div class="cal-ev-item ev-${cls}" data-plant-id="${plant ? plant.id : ''}" style="cursor: ${plant ? 'pointer' : 'default'}">
-          <div class="cal-ev-icon ${cls}">${icon(typeIco[ev.type]||'circle',18)}</div>
+          <div class="cal-ev-icon ${cls}">${icon(typeIco[ev.type] || 'circle', 18)}</div>
           <div class="cal-ev-info">
-            <div class="cal-ev-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</div>
+            <div class="cal-ev-title">${ev.customTitle || typeLabel[ev.type] || ev.type}</div>
             <div class="cal-ev-sub">
               ${timeStr ? `<span class="cal-ev-time">${timeStr}</span>` : ''}
               ${isSched ? `<span class="cal-ev-sched-badge">Zaplanowane</span>` : ''}
               <span>${pName}</span>
             </div>
           </div>
-          ${isSched ? `<button class="cal-ev-del" data-sched-del="${ev.id}" title="Usuń">${icon('trash-2',14)}</button>` : ''}
+          ${isSched ? `<button class="cal-ev-del" data-sched-del="${ev.id}" title="Usuń">${icon('trash-2', 14)}</button>` : ''}
         </div>`;
       }).join('')
     }
@@ -1156,7 +1282,7 @@ function openScheduleModal() {
   const sel = document.getElementById('sched-plant');
   sel.innerHTML = S.plants.map(p => `<option value="${p.id}">${p.name} (${p.location})</option>`).join('');
 
-  const tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+  const tmr = new Date(); tmr.setDate(tmr.getDate() + 1);
   document.getElementById('sched-date').value = tmr.toISOString().split('T')[0];
   document.getElementById('sched-time').value = '08:00';
   document.getElementById('sched-repeat').value = '0';
@@ -1169,25 +1295,25 @@ function openScheduleModal() {
 
 function saveScheduled() {
   const plantId = document.getElementById('sched-plant').value;
-  const date    = document.getElementById('sched-date').value;
-  const time    = document.getElementById('sched-time').value;
-  const repeat  = parseInt(document.getElementById('sched-repeat').value) || 0;
+  const date = document.getElementById('sched-date').value;
+  const time = document.getElementById('sched-time').value;
+  const repeat = parseInt(document.getElementById('sched-repeat').value) || 0;
   if (!plantId || !date) { toast('Wypełnij wymagane pola', true); return; }
 
   const typeBtn = document.querySelector('#sched-type-group .btn-toggle.active');
   const type = typeBtn ? typeBtn.dataset.value : 'water';
   const datetime = date + 'T' + time;
 
-  const baseEv = { plantId, type, date, datetime, time, repeat:0, notified:false };
+  const baseEv = { plantId, type, date, datetime, time, repeat: 0, notified: false };
 
-  S.scheduled.push({ id:uid(), ...baseEv });
+  S.scheduled.push({ id: uid(), ...baseEv });
 
   if (repeat > 0) {
     let cur = new Date(date);
-    for (let i=1; i<=52; i++) {
+    for (let i = 1; i <= 52; i++) {
       cur = addDays(cur, repeat);
       const fd = cur.toISOString().split('T')[0];
-      S.scheduled.push({ id:uid(), ...baseEv, date:fd, datetime:fd+'T'+time });
+      S.scheduled.push({ id: uid(), ...baseEv, date: fd, datetime: fd + 'T' + time });
     }
   }
 
@@ -1205,31 +1331,31 @@ function applyAiForecast() {
 
   let parsed;
   try { parsed = JSON.parse(txt); }
-  catch(e) { toast('Niepoprawny format JSON', true); return; }
+  catch (e) { toast('Niepoprawny format JSON', true); return; }
 
   const rows = [];
   for (const [key, val] of Object.entries(parsed)) {
-    const plant = S.plants.find(p => p.name.toLowerCase()===key.toLowerCase() || p.id===key);
-    if (!plant) { rows.push({name:key,found:false}); continue; }
+    const plant = S.plants.find(p => p.name.toLowerCase() === key.toLowerCase() || p.id === key);
+    if (!plant) { rows.push({ name: key, found: false }); continue; }
     S.aiForecasts[plant.id] = {
       nextDate: val.next || val.nextDate || val.date,
       freq: val.freq || val.frequency || val.days || 7,
       source: 'ai', note: val.note || ''
     };
-    rows.push({name:plant.name,found:true,next:S.aiForecasts[plant.id].nextDate});
+    rows.push({ name: plant.name, found: true, next: S.aiForecasts[plant.id].nextDate });
   }
 
   save();
   const res = document.getElementById('ai-forecast-result');
   res.classList.remove('hidden');
   res.innerHTML = `
-    <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px">${icon('check-circle',13)} AI Forecast zastosowany</div>
-    ${rows.map(r=>`<div class="ai-plant-row">
-      <span>${r.found?'✓':'⚠'} ${r.name}</span>
-      <span style="color:var(--text3)">${r.found?(r.next||'OK'):'Nie znaleziono'}</span>
+    <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px">${icon('check-circle', 13)} AI Forecast zastosowany</div>
+    ${rows.map(r => `<div class="ai-plant-row">
+      <span>${r.found ? '✓' : '⚠'} ${r.name}</span>
+      <span style="color:var(--text3)">${r.found ? (r.next || 'OK') : 'Nie znaleziono'}</span>
     </div>`).join('')}
     <button id="btn-clear-ai" style="margin-top:10px;width:100%;display:flex;align-items:center;gap:6px;justify-content:center"
-      class="btn-secondary">${icon('trash-2',14)} Wyczyść AI forecast</button>
+      class="btn-secondary">${icon('trash-2', 14)} Wyczyść AI forecast</button>
   `;
 
   document.getElementById('btn-clear-ai').addEventListener('click', () => {
@@ -1288,7 +1414,7 @@ function addSpecies() {
     S.species.push({ id: uid(), name, description: desc });
     toast('✓ Gatunek dodany do Bazy Wiedzy');
   }
-  
+
   save();
   nameInput.value = '';
   descInput.value = '';
@@ -1324,7 +1450,7 @@ function handleImport(e) {
       renderCalendar();
       updateStats();
       toast('✓ Dane zaimportowane pomyślnie!');
-    } catch(err) {
+    } catch (err) {
       toast('Błąd formatu pliku', true);
     }
     e.target.value = ''; // Reset input
@@ -1334,15 +1460,15 @@ function handleImport(e) {
 
 // ───── STATS / CHARTS ─────
 function updateStats() {
-  const waters = S.events.filter(e=>e.type==='water').length;
-  const ferts  = S.events.filter(e=>e.type==='fertilize').length;
-  const harvs  = S.events.filter(e=>e.type==='harvest');
-  const kg     = harvs.reduce((s,e)=>s+(e.weight||0),0);
+  const waters = S.events.filter(e => e.type === 'water').length;
+  const ferts = S.events.filter(e => e.type === 'fertilize').length;
+  const harvs = S.events.filter(e => e.type === 'harvest');
+  const kg = harvs.reduce((s, e) => s + (e.weight || 0), 0);
 
   document.getElementById('stat-waterings-val').textContent = waters;
   document.getElementById('stat-fertilize-val').textContent = ferts;
-  document.getElementById('stat-harvest-val').textContent   = kg.toFixed(1)+' kg';
-  document.getElementById('stat-plants-val').textContent    = S.plants.length;
+  document.getElementById('stat-harvest-val').textContent = kg.toFixed(1) + ' kg';
+  document.getElementById('stat-plants-val').textContent = S.plants.length;
 }
 
 function renderCharts() {
@@ -1363,8 +1489,8 @@ function renderEventChart() {
   filters.forEach(f => counts[f] = 0);
   evs.forEach(e => counts[e.type]++);
 
-  const labelsMap = { water:'Podlewanie', fertilize:'Nawożenie', harvest:'Zbiory', plant:'Sadzenie', custom:'Inne' };
-  const colorsMap = { water:'#38bdf8', fertilize:'#a3e635', harvest:'#fb923c', plant:'#a78bfa', custom:'#f472b6' };
+  const labelsMap = { water: 'Podlewanie', fertilize: 'Nawożenie', harvest: 'Zbiory', plant: 'Sadzenie', custom: 'Inne' };
+  const colorsMap = { water: '#38bdf8', fertilize: '#a3e635', harvest: '#fb923c', plant: '#a78bfa', custom: '#f472b6' };
 
   const labels = filters.map(f => labelsMap[f]);
   const data = filters.map(f => counts[f]);
@@ -1374,7 +1500,7 @@ function renderEventChart() {
   if (evs.length === 0) {
     S.charts.events = new Chart(canvas, {
       type: 'doughnut',
-      data: { labels: ['Brak'], datasets: [{ data: [1], backgroundColor: ['#3f3f46'], borderWidth:0 }] },
+      data: { labels: ['Brak'], datasets: [{ data: [1], backgroundColor: ['#3f3f46'], borderWidth: 0 }] },
       options: { cutout: '80%', plugins: { tooltip: { enabled: false } } }
     });
     return;
@@ -1404,44 +1530,44 @@ function renderEventChart() {
 function renderWaterChart() {
   const canvas = document.getElementById('chart-waterings');
   if (!canvas || !window.Chart) return;
-  
+
   const ctx = canvas.getContext('2d');
   const gradW = ctx.createLinearGradient(0, 0, 0, 300);
   gradW.addColorStop(0, 'rgba(56,189,248,0.5)');
   gradW.addColorStop(1, 'rgba(56,189,248,0.0)');
-  
+
   const gradF = ctx.createLinearGradient(0, 0, 0, 300);
   gradF.addColorStop(0, 'rgba(163,230,53,0.4)');
   gradF.addColorStop(1, 'rgba(163,230,53,0.0)');
 
-  const labels=[], wData=[], fData=[];
-  for (let i=29;i>=0;i--) {
-    const d=new Date(); d.setDate(d.getDate()-i);
-    labels.push(d.toLocaleDateString('pl-PL',{day:'numeric',month:'short'}));
-    wData.push(S.events.filter(e=>e.type==='water'&&sameDay(e.timestamp,d)).length);
-    fData.push(S.events.filter(e=>e.type==='fertilize'&&sameDay(e.timestamp,d)).length);
+  const labels = [], wData = [], fData = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    labels.push(d.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' }));
+    wData.push(S.events.filter(e => e.type === 'water' && sameDay(e.timestamp, d)).length);
+    fData.push(S.events.filter(e => e.type === 'fertilize' && sameDay(e.timestamp, d)).length);
   }
 
   if (S.charts.water) S.charts.water.destroy();
   S.charts.water = new Chart(canvas, {
-    type:'line',
-    data:{
+    type: 'line',
+    data: {
       labels,
-      datasets:[
-        { label:'Podlewanie', data:wData, backgroundColor:gradW, borderColor:'#38bdf8', borderWidth:2, fill:true, tension:0.4, pointRadius:0, pointHitRadius:10 },
-        { label:'Nawożenie', data:fData, backgroundColor:gradF, borderColor:'#a3e635', borderWidth:2, fill:true, tension:0.4, pointRadius:0, pointHitRadius:10 }
+      datasets: [
+        { label: 'Podlewanie', data: wData, backgroundColor: gradW, borderColor: '#38bdf8', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHitRadius: 10 },
+        { label: 'Nawożenie', data: fData, backgroundColor: gradF, borderColor: '#a3e635', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHitRadius: 10 }
       ]
     },
-    options:{
-      responsive:true,
+    options: {
+      responsive: true,
       interaction: { mode: 'index', intersect: false },
-      plugins:{
-        legend:{ position: 'top', labels:{color:'#A1A1AA',font:{family:'Inter',size:12}, usePointStyle: true, boxWidth: 8} },
+      plugins: {
+        legend: { position: 'top', labels: { color: '#A1A1AA', font: { family: 'Inter', size: 12 }, usePointStyle: true, boxWidth: 8 } },
         tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, cornerRadius: 8 }
       },
-      scales:{
-        x:{ ticks:{color:'#71717A',font:{size:10},maxRotation:45}, grid:{display:false} },
-        y:{ ticks:{color:'#71717A',stepSize:1}, grid:{color:'rgba(255,255,255,0.05)', drawBorder:false}, beginAtZero:true }
+      scales: {
+        x: { ticks: { color: '#71717A', font: { size: 10 }, maxRotation: 45 }, grid: { display: false } },
+        y: { ticks: { color: '#71717A', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, beginAtZero: true }
       }
     }
   });
@@ -1450,34 +1576,34 @@ function renderWaterChart() {
 function renderHarvestChart() {
   const canvas = document.getElementById('chart-harvests');
   if (!canvas || !window.Chart) return;
-  
-  const map={};
-  S.events.filter(e=>e.type==='harvest').forEach(e=>{
-    const p=S.plants.find(x=>x.id===e.plantId);
-    const name=p?p.name:'Nieznana';
-    map[name]=(map[name]||0)+(e.weight||0);
+
+  const map = {};
+  S.events.filter(e => e.type === 'harvest').forEach(e => {
+    const p = S.plants.find(x => x.id === e.plantId);
+    const name = p ? p.name : 'Nieznana';
+    map[name] = (map[name] || 0) + (e.weight || 0);
   });
 
-  const labels=Object.keys(map);
-  const data=Object.values(map);
+  const labels = Object.keys(map);
+  const data = Object.values(map);
 
-  if (labels.length===0) {
-    canvas.parentElement.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Brak danych o plonach</div>';
+  if (labels.length === 0) {
+    canvas.parentElement.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Brak danych o plonach</div>';
     return;
   }
 
   if (S.charts.harvest) S.charts.harvest.destroy();
-  const colors=['#fb923c','#4ade80','#38bdf8','#a78bfa','#fbbf24'];
+  const colors = ['#fb923c', '#4ade80', '#38bdf8', '#a78bfa', '#fbbf24'];
 
-  S.charts.harvest = new Chart(canvas,{
-    type:'bar',
-    data:{labels,datasets:[{data,backgroundColor:colors.slice(0,labels.length), borderRadius: 4, barThickness: 16}]},
-    options:{
+  S.charts.harvest = new Chart(canvas, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: colors.slice(0, labels.length), borderRadius: 4, barThickness: 16 }] },
+    options: {
       indexAxis: 'y',
-      responsive:true,
-      plugins:{
-        legend:{display:false},
-        tooltip:{ backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, callbacks:{label:ctx=>` ${ctx.parsed.x.toFixed(2)} kg`} }
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, callbacks: { label: ctx => ` ${ctx.parsed.x.toFixed(2)} kg` } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { color: '#71717A' } },
@@ -1491,12 +1617,12 @@ function renderGrowthChart() {
   const canvas = document.getElementById('chart-growth');
   if (!canvas || !window.Chart) return;
 
-  const labels=[], data=[];
-  for (let i=5;i>=0;i--) {
+  const labels = [], data = [];
+  for (let i = 5; i >= 0; i--) {
     const d = new Date();
     d.setMonth(d.getMonth() - i);
-    labels.push(d.toLocaleDateString('pl-PL',{month:'short', year:'numeric'}));
-    
+    labels.push(d.toLocaleDateString('pl-PL', { month: 'short', year: 'numeric' }));
+
     const count = S.plants.filter(p => {
       if (!p.createdAt && !p.planted) return false;
       const pd = new Date(p.planted || p.createdAt);
@@ -1507,20 +1633,20 @@ function renderGrowthChart() {
 
   if (S.charts.growth) S.charts.growth.destroy();
   S.charts.growth = new Chart(canvas, {
-    type:'bar',
-    data:{
+    type: 'bar',
+    data: {
       labels,
-      datasets:[{ label:'Nowe rośliny', data, backgroundColor:'#a78bfa', borderRadius: 4, barThickness: 24 }]
+      datasets: [{ label: 'Nowe rośliny', data, backgroundColor: '#a78bfa', borderRadius: 4, barThickness: 24 }]
     },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{ display:false },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
         tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, cornerRadius: 8 }
       },
-      scales:{
-        x:{ ticks:{color:'#71717A',font:{size:10}}, grid:{display:false} },
-        y:{ ticks:{color:'#71717A',stepSize:1}, grid:{color:'rgba(255,255,255,0.05)', drawBorder:false}, beginAtZero:true }
+      scales: {
+        x: { ticks: { color: '#71717A', font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { color: '#71717A', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }, beginAtZero: true }
       }
     }
   });
@@ -1529,18 +1655,18 @@ function renderGrowthChart() {
 function renderPlantsTable() {
   const tbody = document.querySelector('#plants-table tbody');
   if (!tbody) return;
-  
+
   if (S.plants.length === 0) {
     tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text3)">Brak roślin w kolekcji</td></tr>';
     return;
   }
-  
-  const locLabels = { balkon:'Balkon', parapet:'Parapet', polka:'Półka', okno:'Okno' };
+
+  const locLabels = { balkon: 'Balkon', parapet: 'Parapet', polka: 'Półka', okno: 'Okno' };
 
   tbody.innerHTML = S.plants.map(p => {
-    const wEvs = S.events.filter(e => e.plantId === p.id && e.type === 'water').sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    const wEvs = S.events.filter(e => e.plantId === p.id && e.type === 'water').sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const days = daysAgo(wEvs[0]?.timestamp);
-    
+
     let statusHtml = '<span class="table-status ok">Zadbana</span>';
     if (days !== null && days >= p.waterFreq) {
       statusHtml = '<span class="table-status danger">Wymaga uwagi</span>';
@@ -1549,7 +1675,7 @@ function renderPlantsTable() {
     } else if (days === null) {
       statusHtml = '<span class="table-status warn">Brak danych</span>';
     }
-    
+
     return `
       <tr>
         <td style="font-weight:500; color:var(--text1)">${p.name}</td>
@@ -1562,17 +1688,17 @@ function renderPlantsTable() {
 
 // ───── NAVIGATION ─────
 function switchView(name, fromPop = false) {
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(`view-${name}`)?.classList.add('active');
   document.querySelector(`.nav-btn[data-view="${name}"]`)?.classList.add('active');
   S.view = name;
 
-  if (name==='timeline')  renderTimeline();
-  if (name==='calendar')  renderCalendar();
-  if (name==='stats')     renderCharts();
-  if (name==='finances')  renderFinances();
-  if (name==='settings')  renderPriceRulesList();
+  if (name === 'timeline') renderTimeline();
+  if (name === 'calendar') renderCalendar();
+  if (name === 'stats') renderCharts();
+  if (name === 'finances') renderFinances();
+  if (name === 'settings') renderPriceRulesList();
 
   renderIcons();
 
@@ -1821,32 +1947,44 @@ function bindPhotoInput(inputId, previewId) {
 function addDemo() {
   const now = new Date();
   const demo = [
-    { name:'Monstera', species:'Monstera deliciosa', location:'parapet', waterFreq:7,
-      planted: addDays(now,-60).toISOString().split('T')[0], notes:'Lubi rozproszone światło' },
-    { name:'Pomidory', species:'Solanum lycopersicum', location:'balkon', waterFreq:2,
-      planted: addDays(now,-30).toISOString().split('T')[0], notes:'Podlewać codziennie przy upałach' },
-    { name:'Bazylia', species:'Ocimum basilicum', location:'parapet', waterFreq:3,
-      planted: addDays(now,-14).toISOString().split('T')[0], notes:'Nie zalewać' }
+    {
+      name: 'Monstera', species: 'Monstera deliciosa', location: 'parapet', waterFreq: 7,
+      planted: addDays(now, -60).toISOString().split('T')[0], notes: 'Lubi rozproszone światło'
+    },
+    {
+      name: 'Pomidory', species: 'Solanum lycopersicum', location: 'balkon', waterFreq: 2,
+      planted: addDays(now, -30).toISOString().split('T')[0], notes: 'Podlewać codziennie przy upałach'
+    },
+    {
+      name: 'Bazylia', species: 'Ocimum basilicum', location: 'parapet', waterFreq: 3,
+      planted: addDays(now, -14).toISOString().split('T')[0], notes: 'Nie zalewać'
+    }
   ];
 
   demo.forEach(pd => {
-    const p = { id:uid(), ...pd, photo:null, createdAt:now.toISOString() };
+    const p = { id: uid(), ...pd, photo: null, createdAt: now.toISOString() };
     S.plants.push(p);
-    S.events.push({ id:uid(), plantId:p.id, type:'plant',
-      timestamp: new Date(pd.planted+'T09:00:00').toISOString(), notes:'Posadzenie' });
-    for (let i=3;i>=0;i--) {
-      const ts = addDays(now, -i*pd.waterFreq);
-      S.events.push({ id:uid(), plantId:p.id,
-        type: i%4===0?'fertilize':'water',
+    S.events.push({
+      id: uid(), plantId: p.id, type: 'plant',
+      timestamp: new Date(pd.planted + 'T09:00:00').toISOString(), notes: 'Posadzenie'
+    });
+    for (let i = 3; i >= 0; i--) {
+      const ts = addDays(now, -i * pd.waterFreq);
+      S.events.push({
+        id: uid(), plantId: p.id,
+        type: i % 4 === 0 ? 'fertilize' : 'water',
         timestamp: ts.toISOString(),
-        amount: Math.floor(Math.random()*200+100),
-        fertilizer: i%4===0?'NPK 10-10-10':null, notes:'' });
+        amount: Math.floor(Math.random() * 200 + 100),
+        fertilizer: i % 4 === 0 ? 'NPK 10-10-10' : null, notes: ''
+      });
     }
   });
 
-  S.events.push({ id:uid(), plantId:S.plants[1].id, type:'harvest',
-    timestamp: addDays(now,-5).toISOString(),
-    quantity:8, weight:0.6, notes:'Pierwsze pomidory sezonu!', photo:null });
+  S.events.push({
+    id: uid(), plantId: S.plants[1].id, type: 'harvest',
+    timestamp: addDays(now, -5).toISOString(),
+    quantity: 8, weight: 0.6, notes: 'Pierwsze pomidory sezonu!', photo: null
+  });
 
   save();
 }
@@ -1860,19 +1998,19 @@ function calculatePlantValue(plant) {
   if (rules.length === 0) return val;
 
   // Wzrost (Interpolacja liniowa)
-  const hRules = rules.filter(r => r.type === 'height').sort((a,b) => a.threshold - b.threshold);
-  const hEvents = S.events.filter(e => e.plantId === plant.id && e.type === 'height').sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const hRules = rules.filter(r => r.type === 'height').sort((a, b) => a.threshold - b.threshold);
+  const hEvents = S.events.filter(e => e.plantId === plant.id && e.type === 'height').sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   const currentHeight = hEvents.length > 0 ? hEvents[0].height : 0;
 
   if (hRules.length > 0) {
     if (currentHeight <= hRules[0].threshold) {
       val.base = (currentHeight / hRules[0].threshold) * hRules[0].price;
-    } else if (currentHeight >= hRules[hRules.length-1].threshold) {
-      val.base = hRules[hRules.length-1].price;
+    } else if (currentHeight >= hRules[hRules.length - 1].threshold) {
+      val.base = hRules[hRules.length - 1].price;
     } else {
       for (let i = 0; i < hRules.length - 1; i++) {
-        if (currentHeight >= hRules[i].threshold && currentHeight <= hRules[i+1].threshold) {
-          const r1 = hRules[i], r2 = hRules[i+1];
+        if (currentHeight >= hRules[i].threshold && currentHeight <= hRules[i + 1].threshold) {
+          const r1 = hRules[i], r2 = hRules[i + 1];
           const factor = (currentHeight - r1.threshold) / (r2.threshold - r1.threshold);
           val.base = r1.price + factor * (r2.price - r1.price);
           break;
@@ -1885,8 +2023,8 @@ function calculatePlantValue(plant) {
   const qtyRules = rules.filter(r => r.type === 'quantity');
   const wgtRules = rules.filter(r => r.type === 'weight');
   const harvests = S.events.filter(e => e.plantId === plant.id && e.type === 'harvest');
-  const totalQty = harvests.reduce((s,e) => s + (e.quantity||0), 0);
-  const totalWgt = harvests.reduce((s,e) => s + (e.weight||0), 0);
+  const totalQty = harvests.reduce((s, e) => s + (e.quantity || 0), 0);
+  const totalWgt = harvests.reduce((s, e) => s + (e.weight || 0), 0);
 
   if (qtyRules.length > 0) val.yields += totalQty * (qtyRules[0].price / (qtyRules[0].threshold || 1));
   if (wgtRules.length > 0) val.yields += totalWgt * (wgtRules[0].price / (wgtRules[0].threshold || 1));
@@ -1894,7 +2032,7 @@ function calculatePlantValue(plant) {
   // Sadzonki
   const cutRules = rules.filter(r => r.type === 'cutting');
   const cuttings = S.events.filter(e => e.plantId === plant.id && e.type === 'cutting');
-  const totalCut = cuttings.reduce((s,e) => s + (e.quantity||0), 0);
+  const totalCut = cuttings.reduce((s, e) => s + (e.quantity || 0), 0);
 
   if (cutRules.length > 0) val.yields += totalCut * (cutRules[0].price / (cutRules[0].threshold || 1));
 
@@ -1909,19 +2047,19 @@ function calculatePlantValueAtDate(plant, timestamp) {
   const rules = S.priceRules.filter(r => r.speciesId === plant.species);
   if (rules.length === 0) return val;
 
-  const hRules = rules.filter(r => r.type === 'height').sort((a,b) => a.threshold - b.threshold);
-  const hEvents = S.events.filter(e => e.plantId === plant.id && e.type === 'height' && new Date(e.timestamp).getTime() <= timestamp).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const hRules = rules.filter(r => r.type === 'height').sort((a, b) => a.threshold - b.threshold);
+  const hEvents = S.events.filter(e => e.plantId === plant.id && e.type === 'height' && new Date(e.timestamp).getTime() <= timestamp).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   const currentHeight = hEvents.length > 0 ? hEvents[0].height : 0;
 
   if (hRules.length > 0) {
     if (currentHeight <= hRules[0].threshold) {
       val.base = (currentHeight / hRules[0].threshold) * hRules[0].price;
-    } else if (currentHeight >= hRules[hRules.length-1].threshold) {
-      val.base = hRules[hRules.length-1].price;
+    } else if (currentHeight >= hRules[hRules.length - 1].threshold) {
+      val.base = hRules[hRules.length - 1].price;
     } else {
       for (let i = 0; i < hRules.length - 1; i++) {
-        if (currentHeight >= hRules[i].threshold && currentHeight <= hRules[i+1].threshold) {
-          const r1 = hRules[i], r2 = hRules[i+1];
+        if (currentHeight >= hRules[i].threshold && currentHeight <= hRules[i + 1].threshold) {
+          const r1 = hRules[i], r2 = hRules[i + 1];
           const factor = (currentHeight - r1.threshold) / (r2.threshold - r1.threshold);
           val.base = r1.price + factor * (r2.price - r1.price);
           break;
@@ -1933,15 +2071,15 @@ function calculatePlantValueAtDate(plant, timestamp) {
   const qtyRules = rules.filter(r => r.type === 'quantity');
   const wgtRules = rules.filter(r => r.type === 'weight');
   const harvests = S.events.filter(e => e.plantId === plant.id && e.type === 'harvest' && new Date(e.timestamp).getTime() <= timestamp);
-  const totalQty = harvests.reduce((s,e) => s + (e.quantity||0), 0);
-  const totalWgt = harvests.reduce((s,e) => s + (e.weight||0), 0);
+  const totalQty = harvests.reduce((s, e) => s + (e.quantity || 0), 0);
+  const totalWgt = harvests.reduce((s, e) => s + (e.weight || 0), 0);
 
   if (qtyRules.length > 0) val.yields += totalQty * (qtyRules[0].price / (qtyRules[0].threshold || 1));
   if (wgtRules.length > 0) val.yields += totalWgt * (wgtRules[0].price / (wgtRules[0].threshold || 1));
 
   const cutRules = rules.filter(r => r.type === 'cutting');
   const cuttings = S.events.filter(e => e.plantId === plant.id && e.type === 'cutting' && new Date(e.timestamp).getTime() <= timestamp);
-  const totalCut = cuttings.reduce((s,e) => s + (e.quantity||0), 0);
+  const totalCut = cuttings.reduce((s, e) => s + (e.quantity || 0), 0);
 
   if (cutRules.length > 0) val.yields += totalCut * (cutRules[0].price / (cutRules[0].threshold || 1));
 
@@ -1978,7 +2116,7 @@ function renderFinances() {
 
   // Wydatki
   let totalExpenses = 0;
-  S.expenses.sort((a,b) => new Date(b.date) - new Date(a.date));
+  S.expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
   eTable.innerHTML = S.expenses.map(e => {
     totalExpenses += e.amount;
     const p = e.plantId ? S.plants.find(x => x.id === e.plantId) : null;
@@ -1988,7 +2126,7 @@ function renderFinances() {
       <td style="color:var(--danger);">- ${e.amount.toFixed(2)} zł</td>
       <td>${p ? p.name : '—'}</td>
       <td style="text-align:right;">
-        <button class="btn-delete-expense" data-eid="${e.id}" style="background:none;border:none;color:var(--danger);cursor:pointer;">${icon('trash-2',14)}</button>
+        <button class="btn-delete-expense" data-eid="${e.id}" style="background:none;border:none;color:var(--danger);cursor:pointer;">${icon('trash-2', 14)}</button>
       </td>
     </tr>`;
   }).join('');
@@ -1997,11 +2135,11 @@ function renderFinances() {
   // Stats
   tVal.textContent = totalValue.toFixed(2) + ' zł';
   tExp.textContent = totalExpenses.toFixed(2) + ' zł';
-  
+
   const balance = totalValue - totalExpenses;
   tBal.textContent = balance.toFixed(2) + ' zł';
   tBal.style.color = balance >= 0 ? 'var(--harvest)' : 'var(--danger)';
-  
+
   document.querySelectorAll('.btn-delete-expense').forEach(b => {
     b.addEventListener('click', (e) => {
       const eid = e.currentTarget.dataset.eid;
@@ -2017,29 +2155,29 @@ function renderFinances() {
   renderIcons();
 
   if (!window.Chart) return;
-  
+
   // Wykres 1: Wartość vs Koszt (Zysk vs Koszt w czasie)
   const chartFC = document.getElementById('chart-fin-profit-cost');
   if (chartFC) {
     const labels = [];
     const profitData = [];
     const costData = [];
-    
+
     for (let i = 5; i >= 0; i--) {
       const d = new Date();
       d.setMonth(d.getMonth() - i);
       labels.push(d.toLocaleDateString('pl-PL', { month: 'short', year: 'numeric' }));
-      
+
       const mStart = new Date(d.getFullYear(), d.getMonth(), 1).getTime();
       const mEnd = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59).getTime();
-      
+
       let mCost = 0;
       S.expenses.forEach(ex => {
         const t = new Date(ex.date).getTime();
         if (t <= mEnd) mCost += ex.amount;
       });
       costData.push(mCost);
-      
+
       let mProfit = 0;
       S.plants.forEach(p => {
         const v = calculatePlantValueAtDate(p, mEnd);
@@ -2047,7 +2185,7 @@ function renderFinances() {
       });
       profitData.push(mProfit);
     }
-    
+
     if (S.charts.finProfitCost) S.charts.finProfitCost.destroy();
     S.charts.finProfitCost = new Chart(chartFC, {
       type: 'line',
@@ -2076,24 +2214,24 @@ function renderFinances() {
   // Wykres 2: Wzrost w czasie
   const chartFH = document.getElementById('chart-fin-height');
   if (chartFH) {
-    const heightEvs = S.events.filter(e => e.type === 'height').sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-    
+    const heightEvs = S.events.filter(e => e.type === 'height').sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
     if (heightEvs.length > 0) {
       const plantCounts = {};
       heightEvs.forEach(e => { plantCounts[e.plantId] = (plantCounts[e.plantId] || 0) + 1; });
-      const topPlants = Object.keys(plantCounts).sort((a,b) => plantCounts[b] - plantCounts[a]).slice(0, 3);
-      
-      const allTimestamps = [...new Set(heightEvs.filter(e => topPlants.includes(e.plantId)).map(e => new Date(e.timestamp).toLocaleDateString('pl-PL', { day:'numeric', month:'short'})))];
-      
+      const topPlants = Object.keys(plantCounts).sort((a, b) => plantCounts[b] - plantCounts[a]).slice(0, 3);
+
+      const allTimestamps = [...new Set(heightEvs.filter(e => topPlants.includes(e.plantId)).map(e => new Date(e.timestamp).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' })))];
+
       const colors = ['#38bdf8', '#a78bfa', '#fbbf24'];
       const datasets = topPlants.map((pid, idx) => {
         const p = S.plants.find(x => x.id === pid);
         const pEvs = heightEvs.filter(e => e.plantId === pid);
         const data = allTimestamps.map(tsLabel => {
-          const ev = pEvs.slice().reverse().find(e => new Date(e.timestamp).toLocaleDateString('pl-PL', { day:'numeric', month:'short'}) === tsLabel);
+          const ev = pEvs.slice().reverse().find(e => new Date(e.timestamp).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' }) === tsLabel);
           return ev ? ev.height : null;
         });
-        
+
         let lastVal = null;
         const filledData = data.map(v => {
           if (v !== null) lastVal = v;
@@ -2142,7 +2280,7 @@ function renderFinances() {
 function renderPriceRulesList() {
   const sel = document.getElementById('price-rule-species');
   if (sel) {
-    sel.innerHTML = '<option value="">-- Wybierz gatunek --</option>' + 
+    sel.innerHTML = '<option value="">-- Wybierz gatunek --</option>' +
       S.species.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
   }
 
@@ -2152,7 +2290,7 @@ function renderPriceRulesList() {
     container.innerHTML = '<div style="color:var(--text3); font-size:13px;">Brak zdefiniowanych cen.</div>';
     return;
   }
-  
+
   const typeMap = { height: 'Wzrost (cm)', weight: 'Plon (kg)', quantity: 'Plon (szt.)', cutting: 'Sadzonka (szt.)' };
 
   container.innerHTML = S.priceRules.map(r => {
@@ -2208,7 +2346,7 @@ function init() {
 
   // Plants grid — delegation for cards AND empty-state button
   document.getElementById('plants-grid').addEventListener('click', e => {
-    if (e.target.closest('#btn-empty-add') || e.target.id==='btn-empty-add') {
+    if (e.target.closest('#btn-empty-add') || e.target.id === 'btn-empty-add') {
       openPlantModal(); return;
     }
     const actionBtn = e.target.closest('[data-action]');
@@ -2216,10 +2354,10 @@ function init() {
       e.stopPropagation();
       const plantId = actionBtn.closest('[data-plant-id]')?.dataset.plantId;
       if (!plantId) return;
-      if (actionBtn.dataset.action === 'water')     openWaterModal(plantId, 'water');
+      if (actionBtn.dataset.action === 'water') openWaterModal(plantId, 'water');
       if (actionBtn.dataset.action === 'fertilize') openWaterModal(plantId, 'fertilize');
-      if (actionBtn.dataset.action === 'harvest')   openHarvestModal(plantId);
-      if (actionBtn.dataset.action === 'custom')    openCustomModal(plantId);
+      if (actionBtn.dataset.action === 'harvest') openHarvestModal(plantId);
+      if (actionBtn.dataset.action === 'custom') openCustomModal(plantId);
       return;
     }
     const card = e.target.closest('.plant-card');
@@ -2258,7 +2396,7 @@ function init() {
   document.getElementById('location-filter').addEventListener('click', e => {
     const tab = e.target.closest('.filter-tab');
     if (!tab) return;
-    document.querySelectorAll('#location-filter .filter-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#location-filter .filter-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     S.locationFilter = tab.dataset.filter;
     renderPlants();
@@ -2268,7 +2406,7 @@ function init() {
   document.getElementById('timeline-filters').addEventListener('click', e => {
     const chip = e.target.closest('.filter-chip');
     if (!chip) return;
-    document.querySelectorAll('#timeline-filters .filter-chip').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('#timeline-filters .filter-chip').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
     S.timelineFilter = chip.dataset.type;
     renderTimeline();
@@ -2278,7 +2416,7 @@ function init() {
   document.getElementById('settings-tabs')?.addEventListener('click', e => {
     const tab = e.target.closest('.filter-tab');
     if (!tab) return;
-    document.querySelectorAll('#settings-tabs .filter-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#settings-tabs .filter-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     document.querySelectorAll('.settings-tab-content').forEach(c => c.classList.add('hidden'));
     document.getElementById(`settings-tab-${tab.dataset.tab}`)?.classList.remove('hidden');
@@ -2354,14 +2492,14 @@ function init() {
     if (!btn) return;
     const pid = btn.dataset.pid;
     const act = btn.dataset.detailAction;
-    if (act === 'water')     { closeModal('modal-detail'); openWaterModal(pid,'water'); }
-    if (act === 'fertilize') { closeModal('modal-detail'); openWaterModal(pid,'fertilize'); }
-    if (act === 'harvest')   { closeModal('modal-detail'); openHarvestModal(pid); }
-    if (act === 'custom')    { closeModal('modal-detail'); openCustomModal(pid); }
-    if (act === 'edit')      { closeModal('modal-detail'); openPlantModal(pid); }
-    if (act === 'cutting')   { closeModal('modal-detail'); openCuttingModal(pid); }
-    if (act === 'height')    { closeModal('modal-detail'); openHeightModal(pid); }
-    if (act === 'delete')    { deletePlant(pid); }
+    if (act === 'water') { closeModal('modal-detail'); openWaterModal(pid, 'water'); }
+    if (act === 'fertilize') { closeModal('modal-detail'); openWaterModal(pid, 'fertilize'); }
+    if (act === 'harvest') { closeModal('modal-detail'); openHarvestModal(pid); }
+    if (act === 'custom') { closeModal('modal-detail'); openCustomModal(pid); }
+    if (act === 'edit') { closeModal('modal-detail'); openPlantModal(pid); }
+    if (act === 'cutting') { closeModal('modal-detail'); openCuttingModal(pid); }
+    if (act === 'height') { closeModal('modal-detail'); openHeightModal(pid); }
+    if (act === 'delete') { deletePlant(pid); }
   });
 
   // All modal close buttons (data-modal attribute)
@@ -2391,7 +2529,7 @@ function init() {
   // Bulk Logic
   document.getElementById('btn-bulk-action')?.addEventListener('click', openBulkModal);
   document.getElementById('btn-save-bulk').addEventListener('click', saveBulkAction);
-  
+
   document.getElementById('btn-bulk-select-all')?.addEventListener('click', (e) => {
     e.preventDefault();
     const cbs = document.querySelectorAll('.bulk-cb');
