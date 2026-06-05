@@ -218,6 +218,16 @@ function nowLocal() {
   return d.toISOString().slice(0, 16);
 }
 
+function nowTime() {
+  const d = new Date();
+  return d.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function combineDateAndTime(dateVal, timeVal) {
+  if (!timeVal) timeVal = '12:00';
+  return new Date(dateVal + 'T' + timeVal).toISOString();
+}
+
 function toast(msg, err = false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -545,6 +555,7 @@ function openHarvestModal(plantId) {
 
   document.getElementById('harvest-plant-badge').textContent = p.name;
   document.getElementById('harvest-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('harvest-time').value = nowTime();
   document.getElementById('harvest-quantity').value = '';
   document.getElementById('harvest-weight').value = '';
   document.getElementById('harvest-notes').value = '';
@@ -562,7 +573,7 @@ function saveHarvest() {
 
   S.events.push({
     id: uid(), plantId: S.harvestPlantId, type: 'harvest',
-    timestamp: new Date(dateVal).toISOString(),
+    timestamp: combineDateAndTime(dateVal, document.getElementById('harvest-time').value),
     quantity: parseInt(document.getElementById('harvest-quantity').value) || null,
     weight: parseFloat(document.getElementById('harvest-weight').value) || null,
     photo,
@@ -585,6 +596,7 @@ function openCustomModal(plantId) {
 
   document.getElementById('custom-plant-badge').textContent = p.name;
   document.getElementById('custom-date').value = nowLocal().split('T')[0];
+  document.getElementById('custom-time').value = nowTime();
   document.getElementById('custom-title').value = '';
   document.getElementById('custom-notes').value = '';
 
@@ -598,7 +610,7 @@ function saveCustom() {
 
   S.events.push({
     id: uid(), plantId: S.customPlantId, type: 'custom',
-    timestamp: new Date(dateVal).toISOString(),
+    timestamp: combineDateAndTime(dateVal, document.getElementById('custom-time').value),
     customTitle: title,
     notes: document.getElementById('custom-notes').value.trim()
   });
@@ -618,6 +630,7 @@ function openHeightModal(plantId) {
 
   document.getElementById('height-plant-badge').textContent = p.name;
   document.getElementById('height-date').value = nowLocal().split('T')[0];
+  document.getElementById('height-time').value = nowTime();
   document.getElementById('height-value').value = '';
   document.getElementById('height-notes').value = '';
 
@@ -631,7 +644,7 @@ function saveHeight() {
 
   S.events.push({
     id: uid(), plantId: S.heightPlantId, type: 'height',
-    timestamp: new Date(dateVal).toISOString(),
+    timestamp: combineDateAndTime(dateVal, document.getElementById('height-time').value),
     height: heightVal,
     notes: document.getElementById('height-notes').value.trim()
   });
@@ -651,6 +664,7 @@ function openCuttingModal(plantId) {
 
   document.getElementById('cutting-plant-badge').textContent = p.name;
   document.getElementById('cutting-date').value = nowLocal().split('T')[0];
+  document.getElementById('cutting-time').value = nowTime();
   document.getElementById('cutting-quantity').value = '1';
   document.getElementById('cutting-notes').value = '';
 
@@ -664,7 +678,7 @@ function saveCutting() {
 
   S.events.push({
     id: uid(), plantId: S.cuttingPlantId, type: 'cutting',
-    timestamp: new Date(dateVal).toISOString(),
+    timestamp: combineDateAndTime(dateVal, document.getElementById('cutting-time').value),
     quantity: qty,
     notes: document.getElementById('cutting-notes').value.trim()
   });
@@ -716,6 +730,7 @@ function saveExpense() {
 function openBulkModal() {
   if (S.plants.length === 0) { toast('Najpierw dodaj rośliny', true); return; }
   document.getElementById('bulk-date').value = nowLocal().split('T')[0];
+  document.getElementById('bulk-time').value = nowTime();
   document.getElementById('bulk-notes').value = '';
   document.getElementById('bulk-fertilizer-name').value = '';
   document.getElementById('bulk-custom-title').value = '';
@@ -762,7 +777,7 @@ function saveBulkAction() {
 
   if (type === 'custom' && !title) { toast('Podaj tytuł dla zdarzenia Inne', true); return; }
 
-  const timestamp = new Date(dateVal).toISOString();
+  const timestamp = combineDateAndTime(dateVal, document.getElementById('bulk-time').value);
 
   cbs.forEach(cb => {
     const pid = cb.value;
