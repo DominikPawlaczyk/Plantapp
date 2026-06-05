@@ -263,7 +263,10 @@ const DEFAULT_PRICE_RULES = [
   { id: 'pr_szczypiorek', speciesId: 'sp_szczypiorek', type: 'weight', threshold: 0.05, price: 3.00 }, // 3 zł za 50g
   // Reguły dla sadzonek z roślin ozdobnych:
   { id: 'pr_philo', speciesId: 'sp_philo_scandens', type: 'cutting', threshold: 1, price: 12.00 }, // 12 zł za 1 sadzonkę pędową
-  { id: 'pr_sansew', speciesId: 'sp_sansewiera', type: 'cutting', threshold: 1, price: 15.00 }    // 15 zł za odrost
+  { id: 'pr_sansew', speciesId: 'sp_sansewiera', type: 'cutting', threshold: 1, price: 15.00 },    // 15 zł za odrost
+  // Wycena za wysokość (np. tuja, zamiokulkas - wartość rośnie wraz z centymetrami)
+  { id: 'pr_tuja_50', speciesId: 'sp_tuja', type: 'height', threshold: 50, price: 30.00 },        // 30 zł przy 50 cm
+  { id: 'pr_tuja_150', speciesId: 'sp_tuja', type: 'height', threshold: 150, price: 150.00 }      // 150 zł przy 150 cm
 ];
 
 // ───── STATE ─────
