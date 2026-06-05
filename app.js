@@ -253,20 +253,135 @@ const DEFAULT_SPECIES = [
 ];
 
 const DEFAULT_PRICE_RULES = [
-  // Możesz tutaj wpisać własne domyślne reguły cenowe. 
-  // Zostaną one automatycznie załadowane do aplikacji (dopasowane po speciesId z bazy).
-  { id: 'pr_truskawka', speciesId: 'sp_truskawka', type: 'weight', threshold: 1, price: 15.00 }, // 15 zł za 1 kg truskawek
-  { id: 'pr_tom_red', speciesId: 'sp_tom_red', type: 'weight', threshold: 1, price: 18.00 },     // 18 zł za 1 kg pomidorków
-  { id: 'pr_maliniak', speciesId: 'sp_maliniak', type: 'weight', threshold: 1, price: 10.00 },    // 10 zł za 1 kg
-  { id: 'pr_jalapeno', speciesId: 'sp_jalapeno', type: 'quantity', threshold: 1, price: 1.50 },   // 1.50 zł za sztukę papryczki
-  { id: 'pr_bazylia', speciesId: 'sp_bazylia_ziel', type: 'weight', threshold: 0.1, price: 6.00 },// 6 zł za 100 gram (0.1kg) liści
-  { id: 'pr_szczypiorek', speciesId: 'sp_szczypiorek', type: 'weight', threshold: 0.05, price: 3.00 }, // 3 zł za 50g
-  // Reguły dla sadzonek z roślin ozdobnych:
-  { id: 'pr_philo', speciesId: 'sp_philo_scandens', type: 'cutting', threshold: 1, price: 12.00 }, // 12 zł za 1 sadzonkę pędową
-  { id: 'pr_sansew', speciesId: 'sp_sansewiera', type: 'cutting', threshold: 1, price: 15.00 },    // 15 zł za odrost
-  // Wycena za wysokość (np. tuja, zamiokulkas - wartość rośnie wraz z centymetrami)
-  { id: 'pr_tuja_50', speciesId: 'sp_tuja', type: 'height', threshold: 50, price: 30.00 },        // 30 zł przy 50 cm
-  { id: 'pr_tuja_150', speciesId: 'sp_tuja', type: 'height', threshold: 150, price: 150.00 }      // 150 zł przy 150 cm
+  // 1. Truskawka wieloletnia (krępa bylina, sprzedawana jako mała lub rozrośnięta sadzonka)
+  { id: 'pr_truskawka_10', speciesId: 'sp_truskawka', type: 'height', threshold: 10, price: 6.00 },
+  { id: 'pr_truskawka_30', speciesId: 'sp_truskawka', type: 'height', threshold: 30, price: 15.00 },
+
+  // 2. Pomidor wiszący Tumbling Tom Red (pokrój karłowy/zwisający)
+  { id: 'pr_tom_red_10', speciesId: 'sp_tom_red', type: 'height', threshold: 10, price: 6.00 },
+  { id: 'pr_tom_red_30', speciesId: 'sp_tom_red', type: 'height', threshold: 30, price: 15.00 },
+  { id: 'pr_tom_red_50', speciesId: 'sp_tom_red', type: 'height', threshold: 50, price: 25.00 },
+
+  // 3. Pomidor Black Cherry (wysoki, rośnie silnie w górę)
+  { id: 'pr_black_cherry_10', speciesId: 'sp_black_cherry', type: 'height', threshold: 10, price: 6.00 },
+  { id: 'pr_black_cherry_30', speciesId: 'sp_black_cherry', type: 'height', threshold: 30, price: 12.00 },
+  { id: 'pr_black_cherry_50', speciesId: 'sp_black_cherry', type: 'height', threshold: 50, price: 20.00 },
+  { id: 'pr_black_cherry_70', speciesId: 'sp_black_cherry', type: 'height', threshold: 70, price: 28.00 },
+  { id: 'pr_black_cherry_90', speciesId: 'sp_black_cherry', type: 'height', threshold: 90, price: 35.00 },
+  { id: 'pr_black_cherry_110', speciesId: 'sp_black_cherry', type: 'height', threshold: 110, price: 45.00 },
+
+  // 4. Pomidor Żółta gruszka / Yellow Pear (wysoki)
+  { id: 'pr_yellow_pear_10', speciesId: 'sp_yellow_pear', type: 'height', threshold: 10, price: 6.00 },
+  { id: 'pr_yellow_pear_30', speciesId: 'sp_yellow_pear', type: 'height', threshold: 30, price: 12.00 },
+  { id: 'pr_yellow_pear_50', speciesId: 'sp_yellow_pear', type: 'height', threshold: 50, price: 20.00 },
+  { id: 'pr_yellow_pear_70', speciesId: 'sp_yellow_pear', type: 'height', threshold: 70, price: 28.00 },
+  { id: 'pr_yellow_pear_90', speciesId: 'sp_yellow_pear', type: 'height', threshold: 90, price: 35.00 },
+  { id: 'pr_yellow_pear_110', speciesId: 'sp_yellow_pear', type: 'height', threshold: 110, price: 45.00 },
+
+  // 5. Pomidor wiszący Tumbling Tom Yellow (karłowy)
+  { id: 'pr_tom_yellow_10', speciesId: 'sp_tom_yellow', type: 'height', threshold: 10, price: 6.00 },
+  { id: 'pr_tom_yellow_30', speciesId: 'sp_tom_yellow', type: 'height', threshold: 30, price: 15.00 },
+  { id: 'pr_tom_yellow_50', speciesId: 'sp_tom_yellow', type: 'height', threshold: 50, price: 25.00 },
+
+  // 6. Pomidor Maliniak (sztywno-łodygowy, krzaczasty)
+  { id: 'pr_maliniak_10', speciesId: 'sp_maliniak', type: 'height', threshold: 10, price: 6.00 },
+  { id: 'pr_maliniak_30', speciesId: 'sp_maliniak', type: 'height', threshold: 30, price: 12.00 },
+  { id: 'pr_maliniak_50', speciesId: 'sp_maliniak', type: 'height', threshold: 50, price: 18.00 },
+  { id: 'pr_maliniak_70', speciesId: 'sp_maliniak', type: 'height', threshold: 70, price: 25.00 },
+
+  // 7. Papryka Jalapeño
+  { id: 'pr_jalapeno_10', speciesId: 'sp_jalapeno', type: 'height', threshold: 10, price: 8.00 },
+  { id: 'pr_jalapeno_30', speciesId: 'sp_jalapeno', type: 'height', threshold: 30, price: 18.00 },
+  { id: 'pr_jalapeno_50', speciesId: 'sp_jalapeno', type: 'height', threshold: 50, price: 30.00 },
+  { id: 'pr_jalapeno_70', speciesId: 'sp_jalapeno', type: 'height', threshold: 70, price: 45.00 },
+
+  // 8. Papryka Chilli
+  { id: 'pr_chilli_10', speciesId: 'sp_chilli', type: 'height', threshold: 10, price: 8.00 },
+  { id: 'pr_chilli_30', speciesId: 'sp_chilli', type: 'height', threshold: 30, price: 18.00 },
+  { id: 'pr_chilli_50', speciesId: 'sp_chilli', type: 'height', threshold: 50, price: 30.00 },
+  { id: 'pr_chilli_70', speciesId: 'sp_chilli', type: 'height', threshold: 70, price: 45.00 },
+
+  // 9. Bazylia Zielona
+  { id: 'pr_bazylia_ziel_10', speciesId: 'sp_bazylia_ziel', type: 'height', threshold: 10, price: 7.00 },
+  { id: 'pr_bazylia_ziel_30', speciesId: 'sp_bazylia_ziel', type: 'height', threshold: 30, price: 15.00 },
+  { id: 'pr_bazylia_ziel_50', speciesId: 'sp_bazylia_ziel', type: 'height', threshold: 50, price: 22.00 },
+
+  // 10. Mięta Czekoladowa
+  { id: 'pr_mieta_czek_10', speciesId: 'sp_mieta_czek', type: 'height', threshold: 10, price: 8.00 },
+  { id: 'pr_mieta_czek_30', speciesId: 'sp_mieta_czek', type: 'height', threshold: 30, price: 15.00 },
+  { id: 'pr_mieta_czek_50', speciesId: 'sp_mieta_czek', type: 'height', threshold: 50, price: 24.00 },
+
+  // 11. Mięta Pomarańczowa
+  { id: 'pr_mieta_pom_10', speciesId: 'sp_mieta_pom', type: 'height', threshold: 10, price: 8.00 },
+  { id: 'pr_mieta_pom_30', speciesId: 'sp_mieta_pom', type: 'height', threshold: 30, price: 15.00 },
+  { id: 'pr_mieta_pom_50', speciesId: 'sp_mieta_pom', type: 'height', threshold: 50, price: 24.00 },
+
+  // 12. Melisa
+  { id: 'pr_melisa_10', speciesId: 'sp_melisa', type: 'height', threshold: 10, price: 7.00 },
+  { id: 'pr_melisa_30', speciesId: 'sp_melisa', type: 'height', threshold: 30, price: 14.00 },
+  { id: 'pr_melisa_50', speciesId: 'sp_melisa', type: 'height', threshold: 50, price: 22.00 },
+
+  // 13. Rozmaryn (drewniejący krzew, starsze okazy są dość cenne)
+  { id: 'pr_rozmaryn_10', speciesId: 'sp_rozmaryn', type: 'height', threshold: 10, price: 8.00 },
+  { id: 'pr_rozmaryn_30', speciesId: 'sp_rozmaryn', type: 'height', threshold: 30, price: 18.00 },
+  { id: 'pr_rozmaryn_50', speciesId: 'sp_rozmaryn', type: 'height', threshold: 50, price: 35.00 },
+  { id: 'pr_rozmaryn_70', speciesId: 'sp_rozmaryn', type: 'height', threshold: 70, price: 55.00 },
+
+  // 14. Oregano
+  { id: 'pr_oregano_10', speciesId: 'sp_oregano', type: 'height', threshold: 10, price: 7.00 },
+  { id: 'pr_oregano_30', speciesId: 'sp_oregano', type: 'height', threshold: 30, price: 14.00 },
+  { id: 'pr_oregano_50', speciesId: 'sp_oregano', type: 'height', threshold: 50, price: 20.00 },
+
+  // 15. Szczypiorek wieloletni
+  { id: 'pr_szczypiorek_10', speciesId: 'sp_szczypiorek', type: 'height', threshold: 10, price: 6.00 },
+  { id: 'pr_szczypiorek_30', speciesId: 'sp_szczypiorek', type: 'height', threshold: 30, price: 12.00 },
+
+  // 16. Tuja Szmaragdowa (często sprzedawana w donicach z gołym korzeniem lub w balocie)
+  { id: 'pr_tuja_10', speciesId: 'sp_tuja', type: 'height', threshold: 10, price: 5.00 },
+  { id: 'pr_tuja_30', speciesId: 'sp_tuja', type: 'height', threshold: 30, price: 10.00 },
+  { id: 'pr_tuja_50', speciesId: 'sp_tuja', type: 'height', threshold: 50, price: 15.00 },
+  { id: 'pr_tuja_70', speciesId: 'sp_tuja', type: 'height', threshold: 70, price: 22.00 },
+  { id: 'pr_tuja_90', speciesId: 'sp_tuja', type: 'height', threshold: 90, price: 30.00 },
+  { id: 'pr_tuja_110', speciesId: 'sp_tuja', type: 'height', threshold: 110, price: 42.00 },
+
+  // 17. Philodendron Brasil (pnącze, wyceniane często po długości pędów i gęstości w donicy)
+  { id: 'pr_philo_brasil_10', speciesId: 'sp_philo_brasil', type: 'height', threshold: 10, price: 18.00 },
+  { id: 'pr_philo_brasil_30', speciesId: 'sp_philo_brasil', type: 'height', threshold: 30, price: 35.00 },
+  { id: 'pr_philo_brasil_50', speciesId: 'sp_philo_brasil', type: 'height', threshold: 50, price: 55.00 },
+  { id: 'pr_philo_brasil_70', speciesId: 'sp_philo_brasil', type: 'height', threshold: 70, price: 85.00 },
+  { id: 'pr_philo_brasil_90', speciesId: 'sp_philo_brasil', type: 'height', threshold: 90, price: 120.00 },
+  { id: 'pr_philo_brasil_110', speciesId: 'sp_philo_brasil', type: 'height', threshold: 110, price: 160.00 },
+
+  // 18. Philodendron Scandens
+  { id: 'pr_philo_scandens_10', speciesId: 'sp_philo_scandens', type: 'height', threshold: 10, price: 15.00 },
+  { id: 'pr_philo_scandens_30', speciesId: 'sp_philo_scandens', type: 'height', threshold: 30, price: 30.00 },
+  { id: 'pr_philo_scandens_50', speciesId: 'sp_philo_scandens', type: 'height', threshold: 50, price: 49.00 },
+  { id: 'pr_philo_scandens_70', speciesId: 'sp_philo_scandens', type: 'height', threshold: 70, price: 79.00 },
+  { id: 'pr_philo_scandens_90', speciesId: 'sp_philo_scandens', type: 'height', threshold: 90, price: 110.00 },
+  { id: 'pr_philo_scandens_110', speciesId: 'sp_philo_scandens', type: 'height', threshold: 110, price: 149.00 },
+
+  // 19. Sansewiera Laurentii (bardzo droga przy wyższych partiach)
+  { id: 'pr_sansewiera_10', speciesId: 'sp_sansewiera', type: 'height', threshold: 10, price: 18.00 },
+  { id: 'pr_sansewiera_30', speciesId: 'sp_sansewiera', type: 'height', threshold: 30, price: 35.00 },
+  { id: 'pr_sansewiera_50', speciesId: 'sp_sansewiera', type: 'height', threshold: 50, price: 55.00 },
+  { id: 'pr_sansewiera_70', speciesId: 'sp_sansewiera', type: 'height', threshold: 70, price: 89.00 },
+  { id: 'pr_sansewiera_90', speciesId: 'sp_sansewiera', type: 'height', threshold: 90, price: 139.00 },
+  { id: 'pr_sansewiera_110', speciesId: 'sp_sansewiera', type: 'height', threshold: 110, price: 249.00 },
+
+  // 20. Zamioculcas (pancerny, popularny, duże rośliny w cenie)
+  { id: 'pr_zamioculcas_10', speciesId: 'sp_zamioculcas', type: 'height', threshold: 10, price: 15.00 }, // mała sadzonka (np. z liścia)
+  { id: 'pr_zamioculcas_30', speciesId: 'sp_zamioculcas', type: 'height', threshold: 30, price: 30.00 },
+  { id: 'pr_zamioculcas_50', speciesId: 'sp_zamioculcas', type: 'height', threshold: 50, price: 65.00 },
+  { id: 'pr_zamioculcas_70', speciesId: 'sp_zamioculcas', type: 'height', threshold: 70, price: 85.00 },
+  { id: 'pr_zamioculcas_90', speciesId: 'sp_zamioculcas', type: 'height', threshold: 90, price: 140.00 },
+  { id: 'pr_zamioculcas_110', speciesId: 'sp_zamioculcas', type: 'height', threshold: 110, price: 220.00 },
+
+  // 21. Euphorbia lactea (kolekcjonerska, szczepiona)
+  { id: 'pr_euphorbia_10', speciesId: 'sp_euphorbia_lactea', type: 'height', threshold: 10, price: 25.00 },
+  { id: 'pr_euphorbia_30', speciesId: 'sp_euphorbia_lactea', type: 'height', threshold: 30, price: 65.00 },
+  { id: 'pr_euphorbia_50', speciesId: 'sp_euphorbia_lactea', type: 'height', threshold: 50, price: 110.00 },
+  { id: 'pr_euphorbia_70', speciesId: 'sp_euphorbia_lactea', type: 'height', threshold: 70, price: 170.00 },
+  { id: 'pr_euphorbia_90', speciesId: 'sp_euphorbia_lactea', type: 'height', threshold: 90, price: 250.00 }
 ];
 
 // ───── STATE ─────
