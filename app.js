@@ -252,6 +252,20 @@ const DEFAULT_SPECIES = [
   }
 ];
 
+const DEFAULT_PRICE_RULES = [
+  // Możesz tutaj wpisać własne domyślne reguły cenowe. 
+  // Zostaną one automatycznie załadowane do aplikacji (dopasowane po speciesId z bazy).
+  { id: 'pr_truskawka', speciesId: 'sp_truskawka', type: 'weight', threshold: 1, price: 15.00 }, // 15 zł za 1 kg truskawek
+  { id: 'pr_tom_red', speciesId: 'sp_tom_red', type: 'weight', threshold: 1, price: 18.00 },     // 18 zł za 1 kg pomidorków
+  { id: 'pr_maliniak', speciesId: 'sp_maliniak', type: 'weight', threshold: 1, price: 10.00 },    // 10 zł za 1 kg
+  { id: 'pr_jalapeno', speciesId: 'sp_jalapeno', type: 'quantity', threshold: 1, price: 1.50 },   // 1.50 zł za sztukę papryczki
+  { id: 'pr_bazylia', speciesId: 'sp_bazylia_ziel', type: 'weight', threshold: 0.1, price: 6.00 },// 6 zł za 100 gram (0.1kg) liści
+  { id: 'pr_szczypiorek', speciesId: 'sp_szczypiorek', type: 'weight', threshold: 0.05, price: 3.00 }, // 3 zł za 50g
+  // Reguły dla sadzonek z roślin ozdobnych:
+  { id: 'pr_philo', speciesId: 'sp_philo_scandens', type: 'cutting', threshold: 1, price: 12.00 }, // 12 zł za 1 sadzonkę pędową
+  { id: 'pr_sansew', speciesId: 'sp_sansewiera', type: 'cutting', threshold: 1, price: 15.00 }    // 15 zł za odrost
+];
+
 // ───── STATE ─────
 const S = {
   plants: [], events: [], scheduled: [], aiForecasts: {}, species: [], expenses: [], priceRules: [],
@@ -295,6 +309,9 @@ function load() {
     if (S.defaultSpeciesVersion < 2) {
       DEFAULT_SPECIES.forEach(ds => {
         if (!S.species.find(s => s.name === ds.name)) S.species.push(ds);
+      });
+      DEFAULT_PRICE_RULES.forEach(pr => {
+        if (!S.priceRules.find(r => r.id === pr.id)) S.priceRules.push(pr);
       });
       S.defaultSpeciesVersion = 2;
       save(); // Save immediately to persist defaults
