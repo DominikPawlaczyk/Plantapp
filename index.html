@@ -834,6 +834,35 @@
   </div>
 </div>
 
+<!-- MODAL: Image Crop -->
+<div class="modal-overlay hidden" id="modal-crop" style="z-index:9999;">
+  <div class="modal" style="max-width:480px;width:95vw;">
+    <div class="modal-header">
+      <h3>Przytnij zdjęcie</h3>
+      <button class="modal-close" data-modal="modal-crop"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:0;overflow:hidden;">
+      <div id="crop-container">
+        <img id="crop-image" src="" alt="Crop" draggable="false" />
+        <div id="crop-viewport"></div>
+      </div>
+      <div id="crop-controls">
+        <button type="button" id="crop-zoom-out" class="crop-zoom-btn" title="Oddal">
+          <i data-lucide="minus"></i>
+        </button>
+        <input type="range" id="crop-zoom" min="100" max="500" value="100" step="1" />
+        <button type="button" id="crop-zoom-in" class="crop-zoom-btn" title="Przybliż">
+          <i data-lucide="plus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-crop">Anuluj</button>
+      <button class="btn-primary" id="btn-crop-confirm">Zatwierdź</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast hidden" id="toast"></div>
 

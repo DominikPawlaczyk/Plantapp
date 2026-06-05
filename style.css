@@ -846,6 +846,102 @@ input[type="date"], input[type="datetime-local"], input[type="time"] { color-sch
 .table-status.ok { color: #a3e635; background: rgba(163, 230, 53, 0.1); }
 .table-status.warn { color: #facc15; background: rgba(250, 204, 21, 0.1); }
 .table-status.danger { color: #fb7185; background: rgba(251, 113, 133, 0.1); }
+
+/* ===== IMAGE CROP MODAL ===== */
+#crop-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #0a0a0a;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#crop-container:active { cursor: grabbing; }
+
+#crop-image {
+  position: absolute;
+  transform-origin: 0 0;
+  will-change: transform;
+  pointer-events: none;
+  max-width: none;
+  max-height: none;
+}
+
+#crop-viewport {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 2px var(--accent), inset 0 0 0 9999px rgba(0,0,0,0.45);
+  border-radius: 0;
+  z-index: 2;
+}
+#crop-viewport::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.12) 1px, transparent 1px);
+  background-size: 33.333% 33.333%;
+}
+
+#crop-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: rgba(0,0,0,0.3);
+}
+#crop-controls input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--bd2);
+  border-radius: 4px;
+  outline: none;
+}
+#crop-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(74,222,128,0.4);
+}
+#crop-controls input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 8px rgba(74,222,128,0.4);
+}
+.crop-zoom-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--bd2);
+  background: rgba(255,255,255,0.05);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.crop-zoom-btn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-bd);
+  color: var(--accent);
+}
+.crop-zoom-btn [data-lucide] svg { width: 16px; height: 16px; }
  / *    % % % % %  M O D E R N   C H A R T S   &   T A B L E S    % % % % %  * / 
  . m o d e r n - c h a r t - c o n t a i n e r   { 
      b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 0 2 ) ; 
