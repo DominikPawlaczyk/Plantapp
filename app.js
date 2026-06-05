@@ -992,11 +992,18 @@ function renderCalendar() {
   const rem=42-cells.length;
   for (let i=1;i<=rem;i++) { const d=new Date(last); d.setDate(d.getDate()+i); cells.push({date:d,other:true}); }
 
+  function getEventsForDay(date) {
+    let dayEvs = S.events.filter(e => sameDay(e.timestamp, date));
+    let scheEvs = S.scheduled.filter(e => e.date && sameDay(e.date, date));
+    if (S.calPlant !== 'all') {
+      dayEvs = dayEvs.filter(e => e.plantId === S.calPlant);
+      scheEvs = scheEvs.filter(e => e.plantId === S.calPlant);
+    }
+    return [...dayEvs, ...scheEvs];
+  }
+
   function dotsForDay(date) {
-    const types = new Set([
-      ...S.events.filter(e => sameDay(e.timestamp,date) && (S.calPlant==='all'||e.plantId===S.calPlant)).map(e=>e.type),
-      ...S.scheduled.filter(e => e.date && sameDay(e.date,date) && (S.calPlant==='all'||e.plantId===S.calPlant)).map(e=>e.type)
-    ]);
+    const types = new Set(getEventsForDay(date).map(e=>e.type));
     return [...types].slice(0,3).map(t=>`<div class="cal-dot ${t}"></div>`).join('');
   }
 
@@ -1008,8 +1015,12 @@ function renderCalendar() {
 
   widget.innerHTML = `
     <div class="cal-head">
-      <span class="cal-month">${mNames[month.getMonth()]} ${month.getFullYear()}</span>
+      <div class="cal-month-year">
+        <span class="cal-month-name">${mNames[month.getMonth()]}</span>
+        <span class="cal-year">${month.getFullYear()}</span>
+      </div>
       <div class="cal-nav">
+        <button class="cal-today-btn" id="cal-today">Dziś</button>
         <button class="cal-nav-btn" id="cal-prev">${icon('chevron-left',16)}</button>
         <button class="cal-nav-btn" id="cal-next">${icon('chevron-right',16)}</button>
       </div>
@@ -1019,9 +1030,10 @@ function renderCalendar() {
       ${cells.map(cell => {
         const isToday    = sameDay(cell.date, today);
         const isSelected = sameDay(cell.date, S.selectedDate);
+        const evs = getEventsForDay(cell.date);
         const dots = dotsForDay(cell.date);
-        return `<div class="cal-cell${cell.other?' other-month':''}${isToday&&!isSelected?' today':''}${isSelected?' selected':''}"
-          data-cal-date="${cell.date.toISOString()}">
+        return `<div class="cal-cell${cell.other?' other-month':''}${isToday&&!isSelected?' today':''}${isSelected?' selected':''}${evs.length>0?' has-events':''}"
+          data-cal-date="${cell.date.toISOString()}" data-count="${evs.length}">
           ${cell.date.getDate()}
           ${dots ? `<div class="cal-dots">${dots}</div>` : ''}
         </div>`;
@@ -1036,6 +1048,12 @@ function renderCalendar() {
   document.getElementById('cal-next').addEventListener('click', () => {
     S.calMonth = new Date(month.getFullYear(), month.getMonth()+1, 1);
     renderCalendar();
+  });
+  document.getElementById('cal-today').addEventListener('click', () => {
+    S.calMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    S.selectedDate = today;
+    renderCalendar();
+    renderCalEvents();
   });
 
   widget.querySelectorAll('.cal-cell').forEach(cell => {
@@ -1069,20 +1087,50 @@ function renderCalEvents() {
   const typeCls   = { water:'water', fertilize:'fertilize', harvest:'harvest', plant:'plant', custom:'custom', height:'plant', cutting:'harvest' };
 
   const ds = date.toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'});
+  const mNamesGenitive = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+  const dayName = date.toLocaleDateString('pl-PL',{weekday:'long'});
+  const dayNum = date.getDate();
+  const monthName = mNamesGenitive[date.getMonth()];
 
   el.innerHTML = `
-    <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:capitalize">${ds}</div>
-    ${all.length===0 ? '<div style="color:var(--text3);font-size:13px;padding:8px 0">Brak zdarzeń w tym dniu</div>' :
+    <div class="cal-events-header">
+      <div class="cal-events-date">
+        <div class="cal-events-day-num">${dayNum}</div>
+        <div class="cal-events-day-info">
+          <div class="cal-events-weekday">${dayName}</div>
+          <div class="cal-events-month">${monthName} ${date.getFullYear()}</div>
+        </div>
+      </div>
+      <div class="cal-events-count">${all.length} zdarzeń</div>
+    </div>
+    ${all.length===0 ? `
+      <div class="cal-empty-state">
+        <div class="cal-empty-icon">${icon('calendar-x', 24)}</div>
+        <div class="cal-empty-text">Brak zdarzeń</div>
+        <div class="cal-empty-hint">Odpocznij lub zaplanuj coś nowego</div>
+      </div>
+    ` :
       all.map(ev => {
         const plant = S.plants.find(p=>p.id===ev.plantId);
         const pName = plant ? plant.name : '—';
         const isSched = !ev.timestamp || !ev.timestamp.includes('T');
         const cls = typeCls[ev.type]||'water';
-        return `<div class="cal-ev-item" data-plant-id="${plant ? plant.id : ''}" style="cursor: ${plant ? 'pointer' : 'default'}">
+        
+        let timeStr = '';
+        if (ev.time) timeStr = ev.time;
+        else if (ev.timestamp && ev.timestamp.includes('T')) {
+          timeStr = new Date(ev.timestamp).toLocaleTimeString('pl-PL', {hour:'2-digit', minute:'2-digit'});
+        }
+
+        return `<div class="cal-ev-item ev-${cls}" data-plant-id="${plant ? plant.id : ''}" style="cursor: ${plant ? 'pointer' : 'default'}">
           <div class="cal-ev-icon ${cls}">${icon(typeIco[ev.type]||'circle',18)}</div>
           <div class="cal-ev-info">
             <div class="cal-ev-title">${ev.customTitle || typeLabel[ev.type]||ev.type}</div>
-            <div class="cal-ev-sub">${pName}${isSched?' · Zaplanowane':''}</div>
+            <div class="cal-ev-sub">
+              ${timeStr ? `<span class="cal-ev-time">${timeStr}</span>` : ''}
+              ${isSched ? `<span class="cal-ev-sched-badge">Zaplanowane</span>` : ''}
+              <span>${pName}</span>
+            </div>
           </div>
           ${isSched ? `<button class="cal-ev-del" data-sched-del="${ev.id}" title="Usuń">${icon('trash-2',14)}</button>` : ''}
         </div>`;
