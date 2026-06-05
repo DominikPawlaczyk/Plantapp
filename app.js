@@ -1085,7 +1085,7 @@ function openPlantDetail(plantId) {
 
   document.getElementById('detail-title').textContent = p.name;
   document.getElementById('modal-detail-body').innerHTML = `
-    <div class="detail-header">
+    <div class="detail-header-new">
       ${imgHtml}
       <div>
         <div class="detail-name">${p.name}</div>
@@ -1098,14 +1098,14 @@ function openPlantDetail(plantId) {
       </div>
     </div>
 
-    <div class="detail-actions">
-      <button class="detail-action-btn water"     data-detail-action="water"     data-pid="${p.id}">${icon('droplets', 14)} Podlej</button>
-      <button class="detail-action-btn fertilize" data-detail-action="fertilize" data-pid="${p.id}">${icon('flask-conical', 14)} Nawóź</button>
-      <button class="detail-action-btn harvest"   data-detail-action="harvest"   data-pid="${p.id}">${icon('apple', 14)} Zbiory</button>
-      <button class="detail-action-btn custom"    data-detail-action="cutting"   data-pid="${p.id}">${icon('scissors', 14)} Sadzonki</button>
-      <button class="detail-action-btn custom"    data-detail-action="height"    data-pid="${p.id}">${icon('ruler', 14)} Wysokość</button>
-      <button class="detail-action-btn custom"    data-detail-action="custom"    data-pid="${p.id}">${icon('file-text', 14)} Inne</button>
-      <button class="detail-action-btn danger"    data-detail-action="delete"    data-pid="${p.id}">${icon('trash-2', 14)}</button>
+    <div class="actions-grid">
+      <button class="detail-action-btn water"     data-detail-action="water"     data-pid="${p.id}">${icon('droplets', 20)} Podlej</button>
+      <button class="detail-action-btn fertilize" data-detail-action="fertilize" data-pid="${p.id}">${icon('flask-conical', 20)} Nawóź</button>
+      <button class="detail-action-btn harvest"   data-detail-action="harvest"   data-pid="${p.id}">${icon('apple', 20)} Zbiory</button>
+      <button class="detail-action-btn custom"    data-detail-action="cutting"   data-pid="${p.id}">${icon('scissors', 20)} Sadzonki</button>
+      <button class="detail-action-btn custom"    data-detail-action="height"    data-pid="${p.id}">${icon('ruler', 20)} Wysokość</button>
+      <button class="detail-action-btn custom"    data-detail-action="custom"    data-pid="${p.id}">${icon('file-text', 20)} Inne</button>
+      <button class="detail-action-btn danger"    data-detail-action="delete"    data-pid="${p.id}">${icon('trash-2', 20)} Usuń</button>
     </div>
 
     ${pred ? `
@@ -1210,8 +1210,9 @@ function renderTimeline() {
     if (ev.height) detail += (detail ? ' · ' : '') + ev.height + ' cm';
     if (ev.notes) detail += (detail ? ' · ' : '') + ev.notes;
 
-    return `<div class="tl-item" data-plant-id="${plant ? plant.id : ''}" data-ev-id="${ev.id}">
-      <div class="tl-dot ${ev.type}">${icon(typeIco[ev.type] || 'circle', 10)}</div>
+    const tCls = typeCls[ev.type] || 'plant';
+    return `<div class="tl-item" data-type="${tCls}" data-plant-id="${plant ? plant.id : ''}" data-ev-id="${ev.id}">
+      <div class="tl-dot ${tCls}">${icon(typeIco[ev.type] || 'circle', 14)}</div>
       <div class="tl-card">
         <div class="tl-head">
           <span class="tl-title">${ev.customTitle || typeLabel[ev.type] || ev.type}</span>
