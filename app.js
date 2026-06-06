@@ -424,14 +424,14 @@ function load() {
     if (d.defaultSpeciesAdded && !d.defaultSpeciesVersion) d.defaultSpeciesVersion = 1;
     S.defaultSpeciesVersion = d.defaultSpeciesVersion || 0;
 
-    if (S.defaultSpeciesVersion < 2) {
+    if (S.defaultSpeciesVersion < 3) {
       DEFAULT_SPECIES.forEach(ds => {
         if (!S.species.find(s => s.name === ds.name)) S.species.push(ds);
       });
       DEFAULT_PRICE_RULES.forEach(pr => {
         if (!S.priceRules.find(r => r.id === pr.id)) S.priceRules.push(pr);
       });
-      S.defaultSpeciesVersion = 2;
+      S.defaultSpeciesVersion = 3;
       save(); // Save immediately to persist defaults
     }
   } catch (e) { console.error(e); }
@@ -1196,8 +1196,9 @@ function renderTimeline() {
     return;
   }
 
-  const typeIco = { water: 'droplets', fertilize: 'flask-conical', harvest: 'apple', plant: 'sprout', custom: 'file-text' };
-  const typeLabel = { water: 'Podlewanie', fertilize: 'Nawożenie', harvest: 'Zbiory', plant: 'Posadzenie', custom: 'Inne' };
+  const typeIco = { water: 'droplets', fertilize: 'flask-conical', harvest: 'apple', plant: 'sprout', custom: 'file-text', height: 'ruler', cutting: 'scissors' };
+  const typeLabel = { water: 'Podlewanie', fertilize: 'Nawożenie', harvest: 'Zbiory', plant: 'Posadzenie', custom: 'Inne', height: 'Wysokość', cutting: 'Sadzonka' };
+  const typeCls = { water: 'water', fertilize: 'fertilize', harvest: 'harvest', plant: 'plant', custom: 'custom', height: 'plant', cutting: 'harvest' };
 
   el.innerHTML = evs.map(ev => {
     const plant = S.plants.find(p => p.id === ev.plantId);
